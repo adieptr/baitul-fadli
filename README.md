@@ -40,7 +40,7 @@ Dokumentasi teknis lengkap (arsitektur, skema database, RLS, alur Telegram, penj
 3. **Authentication → URL Configuration**
    - *Site URL*: `https://<domain-anda>.vercel.app`
    - *Redirect URLs*: `https://<domain-anda>.vercel.app/**`
-4. **Tidak perlu SMTP / email konfirmasi.** Akun dibuat di server dan langsung aktif; aplikasi tidak pernah mengirim email. Lupa kata sandi ditangani lewat Telegram atau oleh admin (lihat bagian *Autentikasi*). Disarankan mematikan *Authentication → Sign In / Providers → Email → Confirm email* agar perilakunya konsisten.
+4. **Tidak perlu SMTP / email konfirmasi.** Akun dibuat di server dan langsung aktif; aplikasi tidak pernah mengirim email. Lupa kata sandi ditangani lewat Telegram atau oleh admin (lihat bagian *Autentikasi*). **Wajib:** matikan *Authentication → Sign In / Providers → Allow new users to sign up* (akun hanya dibuat lewat server aplikasi yang punya anti-bot & rate limit; tanpa ini, siapa pun bisa mendaftar langsung ke API Supabase memakai publishable key). Matikan juga *Confirm email*.
 5. Catat dari **Project Settings → API Keys**: Project URL, *Publishable key*, dan *Secret key*.
 
 ### 2. Bot Telegram
