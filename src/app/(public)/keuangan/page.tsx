@@ -4,7 +4,7 @@ import { PageHeader, EmptyState } from "@/components/ui/card";
 import { formatDate, formatRupiah } from "@/lib/format";
 import { getPublishedReports } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 export const metadata = { title: "Laporan Keuangan" };
 
 export default async function ReportsPage() {

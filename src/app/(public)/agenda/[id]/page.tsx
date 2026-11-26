@@ -5,7 +5,7 @@ import { formatDate, formatTime } from "@/lib/format";
 import { publicMediaUrl } from "@/lib/storage";
 import { getPublishedEvent } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 // Render saat pertama diminta lalu di-cache (ISR).
 export async function generateStaticParams() {
   return [];

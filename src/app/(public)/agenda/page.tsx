@@ -2,7 +2,7 @@ import { PageHeader, EmptyState } from "@/components/ui/card";
 import { EventCard } from "@/components/public/event-card";
 import { getPastEvents, getUpcomingEvents } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 export const metadata = { title: "Agenda Kegiatan" };
 
 export default async function AgendaPage() {

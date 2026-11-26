@@ -5,7 +5,7 @@ import { PaymentInfo } from "@/components/public/payment-info";
 import { formatRupiah } from "@/lib/format";
 import { getActivePrograms, getSiteSettings } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 export const metadata = { title: "Program Donasi" };
 
 export default async function DonasiPage() {

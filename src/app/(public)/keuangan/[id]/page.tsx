@@ -7,7 +7,7 @@ import { BreakdownBars, ReportSummary } from "@/components/public/finance";
 import { formatDate, formatDateTime, formatRupiah } from "@/lib/format";
 import { getPublishedReport, getReportTransactions, type Breakdown } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 // Render saat pertama diminta lalu di-cache (ISR).
 export async function generateStaticParams() {
   return [];

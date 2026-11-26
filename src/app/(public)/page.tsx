@@ -25,7 +25,7 @@ import { publicMediaUrl } from "@/lib/storage";
 import { DEFAULT_PROFILE } from "@/lib/content";
 import { getActivePrograms, getPublishedReports, getSiteSettings, getUpcomingEvents } from "@/lib/queries/public";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 function SectionHeading({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
