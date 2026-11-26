@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-gold-100: #fef3c7;
+  --color-gold-500: #d4a017;
+  --color-gold-700: #a16207;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  /* Basis 18px agar teks nyaman dibaca, termasuk oleh pengguna lanjut usia */
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f8faf9;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+/* Fokus keyboard yang jelas */
+:focus-visible {
+  outline: 3px solid #d4a017;
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  font-size: 1rem;
+}
+
+.pattern-bg {
+  background-color: #064e3b;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212, 160, 23, 0.18) 0, transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(16, 185, 129, 0.25) 0, transparent 45%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l8.66 15H51.3l-6.33 10.96L51.3 37H38.66L30 52l-8.66-15H8.7l6.33-11.04L8.7 15h12.64z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.55);
+}
