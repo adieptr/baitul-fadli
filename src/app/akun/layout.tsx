@@ -16,7 +16,7 @@ export default async function DonorLayout({ children }: { children: React.ReactN
             {user.role === "admin" && (
               <Link
                 href="/admin"
-                className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-gold-100 px-3 font-semibold text-slate-900"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-accent-100 px-3 font-semibold text-slate-900"
               >
                 <LayoutDashboard className="size-4" aria-hidden /> <span className="hidden sm:inline">Dashboard</span> Admin
               </Link>

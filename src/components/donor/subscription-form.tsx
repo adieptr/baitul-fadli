@@ -42,7 +42,7 @@ function Choice({
       <span
         className={cn(
           "flex cursor-pointer items-center justify-center rounded-lg border text-sm font-semibold transition-colors select-none",
-          "peer-focus-visible:ring-2 peer-focus-visible:ring-gold-500 peer-focus-visible:ring-offset-1",
+          "peer-focus-visible:ring-2 peer-focus-visible:ring-accent-500 peer-focus-visible:ring-offset-1",
           checked
             ? "border-brand-700 bg-brand-700 text-white shadow-sm"
             : "border-slate-200 bg-white text-slate-700 hover:border-brand-600 hover:bg-brand-50",
@@ -134,7 +134,7 @@ export function SubscriptionForm({ initial }: { initial: Sub }) {
               <span
                 className={cn(
                   "flex cursor-pointer flex-col items-center rounded-lg px-3 py-2 transition-all select-none",
-                  "peer-focus-visible:ring-2 peer-focus-visible:ring-gold-500",
+                  "peer-focus-visible:ring-2 peer-focus-visible:ring-accent-500",
                   freq === v ? "bg-white text-brand-800 shadow-sm" : "text-slate-600 hover:text-slate-900",
                 )}
               >

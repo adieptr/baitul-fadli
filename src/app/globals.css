@@ -2,16 +2,20 @@
 
 @theme {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-200: #a7f3d0;
-  --color-brand-600: #059669;
-  --color-brand-700: #047857;
-  --color-brand-800: #065f46;
-  --color-brand-900: #064e3b;
-  --color-gold-100: #fef3c7;
-  --color-gold-500: #d4a017;
-  --color-gold-700: #a16207;
+  /* Utama: biru tua (navy) yang lembut */
+  --color-brand-50: #f1f5fb;
+  --color-brand-100: #dfe7f3;
+  --color-brand-200: #bccbe3;
+  --color-brand-600: #2d5288;
+  --color-brand-700: #1f3d6d;
+  --color-brand-800: #182f56;
+  --color-brand-900: #0f2140;
+  /* Aksen: merah trim fasad & menara Masjid Baitul Fadli (dipakai hemat) */
+  --color-accent-100: #fdecee;
+  --color-accent-300: #f4a3ab;
+  --color-accent-500: #e0313f;
+  --color-accent-600: #c92433;
+  --color-accent-700: #a91d2a;
 }
 
 :root {
@@ -33,7 +37,7 @@ body {
 
 /* Fokus keyboard yang jelas */
 :focus-visible {
-  outline: 3px solid #d4a017;
+  outline: 3px solid #e0313f;
   outline-offset: 2px;
 }
 
@@ -43,12 +47,24 @@ textarea {
   font-size: 1rem;
 }
 
+/* Ornamen kisi bunga delapan kelopak, terinspirasi panel fasad masjid */
+.lattice {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%231f3d6d' stroke-opacity='0.07' stroke-width='1.2'%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3Cpath d='M28 8c4 6 4 10 0 14c-4-4-4-8 0-14zM28 48c4-6 4-10 0-14c-4 4-4 8 0 14zM8 28c6-4 10-4 14 0c-4 4-8 4-14 0zM48 28c-6-4-10-4-14 0c4 4 8 4 14 0z'/%3E%3Cpath d='M13.9 13.9c7 1.4 9.8 4.2 9.9 9.9c-5.7-.1-8.5-2.9-9.9-9.9zM42.1 42.1c-7-1.4-9.8-4.2-9.9-9.9c5.7.1 8.5 2.9 9.9 9.9zM42.1 13.9c-1.4 7-4.2 9.8-9.9 9.9c.1-5.7 2.9-8.5 9.9-9.9zM13.9 42.1c1.4-7 4.2-9.8 9.9-9.9c-.1 5.7-2.9 8.5-9.9 9.9z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.lattice-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1.2'%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3Cpath d='M28 8c4 6 4 10 0 14c-4-4-4-8 0-14zM28 48c4-6 4-10 0-14c-4 4-4 8 0 14zM8 28c6-4 10-4 14 0c-4 4-8 4-14 0zM48 28c-6-4-10-4-14 0c4 4 8 4 14 0z'/%3E%3Cpath d='M13.9 13.9c7 1.4 9.8 4.2 9.9 9.9c-5.7-.1-8.5-2.9-9.9-9.9zM42.1 42.1c-7-1.4-9.8-4.2-9.9-9.9c5.7.1 8.5 2.9 9.9 9.9zM42.1 13.9c-1.4 7-4.2 9.8-9.9 9.9c.1-5.7 2.9-8.5 9.9-9.9zM13.9 42.1c1.4-7 4.2-9.8 9.9-9.9c-.1 5.7-2.9 8.5-9.9 9.9z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Latar gelap bermotif (dipakai halaman login & kartu agenda tanpa gambar) */
 .pattern-bg {
-  background-color: #064e3b;
+  background-color: #0f2140;
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(212, 160, 23, 0.18) 0, transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(16, 185, 129, 0.25) 0, transparent 45%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l8.66 15H51.3l-6.33 10.96L51.3 37H38.66L30 52l-8.66-15H8.7l6.33-11.04L8.7 15h12.64z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E");
+    radial-gradient(circle at 85% 0%, rgba(224, 49, 63, 0.18) 0, transparent 40%),
+    radial-gradient(circle at 10% 100%, rgba(45, 82, 136, 0.55) 0, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1.2'%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3Cpath d='M28 8c4 6 4 10 0 14c-4-4-4-8 0-14zM28 48c4-6 4-10 0-14c-4 4-4 8 0 14zM8 28c6-4 10-4 14 0c-4 4-8 4-14 0zM48 28c-6-4-10-4-14 0c4 4 8 4 14 0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Garis trim merah tipis seperti list atap fasad masjid */
+.trim-top {
+  box-shadow: inset 0 3px 0 0 #e0313f;
 }
 
 @media (prefers-reduced-motion: reduce) {

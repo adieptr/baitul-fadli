@@ -30,12 +30,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     siteName: "Masjid Baitul Fadli",
-    images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
+    images: [{ url: "/images/og.jpg", width: 1200, height: 630 }],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#047857",
+  themeColor: "#1f3d6d",
   width: "device-width",
   initialScale: 1,
   // Jangan kunci zoom: pengguna lanjut usia sering perlu memperbesar layar.

@@ -4,7 +4,7 @@ import type { SiteSettings } from "@/lib/queries/public";
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   return (
-    <footer className="mt-16 bg-brand-900 text-brand-50">
+    <footer className="trim-top lattice-light mt-16 bg-brand-900 text-brand-50">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <p className="text-lg font-extrabold text-white">{settings.mosque_name}</p>

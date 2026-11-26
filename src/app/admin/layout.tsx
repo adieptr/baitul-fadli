@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-3 px-4">
           <div className="flex items-center gap-3">
             <Logo name="Admin" />
-            <span className="hidden rounded-full bg-gold-100 px-3 py-1 text-sm font-bold text-gold-700 sm:inline">PENGURUS</span>
+            <span className="hidden rounded-full bg-accent-100 px-3 py-1 text-sm font-bold text-accent-700 sm:inline">PENGURUS</span>
           </div>
           <div className="flex items-center gap-2">
             <Link href="/akun" className="hidden min-h-10 items-center gap-2 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100 md:inline-flex">

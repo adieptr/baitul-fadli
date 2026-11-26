@@ -17,7 +17,6 @@ import { LinkButton } from "@/components/ui/button";
 import { ReportSummary } from "@/components/public/finance";
 import { EventCard } from "@/components/public/event-card";
 import { PaymentInfo } from "@/components/public/payment-info";
-import { MosqueIllustration } from "@/components/public/mosque-illustration";
 import { ProfileContent } from "@/components/public/profile-content";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { formatDate, formatRupiah, formatTime } from "@/lib/format";
@@ -51,18 +50,33 @@ function Empty({ icon: Icon, title, text }: { icon: typeof CalendarDays; title: 
   );
 }
 
-function Cover({ src, alt, eager = false }: { src: string | null; alt: string; eager?: boolean }) {
-  return src ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt={alt}
-      className="aspect-[4/3] w-full object-cover"
-      loading={eager ? "eager" : "lazy"}
-      fetchPriority={eager ? "high" : "auto"}
-    />
-  ) : (
-    <MosqueIllustration className="block aspect-[4/3] w-full" />
+const MOSQUE_CUTOUT = "/images/masjid-baitul-fadli.webp";
+const MOSQUE_RENDER = "/images/masjid-baitul-fadli-render.webp";
+
+/** Panel hero: foto unggahan admin, atau bangunan masjid (tanpa latar) di atas "langit" bermotif kisi fasad. */
+function HeroVisual({ photo, name }: { photo: string | null; name: string }) {
+  if (photo) {
+    return (
+      <div className="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5 trim-top">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={photo} alt={`Foto ${name}`} className="aspect-[4/5] w-full object-cover" fetchPriority="high" />
+      </div>
+    );
+  }
+  return (
+    <div className="trim-top relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-b from-[#cfe0f4] via-brand-50 to-white shadow-xl ring-1 ring-brand-100 md:aspect-[4/5]">
+      <div className="lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" aria-hidden />
+      <div className="absolute inset-x-10 bottom-[6%] h-6 rounded-[100%] bg-brand-900/15 blur-md" aria-hidden />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={MOSQUE_CUTOUT}
+        alt={`Desain bangunan ${name}`}
+        width={640}
+        height={767}
+        fetchPriority="high"
+        className="absolute bottom-[7%] left-1/2 h-[86%] w-auto max-w-none -translate-x-1/2 drop-shadow-[0_18px_24px_rgba(15,33,64,0.25)]"
+      />
+    </div>
   );
 }
 
@@ -82,11 +96,12 @@ export default async function HomePage() {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-12 md:grid-cols-2 md:pt-16 md:pb-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
+        <div className="lattice absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" aria-hidden />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-12 md:grid-cols-2 md:pt-14 md:pb-16">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-brand-800 shadow-sm ring-1 ring-brand-100">
-              <span className="size-1.5 rounded-full bg-gold-500" aria-hidden />
+              <span className="size-1.5 rounded-full bg-accent-500" aria-hidden />
               Assalamu&apos;alaikum warahmatullahi wabarakatuh
             </p>
             <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">{settings.mosque_name}</h1>
@@ -108,12 +123,7 @@ export default async function HomePage() {
               </li>
             </ul>
           </div>
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[2rem] bg-brand-100/60 blur-2xl" aria-hidden />
-            <div className="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5">
-              <Cover src={heroImage} alt={`Foto ${settings.mosque_name}`} eager />
-            </div>
-          </div>
+          <HeroVisual photo={heroImage} name={settings.mosque_name} />
         </div>
       </section>
 
@@ -156,8 +166,9 @@ export default async function HomePage() {
         <div className="grid gap-2 lg:grid-cols-[1fr_2fr] lg:gap-10">
           <div className="lg:sticky lg:top-24 lg:self-start">
             <SectionHeading eyebrow="Profil" title={`Tentang ${settings.mosque_name}`} />
-            <div className="hidden overflow-hidden rounded-2xl ring-1 ring-black/5 lg:block">
-              <Cover src={heroImage} alt="" />
+            <div className="trim-top hidden overflow-hidden rounded-2xl ring-1 ring-black/5 lg:block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={heroImage ?? MOSQUE_RENDER} alt="" loading="lazy" className="aspect-[3/4] w-full object-cover" />
             </div>
           </div>
           <article>
@@ -219,10 +230,10 @@ export default async function HomePage() {
       </section>
 
       {/* ================= DONASI ================= */}
-      <section id="donasi" className="scroll-mt-20 bg-brand-900 text-white">
+      <section id="donasi" className="trim-top lattice-light scroll-mt-20 bg-brand-900 text-white">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold tracking-wider text-gold-500 uppercase">Donasi</p>
+            <p className="text-sm font-semibold tracking-wider text-accent-300 uppercase">Donasi</p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Jadi bagian dari kemakmuran masjid</h2>
             <p className="mt-3 text-brand-100">
               Dukung operasional dan kegiatan masjid secara rutin. Setiap amanah dicatat dan dilaporkan secara terbuka.
@@ -234,7 +245,7 @@ export default async function HomePage() {
                 ["Transfer & konfirmasi", "Pengurus memverifikasi dan mencatatnya di laporan keuangan."],
               ].map(([t, d], i) => (
                 <li key={t} className="flex gap-4">
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-gold-500 ring-1 ring-white/20">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-accent-300 ring-1 ring-white/20">
                     {i + 1}
                   </span>
                   <div>

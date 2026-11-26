@@ -22,7 +22,7 @@ export function SiteHeader({ mosqueName }: { mosqueName: string }) {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href.replace("/#kontak", "#")));
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="trim-top sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-3 py-2">
         <Logo name={mosqueName} />
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu utama">

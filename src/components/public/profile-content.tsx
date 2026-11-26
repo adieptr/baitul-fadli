@@ -51,7 +51,7 @@ function Paragraph({ text }: { text: string }) {
 
 function Quote({ text }: { text: string }) {
   return (
-    <blockquote className="rounded-r-lg border-l-4 border-gold-500 bg-gold-100/50 px-4 py-3 text-sm text-slate-700 italic">
+    <blockquote className="rounded-r-lg border-l-4 border-accent-500 bg-accent-100/50 px-4 py-3 text-sm text-slate-700 italic">
       {inline(text)}
     </blockquote>
   );
@@ -184,9 +184,9 @@ export function ProfileContent({ content }: { content: string }) {
       )}
 
       {vision && (
-        <div className="relative overflow-hidden rounded-2xl bg-brand-900 p-6 text-white">
+        <div className="trim-top lattice-light relative overflow-hidden rounded-2xl bg-brand-900 p-6 text-white">
           <Target className="absolute -top-3 -right-3 size-24 text-white/5" aria-hidden />
-          <p className="text-xs font-semibold tracking-wider text-gold-500 uppercase">Visi</p>
+          <p className="text-xs font-semibold tracking-wider text-accent-300 uppercase">Visi</p>
           <p className="mt-2 text-lg leading-snug font-semibold">{plainText(vision.blocks)}</p>
         </div>
       )}
@@ -214,8 +214,8 @@ export function ProfileContent({ content }: { content: string }) {
       )}
 
       {cta && (
-        <div className="flex flex-col gap-4 rounded-2xl border border-gold-500/40 bg-gold-100/40 p-5 sm:flex-row sm:items-center">
-          <HandHeart className="size-8 shrink-0 text-gold-700" aria-hidden />
+        <div className="flex flex-col gap-4 rounded-2xl border border-accent-500/40 bg-accent-100/40 p-5 sm:flex-row sm:items-center">
+          <HandHeart className="size-8 shrink-0 text-accent-700" aria-hidden />
           <div className="flex-1">
             <p className="font-semibold text-slate-900">{cta.title}</p>
             <p className="mt-1 text-sm text-slate-700">{inline(plainText(cta.blocks))}</p>

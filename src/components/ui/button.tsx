@@ -12,7 +12,7 @@ const variants: Record<Variant, string> = {
   secondary: "bg-white text-brand-800 border border-brand-700 hover:bg-brand-50",
   danger: "bg-red-700 text-white hover:bg-red-800",
   ghost: "text-brand-800 hover:bg-brand-50",
-  gold: "bg-gold-500 text-slate-900 hover:bg-amber-400",
+  gold: "bg-accent-600 text-white hover:bg-accent-700",
 };
 const sizes: Record<Size, string> = {
   sm: "min-h-9 px-3 text-sm",

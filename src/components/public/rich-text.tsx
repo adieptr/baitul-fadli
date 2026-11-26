@@ -65,7 +65,7 @@ export function RichText({ content, className }: { content: string; className?: 
             return <h4 key={i} className="mt-6 mb-2 text-lg font-semibold text-slate-900">{inline(b.text)}</h4>;
           case "quote":
             return (
-              <blockquote key={i} className="my-6 rounded-r-lg border-l-4 border-gold-500 bg-gold-100/50 px-5 py-4 text-slate-700 italic">
+              <blockquote key={i} className="my-6 rounded-r-lg border-l-4 border-accent-500 bg-accent-100/50 px-5 py-4 text-slate-700 italic">
                 {inline(b.text)}
               </blockquote>
             );
