@@ -175,10 +175,8 @@ export const programSchema = z.object({
 export const settingsSchema = z.object({
   mosque_name: z.string().trim().min(3).max(120),
   tagline: z.string().trim().max(200).default(""),
-  welcome_message: z.string().trim().max(2000).default(""),
-  history: z.string().trim().max(5000).default(""),
-  vision: z.string().trim().max(2000).default(""),
-  mission: z.string().trim().max(3000).default(""),
+  profile_content: z.string().trim().max(20000, "Artikel profil maksimal 20.000 karakter.").default(""),
+  hero_image_path: storagePath,
   address: z.string().trim().max(500).default(""),
   phone: z.string().trim().max(30).default(""),
   whatsapp: z.string().trim().max(30).default(""),

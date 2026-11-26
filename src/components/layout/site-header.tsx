@@ -9,6 +9,7 @@ import { Logo } from "./logo";
 
 const NAV = [
   { href: "/", label: "Beranda" },
+  { href: "/#profil", label: "Profil" },
   { href: "/keuangan", label: "Laporan Keuangan" },
   { href: "/agenda", label: "Agenda" },
   { href: "/donasi", label: "Donasi" },

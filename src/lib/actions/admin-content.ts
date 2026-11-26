@@ -92,8 +92,12 @@ export async function saveSettingsAction(_: ActionState, formData: FormData): Pr
   const parsed = settingsSchema.safeParse(formObject(formData));
   if (!parsed.success) return validationFailure(parsed.error);
   const supabase = await createClient();
+  const { data: old } = await supabase.from("site_settings").select("hero_image_path").eq("id", 1).maybeSingle();
   const { error } = await supabase.from("site_settings").update(parsed.data).eq("id", 1);
   if (error) return failure(dbErrorMessage(error));
+  if (old?.hero_image_path && old.hero_image_path !== parsed.data.hero_image_path) {
+    await supabase.storage.from("public-media").remove([old.hero_image_path]);
+  }
   revalidatePath("/", "layout");
   return success("Pengaturan berhasil disimpan.");
 }

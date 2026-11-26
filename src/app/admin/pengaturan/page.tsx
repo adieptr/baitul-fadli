@@ -1,6 +1,8 @@
 import { Card, PageHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ActionForm, SubmitButton, TextField, TextAreaField } from "@/components/ui/form";
+import { FileUpload } from "@/components/ui/file-upload";
+import { publicMediaUrl } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { saveSettingsAction } from "@/lib/actions/admin-content";
@@ -30,10 +32,28 @@ export default async function SettingsPage() {
         <ActionForm action={saveSettingsAction} className="space-y-5">
           <TextField label="Nama Masjid" name="mosque_name" defaultValue={s?.mosque_name} required maxLength={120} />
           <TextField label="Slogan / Tagline" name="tagline" defaultValue={s?.tagline} maxLength={200} />
-          <TextAreaField label="Kata Sambutan (Beranda)" name="welcome_message" rows={3} defaultValue={s?.welcome_message} maxLength={2000} />
-          <TextAreaField label="Sejarah Singkat" name="history" rows={6} defaultValue={s?.history} maxLength={5000} />
-          <TextAreaField label="Visi" name="vision" rows={2} defaultValue={s?.vision} maxLength={2000} />
-          <TextAreaField label="Misi" name="mission" rows={4} defaultValue={s?.mission} maxLength={3000} hint="Satu misi per baris." />
+          <FileUpload
+            name="hero_image_path"
+            label="Foto Sampul Beranda (opsional)"
+            bucket="public-media"
+            folder="site"
+            defaultPath={s?.hero_image_path}
+            previewUrl={publicMediaUrl(s?.hero_image_path)}
+            hint="Gunakan foto asli masjid (landscape). Jika kosong, beranda menampilkan ilustrasi masjid."
+          />
+          <TextAreaField
+            label="Profil Masjid (artikel di beranda)"
+            name="profile_content"
+            rows={18}
+            defaultValue={s?.profile_content}
+            maxLength={20000}
+            hint={
+              <>
+                Satu artikel berisi sambutan, sejarah, visi, dan misi. Format: <code>## Subjudul</code>, <code>- poin</code>,{" "}
+                <code>&gt; kutipan</code>, <code>**tebal**</code>. Pisahkan paragraf dengan baris kosong.
+              </>
+            }
+          />
           <TextAreaField label="Alamat" name="address" rows={2} defaultValue={s?.address} maxLength={500} />
           <div className="grid gap-5 sm:grid-cols-2">
             <TextField label="Telepon" name="phone" type="tel" defaultValue={s?.phone} maxLength={30} />

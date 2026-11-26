@@ -251,14 +251,14 @@ isOneToOne: false
                   ]
                 },"site_settings": {
                   Row: {
-                    "address": string,"email": string,"history": string,"id": number,"maps_url": string,"mission": string,"mosque_name": string,"payment_info": string,"phone": string,"tagline": string,"updated_at": string,"vision": string,"welcome_message": string,"whatsapp": string
+                    "address": string,"email": string,"hero_image_path": string | null,"id": number,"maps_url": string,"mosque_name": string,"payment_info": string,"phone": string,"profile_content": string,"tagline": string,"updated_at": string,"whatsapp": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string,"email"?: string,"history"?: string,"id"?: number,"maps_url"?: string,"mission"?: string,"mosque_name"?: string,"payment_info"?: string,"phone"?: string,"tagline"?: string,"updated_at"?: string,"vision"?: string,"welcome_message"?: string,"whatsapp"?: string
+                    "address"?: string,"email"?: string,"hero_image_path"?: string | null,"id"?: number,"maps_url"?: string,"mosque_name"?: string,"payment_info"?: string,"phone"?: string,"profile_content"?: string,"tagline"?: string,"updated_at"?: string,"whatsapp"?: string
                   }
                   Update: {
-                    "address"?: string,"email"?: string,"history"?: string,"id"?: number,"maps_url"?: string,"mission"?: string,"mosque_name"?: string,"payment_info"?: string,"phone"?: string,"tagline"?: string,"updated_at"?: string,"vision"?: string,"welcome_message"?: string,"whatsapp"?: string
+                    "address"?: string,"email"?: string,"hero_image_path"?: string | null,"id"?: number,"maps_url"?: string,"mosque_name"?: string,"payment_info"?: string,"phone"?: string,"profile_content"?: string,"tagline"?: string,"updated_at"?: string,"whatsapp"?: string
                   }
                   Relationships: [
                     
