@@ -27,7 +27,7 @@ export function Pagination({
     <nav aria-label="Halaman" className="mt-6 flex items-center justify-between gap-3">
       {page > 1 ? (
         <Link href={href(page - 1)} className={buttonClass("secondary", "sm")}>
-          <ChevronLeft className="size-5" aria-hidden /> Sebelumnya
+          <ChevronLeft className="size-4" aria-hidden /> Sebelumnya
         </Link>
       ) : (
         <span />
@@ -37,7 +37,7 @@ export function Pagination({
       </span>
       {page < pages ? (
         <Link href={href(page + 1)} className={buttonClass("secondary", "sm")}>
-          Berikutnya <ChevronRight className="size-5" aria-hidden />
+          Berikutnya <ChevronRight className="size-4" aria-hidden />
         </Link>
       ) : (
         <span />

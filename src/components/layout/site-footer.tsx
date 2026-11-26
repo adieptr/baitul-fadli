@@ -7,18 +7,18 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
     <footer className="mt-16 bg-brand-900 text-brand-50">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <p className="text-xl font-extrabold text-white">{settings.mosque_name}</p>
+          <p className="text-lg font-extrabold text-white">{settings.mosque_name}</p>
           {settings.tagline && <p className="mt-1 text-brand-100">{settings.tagline}</p>}
         </div>
         <div className="space-y-2">
           {settings.address && (
             <p className="flex gap-2">
-              <MapPin className="mt-1 size-5 shrink-0" aria-hidden /> {settings.address}
+              <MapPin className="mt-1 size-4 shrink-0" aria-hidden /> {settings.address}
             </p>
           )}
           {settings.phone && (
             <p className="flex gap-2">
-              <Phone className="mt-1 size-5 shrink-0" aria-hidden />
+              <Phone className="mt-1 size-4 shrink-0" aria-hidden />
               <a href={`tel:${settings.phone.replace(/[^0-9+]/g, "")}`} className="underline underline-offset-4">
                 {settings.phone}
               </a>
@@ -26,7 +26,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           )}
           {settings.email && (
             <p className="flex gap-2">
-              <Mail className="mt-1 size-5 shrink-0" aria-hidden />
+              <Mail className="mt-1 size-4 shrink-0" aria-hidden />
               <a href={`mailto:${settings.email}`} className="underline underline-offset-4">
                 {settings.email}
               </a>

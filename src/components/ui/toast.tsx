@@ -31,16 +31,16 @@ export function Toaster() {
       {items.map((t) => (
         <div
           key={t.id}
-          className="pointer-events-auto flex w-full max-w-lg items-start gap-3 rounded-2xl border-2 border-emerald-400 bg-emerald-50 p-4 text-lg text-emerald-900 shadow-xl"
+          className="pointer-events-auto flex w-full max-w-lg items-start gap-3 rounded-xl border border-emerald-400 bg-emerald-50 p-4 text-base text-emerald-900 shadow-xl"
         >
-          <CheckCircle2 className="mt-0.5 size-6 shrink-0" aria-hidden />
+          <CheckCircle2 className="mt-0.5 size-5 shrink-0" aria-hidden />
           <span className="flex-1">{t.message}</span>
           <button
             onClick={() => setItems((x) => x.filter((i) => i.id !== t.id))}
             className="-m-1 rounded-lg p-1 hover:bg-emerald-100"
             aria-label="Tutup notifikasi"
           >
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
         </div>
       ))}

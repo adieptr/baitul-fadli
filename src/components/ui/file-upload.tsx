@@ -91,7 +91,7 @@ export function FileUpload({
         tabIndex={-1}
       />
       {path ? (
-        <div className="flex flex-wrap items-center gap-3 rounded-xl border-2 border-slate-200 bg-slate-50 p-3">
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Pratinjau" className="h-24 w-24 rounded-lg object-cover" />
@@ -113,13 +113,13 @@ export function FileUpload({
                 setPreview(null);
               }}
             >
-              <Trash2 className="size-5" /> Hapus
+              <Trash2 className="size-4" /> Hapus
             </Button>
           </div>
         </div>
       ) : (
         <Button type="button" variant="secondary" onClick={() => inputRef.current?.click()} disabled={busy} className="w-full sm:w-auto">
-          {busy ? <Loader2 className="size-5 animate-spin" /> : <ImagePlus className="size-5" />}
+          {busy ? <Loader2 className="size-4 animate-spin" /> : <ImagePlus className="size-4" />}
           {busy ? "Mengunggah…" : "Pilih / Ambil Foto"}
         </Button>
       )}

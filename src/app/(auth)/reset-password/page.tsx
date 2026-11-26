@@ -14,7 +14,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
   if (token) {
     return (
       <>
-        <h1 className="text-2xl font-bold">Buat Kata Sandi Baru</h1>
+        <h1 className="text-xl font-bold">Buat Kata Sandi Baru</h1>
         <p className="mt-1 mb-6 text-slate-600">Masukkan kata sandi baru Anda, lalu masuk kembali.</p>
         <ActionForm action={resetPasswordWithTokenAction} className="space-y-5">
           <input type="hidden" name="token" value={token} />
@@ -36,7 +36,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
   if (!user) redirect("/lupa-password");
   return (
     <>
-      <h1 className="text-2xl font-bold">Atur Kata Sandi Baru</h1>
+      <h1 className="text-xl font-bold">Atur Kata Sandi Baru</h1>
       <p className="mt-1 mb-6 text-slate-600">Untuk akun {user.email}</p>
       <ActionForm action={updatePasswordAction} className="space-y-5" resetOnSuccess>
         <PasswordField label="Kata Sandi Baru" name="password" autoComplete="new-password" hint="Minimal 8 karakter." required />

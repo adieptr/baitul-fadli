@@ -17,7 +17,7 @@ function EventList({ rows }: { rows: EventRow[] }) {
     <ul className="space-y-3">
       {rows.map((e) => (
         <li key={e.id}>
-          <Link href={`/admin/agenda/${e.id}`} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand-600">
+          <Link href={`/admin/agenda/${e.id}`} className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-600">
             <CalendarDays className="size-8 shrink-0 text-brand-700" aria-hidden />
             <div className="flex-1">
               <p className="font-bold">{e.title}</p>
@@ -52,13 +52,13 @@ export default async function EventsAdminPage({ searchParams }: { searchParams: 
         title="Agenda Kegiatan"
         action={
           <LinkButton href="/admin/agenda/baru">
-            <Plus className="size-5" aria-hidden /> Tambah Agenda
+            <Plus className="size-4" aria-hidden /> Tambah Agenda
           </LinkButton>
         }
       />
-      <h2 className="text-xl font-bold">Akan Datang</h2>
+      <h2 className="text-lg font-bold">Akan Datang</h2>
       {upcoming?.length ? <EventList rows={upcoming} /> : <EmptyState title="Belum ada agenda mendatang" />}
-      <h2 className="pt-4 text-xl font-bold text-slate-700">Sudah Lewat</h2>
+      <h2 className="pt-4 text-lg font-bold text-slate-700">Sudah Lewat</h2>
       {past?.length ? <EventList rows={past} /> : <p className="text-slate-600">Belum ada.</p>}
     </div>
   );

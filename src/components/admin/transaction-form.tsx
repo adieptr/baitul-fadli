@@ -46,7 +46,7 @@ export function TransactionForm({
               <label
                 key={t}
                 className={cn(
-                  "flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 text-lg font-bold",
+                  "flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border text-base font-bold",
                   type === t
                     ? t === "income"
                       ? "border-emerald-700 bg-emerald-50 text-emerald-800"

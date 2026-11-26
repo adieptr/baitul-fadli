@@ -25,21 +25,21 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
   return (
     <div className="space-y-6">
       {konfirmasi && (
-        <div role="status" className="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-lg text-emerald-900">
+        <div role="status" className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-base text-emerald-900">
           ✅ <b>Terima kasih!</b> Konfirmasi pembayaran Anda sudah kami terima dan akan segera diverifikasi oleh pengurus masjid.
           Jazakumullahu khairan.
         </div>
       )}
       <div>
-        <p className="text-lg text-slate-600">Assalamu&apos;alaikum,</p>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">{user.fullName || firstName}</h1>
+        <p className="text-base text-slate-600">Assalamu&apos;alaikum,</p>
+        <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">{user.fullName || firstName}</h1>
       </div>
 
       {!subscription ? (
-        <Card className="border-2 border-brand-700 bg-brand-50">
-          <HandHeart className="size-10 text-brand-700" aria-hidden />
-          <h2 className="mt-2 text-xl font-bold">Jadilah donatur tetap</h2>
-          <p className="mt-1 text-lg text-slate-700">
+        <Card className="border border-brand-700 bg-brand-50">
+          <HandHeart className="size-8 text-brand-700" aria-hidden />
+          <h2 className="mt-2 text-lg font-bold">Jadilah donatur tetap</h2>
+          <p className="mt-1 text-base text-slate-700">
             Atur nominal dan jadwal donasi rutin Anda. Kami akan mengingatkan Anda melalui Telegram.
           </p>
           <LinkButton href="/akun/donasi" size="lg" className="mt-4 w-full sm:w-auto">
@@ -49,23 +49,23 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
       ) : (
         <Card>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-xl font-bold">Donasi Rutin Saya</h2>
+            <h2 className="text-lg font-bold">Donasi Rutin Saya</h2>
             <SubscriptionBadge status={subscription.status} />
           </div>
           <dl className="mt-4 grid gap-4 sm:grid-cols-3">
             <div>
               <dt className="text-slate-600">Nominal</dt>
-              <dd className="text-2xl font-extrabold text-brand-800 tabular-nums">{formatRupiah(subscription.amount)}</dd>
+              <dd className="text-xl font-extrabold text-brand-800 tabular-nums">{formatRupiah(subscription.amount)}</dd>
               <dd className="text-slate-600">{FREQUENCY_LABEL[subscription.frequency]}</dd>
             </div>
             <div>
               <dt className="text-slate-600">Jadwal Pengingat</dt>
-              <dd className="text-lg font-semibold">{scheduleLabel(subscription)}</dd>
+              <dd className="text-base font-semibold">{scheduleLabel(subscription)}</dd>
             </div>
             <div>
               <dt className="text-slate-600">Jatuh Tempo Berikutnya</dt>
-              <dd className="flex items-center gap-2 text-lg font-semibold">
-                <CalendarClock className="size-5 text-brand-700" aria-hidden />
+              <dd className="flex items-center gap-2 text-base font-semibold">
+                <CalendarClock className="size-4 text-brand-700" aria-hidden />
                 {subscription.status === "active" ? formatDate(nextDueDate(subscription), { weekday: true }) : "—"}
               </dd>
             </div>
@@ -78,19 +78,19 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
 
       {actionable.length > 0 && (
         <section aria-labelledby="tagihan" className="space-y-4">
-          <h2 id="tagihan" className="text-xl font-bold">
+          <h2 id="tagihan" className="text-lg font-bold">
             Perlu Dibayar
           </h2>
           {actionable.map((p) => (
-            <Card key={p.id} className="border-2 border-amber-300">
+            <Card key={p.id} className="border border-amber-300">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="text-lg font-bold">{formatPeriodKey(p.period_key)}</p>
+                  <p className="text-base font-bold">{formatPeriodKey(p.period_key)}</p>
                   <p className="text-slate-600">Jatuh tempo {formatDate(p.due_date, { weekday: true })}</p>
                 </div>
                 <PeriodStatusBadge status={p.status} />
               </div>
-              <p className="my-3 text-3xl font-extrabold text-slate-900 tabular-nums">{formatRupiah(p.amount)}</p>
+              <p className="my-3 text-2xl font-extrabold text-slate-900 tabular-nums">{formatRupiah(p.amount)}</p>
               <ConfirmPaymentForm periodId={p.id} periodKey={p.period_key} amount={Number(p.amount)} userId={user.id} />
             </Card>
           ))}
@@ -100,8 +100,8 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
 
       {waiting.length > 0 && (
         <Card className="border-sky-300 bg-sky-50">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-sky-900">
-            <Hourglass className="size-5" aria-hidden /> Menunggu Verifikasi Pengurus
+          <h2 className="flex items-center gap-2 text-base font-bold text-sky-900">
+            <Hourglass className="size-4" aria-hidden /> Menunggu Verifikasi Pengurus
           </h2>
           <ul className="mt-2 space-y-2">
             {waiting.map((p) => (
@@ -118,16 +118,16 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
 
       {subscription && actionable.length === 0 && waiting.length === 0 && (
         <Card className="bg-emerald-50">
-          <p className="text-lg text-emerald-900">
+          <p className="text-base text-emerald-900">
             ✅ Tidak ada tagihan yang perlu dibayar saat ini. Jazakumullahu khairan atas kontribusi Anda.
           </p>
         </Card>
       )}
 
       {subscription && !telegram && (
-        <Card className="border-2 border-sky-300">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <BellRing className="size-5 text-sky-700" aria-hidden /> Aktifkan pengingat Telegram
+        <Card className="border border-sky-300">
+          <h2 className="flex items-center gap-2 text-base font-bold">
+            <BellRing className="size-4 text-sky-700" aria-hidden /> Aktifkan pengingat Telegram
           </h2>
           <p className="mt-1 text-slate-700">Agar tidak lupa, hubungkan akun Telegram Anda. Hanya butuh 1 menit.</p>
           <LinkButton href="/akun/profil#telegram" variant="secondary" className="mt-3">

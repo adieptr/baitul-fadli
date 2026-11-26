@@ -37,7 +37,7 @@ export default async function ReportsAdminPage({ searchParams }: { searchParams:
         description="Buat laporan per periode, periksa, lalu publikasikan agar dapat dilihat masyarakat."
       />
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Buat Laporan Baru</h2>
+        <h2 className="mb-4 text-lg font-bold">Buat Laporan Baru</h2>
         <ActionForm action={saveReportAction} className="grid gap-5 md:grid-cols-2">
           <TextField label="Judul Laporan" name="title" defaultValue={prevTitle} required className="md:col-span-2" />
           <TextField label="Tanggal Awal" name="period_start" type="date" defaultValue={prevStart} required />
@@ -57,7 +57,7 @@ export default async function ReportsAdminPage({ searchParams }: { searchParams:
         <ul className="space-y-3">
           {reports.map((r) => (
             <li key={r.id}>
-              <Link href={`/admin/laporan/${r.id}`} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand-600">
+              <Link href={`/admin/laporan/${r.id}`} className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-600">
                 <div className="flex-1">
                   <p className="font-bold">{r.title}</p>
                   <p className="text-sm text-slate-600">
@@ -66,7 +66,7 @@ export default async function ReportsAdminPage({ searchParams }: { searchParams:
                   </p>
                 </div>
                 <Badge tone={r.status === "published" ? "success" : "warning"}>{r.status === "published" ? "Terbit" : "Draf"}</Badge>
-                <ChevronRight className="size-5 text-slate-400" aria-hidden />
+                <ChevronRight className="size-4 text-slate-400" aria-hidden />
               </Link>
             </li>
           ))}

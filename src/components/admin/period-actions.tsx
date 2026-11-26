@@ -26,7 +26,7 @@ export function PeriodActions({
           <ConfirmButton
             label={
               <>
-                <BadgeCheck className="size-5" aria-hidden /> Verifikasi Lunas
+                <BadgeCheck className="size-4" aria-hidden /> Verifikasi Lunas
               </>
             }
             size="sm"
@@ -53,7 +53,7 @@ export function PeriodActions({
           <ConfirmButton
             label={
               <>
-                <XCircle className="size-5" aria-hidden /> Tolak
+                <XCircle className="size-4" aria-hidden /> Tolak
               </>
             }
             variant="secondary"
@@ -73,7 +73,7 @@ export function PeriodActions({
           <ConfirmButton
             label={
               <>
-                <Undo2 className="size-5" aria-hidden /> Batalkan Lunas
+                <Undo2 className="size-4" aria-hidden /> Batalkan Lunas
               </>
             }
             variant="ghost"
@@ -92,7 +92,7 @@ export function PeriodActions({
           <ConfirmButton
             label={
               <>
-                <Send className="size-5" aria-hidden /> Kirim Pengingat
+                <Send className="size-4" aria-hidden /> Kirim Pengingat
               </>
             }
             variant="ghost"

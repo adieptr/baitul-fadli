@@ -43,7 +43,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
             key={e.key}
             href={`/admin/audit${e.key ? `?entity=${e.key}` : ""}`}
             className={cn(
-              "flex min-h-11 shrink-0 items-center rounded-full border-2 px-4 font-semibold",
+              "flex min-h-9 shrink-0 items-center rounded-full border px-4 font-semibold",
               e.key === entity ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white text-slate-700",
             )}
           >

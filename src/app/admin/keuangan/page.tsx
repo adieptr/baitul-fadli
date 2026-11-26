@@ -61,7 +61,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
         description="Catat setiap pemasukan dan pengeluaran masjid."
         action={
           <LinkButton href="/admin/keuangan/baru">
-            <Plus className="size-5" aria-hidden /> Catat Transaksi
+            <Plus className="size-4" aria-hidden /> Catat Transaksi
           </LinkButton>
         }
       />
@@ -70,11 +70,11 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
         <form className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5" method="get">
           <label className="space-y-1">
             <span className="block font-semibold">Bulan</span>
-            <input type="month" name="month" defaultValue={month} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3" />
+            <input type="month" name="month" defaultValue={month} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
           </label>
           <label className="space-y-1">
             <span className="block font-semibold">Jenis</span>
-            <select name="type" defaultValue={type ?? ""} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3">
+            <select name="type" defaultValue={type ?? ""} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3">
               <option value="">Semua</option>
               <option value="income">Pemasukan</option>
               <option value="expense">Pengeluaran</option>
@@ -82,7 +82,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
           </label>
           <label className="space-y-1">
             <span className="block font-semibold">Kategori</span>
-            <select name="category" defaultValue={category ?? ""} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3">
+            <select name="category" defaultValue={category ?? ""} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3">
               <option value="">Semua</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -93,7 +93,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
           </label>
           <label className="space-y-1">
             <span className="block font-semibold">Cari keterangan</span>
-            <input name="q" defaultValue={q} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3" />
+            <input name="q" defaultValue={q} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
           </label>
           <div className="flex items-end">
             <Button type="submit" variant="secondary" className="w-full">Terapkan</Button>
@@ -118,7 +118,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
               <li key={t.id}>
                 <Link
                   href={`/admin/keuangan/${t.id}`}
-                  className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand-600"
+                  className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-600"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-slate-900">{t.description}</p>
@@ -134,7 +134,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
                       {t.proof_path && <Paperclip className="size-4" aria-label="Ada bukti" />}
                     </div>
                   </div>
-                  <p className={`text-lg font-bold tabular-nums ${t.type === "income" ? "text-emerald-700" : "text-red-700"}`}>
+                  <p className={`text-base font-bold tabular-nums ${t.type === "income" ? "text-emerald-700" : "text-red-700"}`}>
                     {t.type === "income" ? "+" : "−"}
                     {formatRupiah(t.amount)}
                   </p>

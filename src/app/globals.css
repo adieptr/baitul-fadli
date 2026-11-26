@@ -19,8 +19,8 @@
 }
 
 html {
-  /* Basis 18px agar teks nyaman dibaca, termasuk oleh pengguna lanjut usia */
-  font-size: 112.5%;
+  /* Basis 16px (standar) */
+  font-size: 100%;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }

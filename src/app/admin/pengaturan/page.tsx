@@ -26,7 +26,7 @@ export default async function SettingsPage() {
     <div className="space-y-6">
       <PageHeader title="Pengaturan" description="Profil masjid, kontak, rekening, dan integrasi Telegram." />
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Profil &amp; Kontak Masjid</h2>
+        <h2 className="mb-4 text-lg font-bold">Profil &amp; Kontak Masjid</h2>
         <ActionForm action={saveSettingsAction} className="space-y-5">
           <TextField label="Nama Masjid" name="mosque_name" defaultValue={s?.mosque_name} required maxLength={120} />
           <TextField label="Slogan / Tagline" name="tagline" defaultValue={s?.tagline} maxLength={200} />
@@ -54,7 +54,7 @@ export default async function SettingsPage() {
       </Card>
 
       <Card className="space-y-4">
-        <h2 className="text-xl font-bold">Integrasi Telegram</h2>
+        <h2 className="text-lg font-bold">Integrasi Telegram</h2>
         <dl className="grid gap-3 sm:grid-cols-2">
           <div>
             <dt className="text-slate-600">Bot</dt>

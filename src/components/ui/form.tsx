@@ -97,12 +97,12 @@ export function FormAlert({ className }: { className?: string }) {
       tabIndex={-1}
       role={state.ok ? "status" : "alert"}
       className={cn(
-        "mb-4 flex items-start gap-3 rounded-xl border-2 p-4 text-base outline-none",
+        "mb-4 flex items-start gap-2 rounded-lg border p-3 text-sm outline-none",
         state.ok ? "border-emerald-300 bg-emerald-50 text-emerald-900" : "border-red-300 bg-red-50 text-red-900",
         className,
       )}
     >
-      {state.ok ? <CheckCircle2 className="mt-0.5 size-6 shrink-0" /> : <AlertCircle className="mt-0.5 size-6 shrink-0" />}
+      {state.ok ? <CheckCircle2 className="mt-0.5 size-5 shrink-0" /> : <AlertCircle className="mt-0.5 size-5 shrink-0" />}
       <span>{state.message}</span>
     </div>
   );
@@ -118,7 +118,7 @@ export function SubmitButton({
     <Button type="submit" disabled={pending || props.disabled} aria-busy={pending} {...props}>
       {pending ? (
         <>
-          <Loader2 className="size-5 animate-spin" aria-hidden /> {pendingText}
+          <Loader2 className="size-4 animate-spin" aria-hidden /> {pendingText}
         </>
       ) : (
         children
@@ -128,7 +128,7 @@ export function SubmitButton({
 }
 
 const inputBase =
-  "block w-full rounded-xl border-2 border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:bg-slate-100";
+  "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 placeholder:text-slate-400 focus:border-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-100 disabled:bg-slate-100";
 
 function useFieldError(name?: string) {
   const { state } = useFormCtx();
@@ -155,7 +155,7 @@ export function Field({
   const describedBy = [hint ? `${id}-hint` : null, error ? `${id}-err` : null].filter(Boolean).join(" ") || undefined;
   return (
     <div className={cn("space-y-1.5", className)}>
-      <label htmlFor={id} className="block text-base font-semibold text-slate-800">
+      <label htmlFor={id} className="block text-sm font-semibold text-slate-800">
         {label} {required && <span className="text-red-700" aria-hidden>*</span>}
       </label>
       {children({ id, "aria-invalid": error ? true : undefined, "aria-describedby": describedBy })}
@@ -181,7 +181,7 @@ export function TextField({
 }: ComponentProps<"input"> & { label: string; hint?: ReactNode; name: string }) {
   return (
     <Field label={label} name={props.name} hint={hint} required={props.required} className={className}>
-      {(a) => <input {...a} {...props} className={cn(inputBase, props.type === "date" && "min-h-[3.25rem]")} />}
+      {(a) => <input {...a} {...props} className={cn(inputBase, props.type === "date" && "min-h-10")} />}
     </Field>
   );
 }
@@ -209,7 +209,7 @@ export function MoneyField({
             autoComplete="off"
             value={value}
             onChange={(e) => setValue(fmt(e.target.value))}
-            className={cn(inputBase, "pl-12 text-lg font-semibold tabular-nums")}
+            className={cn(inputBase, "pl-12 text-base font-semibold tabular-nums")}
           />
         </div>
       )}
@@ -233,7 +233,7 @@ export function SelectField({
   return (
     <Field label={label} name={props.name} hint={hint} required={props.required}>
       {(a) => (
-        <select {...a} {...props} className={cn(inputBase, "min-h-[3.25rem] appearance-auto")}>
+        <select {...a} {...props} className={cn(inputBase, "min-h-10 appearance-auto")}>
           {placeholder && <option value="">{placeholder}</option>}
           {options.map((o) => (
             <option key={o.value} value={o.value}>
@@ -262,8 +262,8 @@ export function CheckboxField({ label, hint, ...props }: ComponentProps<"input">
   const id = useId();
   return (
     <div className="flex items-start gap-3">
-      <input id={id} type="checkbox" {...props} className="mt-1 size-6 shrink-0 accent-brand-700" />
-      <label htmlFor={id} className="text-base">
+      <input id={id} type="checkbox" {...props} className="mt-0.5 size-4 shrink-0 accent-brand-700" />
+      <label htmlFor={id} className="text-sm">
         <span className="font-semibold text-slate-800">{label}</span>
         {hint && <span className="block text-sm text-slate-600">{hint}</span>}
       </label>
@@ -314,10 +314,10 @@ export function ConfirmButton({
       <dialog
         ref={ref}
         aria-labelledby={titleId}
-        className="m-auto w-[min(92vw,32rem)] rounded-2xl p-0 shadow-2xl"
+        className="m-auto w-[min(92vw,32rem)] rounded-xl p-0 shadow-2xl"
       >
-        <div className="space-y-4 p-6">
-          <h2 id={titleId} className="text-xl font-bold text-slate-900">
+        <div className="space-y-4 p-5">
+          <h2 id={titleId} className="text-lg font-semibold text-slate-900">
             {title}
           </h2>
           <div className="text-base text-slate-700">{message}</div>

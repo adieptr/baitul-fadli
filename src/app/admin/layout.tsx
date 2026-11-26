@@ -18,12 +18,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="hidden rounded-full bg-gold-100 px-3 py-1 text-sm font-bold text-gold-700 sm:inline">PENGURUS</span>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/akun" className="hidden min-h-12 items-center gap-2 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100 md:inline-flex">
-              <UserRound className="size-5" aria-hidden /> {admin.fullName.split(" ")[0]}
+            <Link href="/akun" className="hidden min-h-10 items-center gap-2 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100 md:inline-flex">
+              <UserRound className="size-4" aria-hidden /> {admin.fullName.split(" ")[0]}
             </Link>
             <form action={signOutAction}>
-              <button className="inline-flex min-h-12 items-center gap-2 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100">
-                <LogOut className="size-5" aria-hidden /> <span className="hidden sm:inline">Keluar</span>
+              <button className="inline-flex min-h-10 items-center gap-2 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100">
+                <LogOut className="size-4" aria-hidden /> <span className="hidden sm:inline">Keluar</span>
               </button>
             </form>
             <AdminMobileMenu />

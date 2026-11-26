@@ -8,7 +8,7 @@ export const metadata = { title: "Daftar Donatur" };
 export default function RegisterPage() {
   return (
     <>
-      <h1 className="text-2xl font-bold">Daftar Akun Donatur</h1>
+      <h1 className="text-xl font-bold">Daftar Akun Donatur</h1>
       <p className="mt-1 mb-6 text-slate-600">Isi data berikut. Akun langsung aktif, lalu Anda dapat mengatur jadwal donasi rutin.</p>
       <ActionForm action={signUpAction} className="space-y-5" resetOnSuccess>
         <TextField label="Nama Lengkap" name="full_name" autoComplete="name" required />

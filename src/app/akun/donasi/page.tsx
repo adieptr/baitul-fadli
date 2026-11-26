@@ -16,7 +16,7 @@ export default async function DonationSettingsPage({ searchParams }: { searchPar
   return (
     <div className="space-y-6">
       {welcome && (
-        <div role="status" className="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-lg text-emerald-900">
+        <div role="status" className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-base text-emerald-900">
           Akun Anda berhasil dibuat. Silakan atur nominal dan jadwal donasi di bawah ini.
         </div>
       )}
@@ -42,7 +42,7 @@ export default async function DonationSettingsPage({ searchParams }: { searchPar
 
       {subscription && (
         <Card>
-          <h2 className="text-lg font-bold">Status Donasi Rutin</h2>
+          <h2 className="text-base font-bold">Status Donasi Rutin</h2>
           <p className="mt-1 text-slate-600">
             Jeda bila sedang berhalangan sementara. Selama dijeda/berhenti, tagihan dan pengingat baru tidak dibuat.
           </p>

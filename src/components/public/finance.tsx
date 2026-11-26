@@ -6,10 +6,10 @@ import type { Breakdown, ReportRow } from "@/lib/queries/public";
 export function ReportSummary({ report }: { report: Pick<ReportRow, "opening_balance" | "total_income" | "total_expense" | "closing_balance"> }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard label="Saldo Awal" value={formatRupiah(report.opening_balance)} icon={<Landmark className="size-5" />} />
-      <StatCard label="Pemasukan" value={formatRupiah(report.total_income)} tone="success" icon={<ArrowDownCircle className="size-5" />} />
-      <StatCard label="Pengeluaran" value={formatRupiah(report.total_expense)} tone="danger" icon={<ArrowUpCircle className="size-5" />} />
-      <StatCard label="Saldo Akhir" value={formatRupiah(report.closing_balance)} tone="brand" icon={<Wallet className="size-5" />} />
+      <StatCard label="Saldo Awal" value={formatRupiah(report.opening_balance)} icon={<Landmark className="size-4" />} />
+      <StatCard label="Pemasukan" value={formatRupiah(report.total_income)} tone="success" icon={<ArrowDownCircle className="size-4" />} />
+      <StatCard label="Pengeluaran" value={formatRupiah(report.total_expense)} tone="danger" icon={<ArrowUpCircle className="size-4" />} />
+      <StatCard label="Saldo Akhir" value={formatRupiah(report.closing_balance)} tone="brand" icon={<Wallet className="size-4" />} />
     </div>
   );
 }
@@ -28,7 +28,7 @@ export function BreakdownBars({ breakdown }: { breakdown: Breakdown | null }) {
         const max = Math.max(1, ...rows.map((r) => Number(r.total)));
         return (
           <div key={type}>
-            <h3 className="mb-3 text-lg font-bold">{title}</h3>
+            <h3 className="mb-3 text-base font-bold">{title}</h3>
             {rows.length === 0 ? (
               <p className="text-slate-600">Tidak ada.</p>
             ) : (

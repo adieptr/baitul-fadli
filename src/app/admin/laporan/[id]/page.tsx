@@ -32,8 +32,8 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-6">
-      <Link href="/admin/laporan" className="inline-flex min-h-12 items-center gap-2 font-semibold text-brand-800">
-        <ArrowLeft className="size-5" aria-hidden /> Semua laporan
+      <Link href="/admin/laporan" className="inline-flex min-h-10 items-center gap-2 font-semibold text-brand-800">
+        <ArrowLeft className="size-4" aria-hidden /> Semua laporan
       </Link>
       <PageHeader
         title={r.title}
@@ -42,7 +42,7 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
       />
 
       {!published && (
-        <p className="rounded-xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900">
+        <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900">
           Angka di bawah adalah <b>pratinjau langsung</b> dari transaksi saat ini. Saat dipublikasikan, angka dikunci sebagai
           snapshot dan transaksi pada periode ini tidak bisa diubah.
         </p>
@@ -55,7 +55,7 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
       {published ? (
         <Card className="space-y-4">
           <a href={`/keuangan/${r.id}`} target="_blank" className="inline-flex items-center gap-2 font-semibold text-brand-800 underline">
-            <ExternalLink className="size-5" aria-hidden /> Lihat tampilan publik
+            <ExternalLink className="size-4" aria-hidden /> Lihat tampilan publik
           </a>
           <ActionForm action={unpublishReportAction}>
             <input type="hidden" name="id" value={r.id} />
@@ -73,7 +73,7 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
       ) : (
         <>
           <Card>
-            <h2 className="mb-4 text-xl font-bold">Ubah Draf</h2>
+            <h2 className="mb-4 text-lg font-bold">Ubah Draf</h2>
             <ActionForm action={saveReportAction} className="grid gap-5 md:grid-cols-2">
               <input type="hidden" name="id" value={r.id} />
               <TextField label="Judul Laporan" name="title" defaultValue={r.title} required className="md:col-span-2" />

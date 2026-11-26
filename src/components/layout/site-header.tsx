@@ -22,7 +22,7 @@ export function SiteHeader({ mosqueName }: { mosqueName: string }) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-3 py-2">
         <Logo name={mosqueName} />
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu utama">
           {NAV.map((n) => (
@@ -41,20 +41,20 @@ export function SiteHeader({ mosqueName }: { mosqueName: string }) {
         <div className="flex items-center gap-2">
           <Link
             href="/akun"
-            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800"
+            className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800"
           >
-            <UserRound className="size-5" aria-hidden />
+            <UserRound className="size-4" aria-hidden />
             <span className="hidden sm:inline">Akun Saya</span>
             <span className="sm:hidden">Akun</span>
           </Link>
           <button
-            className="inline-flex size-12 items-center justify-center rounded-xl border-2 border-slate-200 lg:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-xl border border-slate-200 lg:hidden"
             aria-expanded={open}
             aria-controls="menu-mobile"
             aria-label={open ? "Tutup menu" : "Buka menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
       </div>
@@ -67,7 +67,7 @@ export function SiteHeader({ mosqueName }: { mosqueName: string }) {
                   href={n.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "flex min-h-12 items-center rounded-xl px-4 text-lg font-semibold",
+                    "flex min-h-10 items-center rounded-xl px-4 text-base font-semibold",
                     isActive(n.href) ? "bg-brand-50 text-brand-800" : "text-slate-800 hover:bg-slate-100",
                   )}
                 >

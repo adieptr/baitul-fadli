@@ -8,7 +8,7 @@ export const metadata = { title: "Lupa Kata Sandi" };
 export default function ForgotPasswordPage() {
   return (
     <>
-      <h1 className="text-2xl font-bold">Lupa Kata Sandi</h1>
+      <h1 className="text-xl font-bold">Lupa Kata Sandi</h1>
       <p className="mt-1 mb-4 text-slate-600">
         Masukkan nomor HP atau email akun Anda. Tautan untuk membuat kata sandi baru akan dikirim melalui{" "}
         <b>Telegram</b> yang sudah terhubung dengan akun.
@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
       <ActionForm action={forgotPasswordAction} className="space-y-5" resetOnSuccess>
         <TextField label="Nomor HP atau Email" name="identifier" autoComplete="username" placeholder="08xxxxxxxxxx" required />
         <SubmitButton size="lg" className="w-full" pendingText="Mengirim…">
-          <Send className="size-5" aria-hidden /> Kirim Tautan ke Telegram
+          <Send className="size-4" aria-hidden /> Kirim Tautan ke Telegram
         </SubmitButton>
       </ActionForm>
       <div className="mt-6 rounded-xl bg-slate-50 p-4 text-base text-slate-700">

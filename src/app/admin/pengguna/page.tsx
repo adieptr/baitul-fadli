@@ -37,7 +37,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         <form method="get" className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <label className="flex-1 space-y-1">
             <span className="block font-semibold">Cari nama atau email</span>
-            <input name="q" defaultValue={q} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3" />
+            <input name="q" defaultValue={q} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
           </label>
           <Button type="submit" variant="secondary">Cari</Button>
         </form>
@@ -47,7 +47,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
           <li key={u.id}>
             <Card className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
               <div className="flex-1">
-                <p className="flex flex-wrap items-center gap-2 text-lg font-bold">
+                <p className="flex flex-wrap items-center gap-2 text-base font-bold">
                   {u.full_name || "(tanpa nama)"} {u.role === "admin" && <Badge tone="brand">Admin</Badge>}
                   {u.id === me.id && <Badge>Anda</Badge>}
                 </p>

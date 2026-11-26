@@ -58,7 +58,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
             href={`/admin/pembayaran?status=${t}`}
             aria-current={t === status ? "page" : undefined}
             className={cn(
-              "flex min-h-12 shrink-0 items-center gap-2 rounded-xl border-2 px-4 font-semibold",
+              "flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-4 font-semibold",
               t === status ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white text-slate-700",
             )}
           >
@@ -80,7 +80,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
                 <Card className="space-y-3 p-4 sm:p-5">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div>
-                      <Link href={`/admin/donatur/${p.user_id}`} className="text-lg font-bold hover:underline">
+                      <Link href={`/admin/donatur/${p.user_id}`} className="text-base font-bold hover:underline">
                         {p.profiles?.full_name || "(tanpa nama)"}
                       </Link>
                       <p className="text-slate-600">
@@ -88,7 +88,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xl font-extrabold tabular-nums">{formatRupiah(p.amount)}</p>
+                      <p className="text-lg font-extrabold tabular-nums">{formatRupiah(p.amount)}</p>
                       <PeriodStatusBadge status={p.status} />
                     </div>
                   </div>
@@ -109,11 +109,11 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
                     <PeriodActions period={p} donorName={p.profiles?.full_name ?? ""} hasTelegram={Boolean(p.profiles?.telegram_links)} />
                     {phone && (
                       <div className="flex gap-2">
-                        <a href={`tel:${phone}`} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100">
-                          <Phone className="size-5" aria-hidden /> Telepon
+                        <a href={`tel:${phone}`} className="inline-flex min-h-9 items-center gap-1 rounded-xl px-3 font-semibold text-slate-700 hover:bg-slate-100">
+                          <Phone className="size-4" aria-hidden /> Telepon
                         </a>
-                        <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-3 font-semibold text-emerald-800 hover:bg-emerald-50">
-                          <MessageCircle className="size-5" aria-hidden /> WhatsApp
+                        <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center gap-1 rounded-xl px-3 font-semibold text-emerald-800 hover:bg-emerald-50">
+                          <MessageCircle className="size-4" aria-hidden /> WhatsApp
                         </a>
                       </div>
                     )}

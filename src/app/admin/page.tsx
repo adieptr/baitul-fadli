@@ -45,10 +45,10 @@ export default async function AdminDashboard() {
         action={
           <>
             <LinkButton href="/admin/keuangan/baru">
-              <Plus className="size-5" aria-hidden /> Catat Transaksi
+              <Plus className="size-4" aria-hidden /> Catat Transaksi
             </LinkButton>
             <LinkButton href="/admin/agenda/baru" variant="secondary">
-              <Plus className="size-5" aria-hidden /> Agenda
+              <Plus className="size-4" aria-hidden /> Agenda
             </LinkButton>
           </>
         }
@@ -57,30 +57,30 @@ export default async function AdminDashboard() {
       {(s.awaiting_verification ?? 0) > 0 && (
         <Link
           href="/admin/pembayaran"
-          className="flex items-center gap-4 rounded-2xl border-2 border-sky-400 bg-sky-50 p-5 hover:bg-sky-100"
+          className="flex items-center gap-4 rounded-xl border border-sky-400 bg-sky-50 p-5 hover:bg-sky-100"
         >
-          <ClipboardCheck className="size-10 shrink-0 text-sky-700" aria-hidden />
+          <ClipboardCheck className="size-8 shrink-0 text-sky-700" aria-hidden />
           <div>
-            <p className="text-lg font-bold text-sky-900">{s.awaiting_verification} pembayaran menunggu verifikasi</p>
+            <p className="text-base font-bold text-sky-900">{s.awaiting_verification} pembayaran menunggu verifikasi</p>
             <p className="text-sky-800">Periksa rekening masjid lalu verifikasi →</p>
           </div>
         </Link>
       )}
 
       <section aria-labelledby="keu">
-        <h2 id="keu" className="mb-3 text-xl font-bold">Keuangan</h2>
+        <h2 id="keu" className="mb-3 text-lg font-bold">Keuangan</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Total Saldo Kas" value={formatRupiah(s.balance)} tone="brand" icon={<Wallet className="size-5" />} hint="Seluruh transaksi tercatat" />
-          <StatCard label="Total Pemasukan" value={formatRupiah(s.income_all)} tone="success" icon={<ArrowDownCircle className="size-5" />} hint={`${month}: ${formatRupiah(s.income_month)}`} />
-          <StatCard label="Total Pengeluaran" value={formatRupiah(s.expense_all)} tone="danger" icon={<ArrowUpCircle className="size-5" />} hint={`${month}: ${formatRupiah(s.expense_month)}`} />
-          <StatCard label={`Selisih ${month}`} value={formatRupiah((s.income_month ?? 0) - (s.expense_month ?? 0))} icon={<Wallet className="size-5" />} />
+          <StatCard label="Total Saldo Kas" value={formatRupiah(s.balance)} tone="brand" icon={<Wallet className="size-4" />} hint="Seluruh transaksi tercatat" />
+          <StatCard label="Total Pemasukan" value={formatRupiah(s.income_all)} tone="success" icon={<ArrowDownCircle className="size-4" />} hint={`${month}: ${formatRupiah(s.income_month)}`} />
+          <StatCard label="Total Pengeluaran" value={formatRupiah(s.expense_all)} tone="danger" icon={<ArrowUpCircle className="size-4" />} hint={`${month}: ${formatRupiah(s.expense_month)}`} />
+          <StatCard label={`Selisih ${month}`} value={formatRupiah((s.income_month ?? 0) - (s.expense_month ?? 0))} icon={<Wallet className="size-4" />} />
         </div>
       </section>
 
       <section aria-labelledby="don">
-        <h2 id="don" className="mb-3 text-xl font-bold">Donatur Tetap · {month}</h2>
+        <h2 id="don" className="mb-3 text-lg font-bold">Donatur Tetap · {month}</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Donatur Aktif" value={s.active_donors ?? 0} icon={<Users className="size-5" />} />
+          <StatCard label="Donatur Aktif" value={s.active_donors ?? 0} icon={<Users className="size-4" />} />
           <StatCard label="Sudah Berdonasi" value={s.donors_paid_month ?? 0} tone="success" hint="Semua tagihan bulan ini lunas" />
           <StatCard label="Belum Berdonasi" value={s.donors_unpaid_month ?? 0} tone="danger" hint="Ada tagihan belum lunas" />
           <StatCard label="Belum Jatuh Tempo" value={s.donors_not_due_month ?? 0} tone="neutral" hint="Tagihan bulan ini belum terbentuk" />
@@ -95,7 +95,7 @@ export default async function AdminDashboard() {
       <div className="grid gap-6 xl:grid-cols-2">
         <Card>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Menunggu Verifikasi</h2>
+            <h2 className="text-lg font-bold">Menunggu Verifikasi</h2>
             <Link href="/admin/pembayaran" className="font-semibold text-brand-800 underline underline-offset-4">Semua</Link>
           </div>
           {awaiting?.length ? (
@@ -119,14 +119,14 @@ export default async function AdminDashboard() {
         </Card>
         <Card>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Agenda Terdekat</h2>
+            <h2 className="text-lg font-bold">Agenda Terdekat</h2>
             <Link href="/admin/agenda" className="font-semibold text-brand-800 underline underline-offset-4">Semua</Link>
           </div>
           {events?.length ? (
             <ul className="divide-y divide-slate-100">
               {events.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 py-3">
-                  <CalendarDays className="size-6 shrink-0 text-brand-700" aria-hidden />
+                  <CalendarDays className="size-5 shrink-0 text-brand-700" aria-hidden />
                   <div className="flex-1">
                     <Link href={`/admin/agenda/${e.id}`} className="font-semibold hover:underline">{e.title}</Link>
                     <p className="text-sm text-slate-600">

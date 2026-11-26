@@ -33,11 +33,11 @@ export default async function HistoryPage() {
               <Card className="p-4 sm:p-5">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
-                    <p className="text-lg font-bold">{formatPeriodKey(p.period_key)}</p>
+                    <p className="text-base font-bold">{formatPeriodKey(p.period_key)}</p>
                     <p className="text-slate-600">Jatuh tempo {formatDate(p.due_date)}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold tabular-nums">{formatRupiah(p.amount)}</p>
+                    <p className="text-base font-bold tabular-nums">{formatRupiah(p.amount)}</p>
                     <PeriodStatusBadge status={p.status} />
                   </div>
                 </div>

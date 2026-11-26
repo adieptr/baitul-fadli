@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6", className)}>{children}</div>;
+  return <div className={cn("rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6", className)}>{children}</div>;
 }
 
 export function PageHeader({
@@ -17,7 +17,7 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{title}</h1>
+        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">{title}</h1>
         {description && <p className="mt-1 text-slate-600">{description}</p>}
       </div>
       {action && <div className="flex flex-wrap gap-2">{action}</div>}
@@ -47,11 +47,11 @@ export function StatCard({
   };
   return (
     <Card className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 text-base font-medium text-slate-600">
+      <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
         {icon}
         {label}
       </div>
-      <div className={cn("text-2xl font-bold tabular-nums sm:text-[1.7rem]", tones[tone])}>{value}</div>
+      <div className={cn("text-xl font-bold tabular-nums", tones[tone])}>{value}</div>
       {hint && <div className="text-sm text-slate-500">{hint}</div>}
     </Card>
   );
@@ -59,8 +59,8 @@ export function StatCard({
 
 export function EmptyState({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return (
-    <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-8 text-center">
-      <p className="text-lg font-semibold text-slate-800">{title}</p>
+    <div className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center">
+      <p className="font-semibold text-slate-800">{title}</p>
       {description && <p className="mt-1 text-slate-600">{description}</p>}
       {action && <div className="mt-4 flex justify-center">{action}</div>}
     </div>

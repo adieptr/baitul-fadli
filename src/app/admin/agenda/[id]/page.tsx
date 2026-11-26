@@ -21,8 +21,8 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
   if (!ev) notFound();
   return (
     <div className="max-w-2xl space-y-6">
-      <Link href="/admin/agenda" className="inline-flex min-h-12 items-center gap-2 font-semibold text-brand-800">
-        <ArrowLeft className="size-5" aria-hidden /> Kembali
+      <Link href="/admin/agenda" className="inline-flex min-h-10 items-center gap-2 font-semibold text-brand-800">
+        <ArrowLeft className="size-4" aria-hidden /> Kembali
       </Link>
       <PageHeader title="Ubah Agenda" />
       <Card>

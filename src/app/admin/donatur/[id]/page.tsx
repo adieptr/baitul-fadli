@@ -33,30 +33,30 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-6">
-      <Link href="/admin/donatur" className="inline-flex min-h-12 items-center gap-2 font-semibold text-brand-800">
-        <ArrowLeft className="size-5" aria-hidden /> Semua donatur
+      <Link href="/admin/donatur" className="inline-flex min-h-10 items-center gap-2 font-semibold text-brand-800">
+        <ArrowLeft className="size-4" aria-hidden /> Semua donatur
       </Link>
       <PageHeader title={profile.full_name || "(tanpa nama)"} description={`Terdaftar ${formatDateTime(profile.created_at)}`} action={sub && <SubscriptionBadge status={sub.status} />} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="space-y-2">
-          <h2 className="text-lg font-bold">Kontak</h2>
+          <h2 className="text-base font-bold">Kontak</h2>
           {profile.phone && (
             <p className="flex flex-wrap items-center gap-3">
-              <a href={`tel:${profile.phone}`} className="inline-flex items-center gap-2 font-semibold underline"><Phone className="size-5" aria-hidden /> {profile.phone}</a>
-              <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-800 underline"><MessageCircle className="size-5" aria-hidden /> WA</a>
+              <a href={`tel:${profile.phone}`} className="inline-flex items-center gap-2 font-semibold underline"><Phone className="size-4" aria-hidden /> {profile.phone}</a>
+              <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-800 underline"><MessageCircle className="size-4" aria-hidden /> WA</a>
             </p>
           )}
-          {profile.email && <p className="flex items-center gap-2 break-all"><Mail className="size-5 shrink-0" aria-hidden /> {profile.email}</p>}
-          <p className="flex items-center gap-2"><Send className="size-5" aria-hidden /> {telegram ? `Terhubung${telegram.telegram_username ? ` (@${telegram.telegram_username})` : ""}` : "Belum terhubung Telegram"}</p>
+          {profile.email && <p className="flex items-center gap-2 break-all"><Mail className="size-4 shrink-0" aria-hidden /> {profile.email}</p>}
+          <p className="flex items-center gap-2"><Send className="size-4" aria-hidden /> {telegram ? `Terhubung${telegram.telegram_username ? ` (@${telegram.telegram_username})` : ""}` : "Belum terhubung Telegram"}</p>
           <ResetPasswordButton userId={profile.id} name={profile.full_name} phone={profile.phone} />
         </Card>
         <StatCard label="Total Donasi Terverifikasi" value={formatRupiah(totalPaid)} tone="brand" hint={`${paid.length} periode lunas`} />
         <Card>
-          <h2 className="text-lg font-bold">Pengaturan Donasi</h2>
+          <h2 className="text-base font-bold">Pengaturan Donasi</h2>
           {sub ? (
             <div className="mt-2 space-y-1">
-              <p className="text-xl font-bold">{formatRupiah(sub.amount)} <span className="text-base font-normal">/ {FREQUENCY_LABEL[sub.frequency].toLowerCase()}</span></p>
+              <p className="text-lg font-bold">{formatRupiah(sub.amount)} <span className="text-base font-normal">/ {FREQUENCY_LABEL[sub.frequency].toLowerCase()}</span></p>
               <p>{scheduleLabel(sub)}</p>
               {sub.status === "active" && <p className="text-slate-600">Berikutnya: {formatDate(nextDueDate(sub), { weekday: true })}</p>}
               <ActionForm action={adminSetSubscriptionStatusAction} className="pt-2">
@@ -75,7 +75,7 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
       </div>
 
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Riwayat Tagihan</h2>
+        <h2 className="mb-4 text-lg font-bold">Riwayat Tagihan</h2>
         {!periods?.length ? (
           <EmptyState title="Belum ada tagihan" />
         ) : (
@@ -104,7 +104,7 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Log Pengingat Telegram</h2>
+        <h2 className="mb-4 text-lg font-bold">Log Pengingat Telegram</h2>
         {!reminders?.length ? (
           <p className="text-slate-600">Belum ada pengingat terkirim.</p>
         ) : (

@@ -16,13 +16,13 @@ function RadioCard({ name, value, checked, onChange, title, desc }: {
   return (
     <label
       className={cn(
-        "flex cursor-pointer items-start gap-3 rounded-2xl border-2 p-4",
+        "flex cursor-pointer items-start gap-3 rounded-xl border p-4",
         checked ? "border-brand-700 bg-brand-50" : "border-slate-300 bg-white",
       )}
     >
-      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="mt-1 size-6 accent-brand-700" />
+      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="mt-1 size-5 accent-brand-700" />
       <span>
-        <span className="block text-lg font-bold">{title}</span>
+        <span className="block text-base font-bold">{title}</span>
         <span className="text-slate-600">{desc}</span>
       </span>
     </label>
@@ -45,7 +45,7 @@ function AmountPicker({ initial }: { initial?: number }) {
               setKey((k) => k + 1);
             }}
             className={cn(
-              "min-h-12 rounded-full border-2 px-4 font-semibold",
+              "min-h-10 rounded-full border px-4 font-semibold",
               value === q ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white text-slate-800",
             )}
           >
@@ -74,7 +74,7 @@ function ScheduleFields({ initial }: { initial: Sub }) {
       {freq === "weekly" ? (
         <Field label="Hari Pengingat" name="day_of_week" required hint="Pengingat dikirim pada hari ini setiap pekan.">
           {(a) => (
-            <select {...a} name="day_of_week" defaultValue={initial?.day_of_week ?? 5} className="block min-h-[3.25rem] w-full rounded-xl border-2 border-slate-300 bg-white px-4 text-base">
+            <select {...a} name="day_of_week" defaultValue={initial?.day_of_week ?? 5} className="block min-h-10 w-full rounded-xl border border-slate-300 bg-white px-4 text-base">
               {DAY_NAMES.map((d, i) => (
                 <option key={d} value={i + 1}>{d}</option>
               ))}
@@ -84,7 +84,7 @@ function ScheduleFields({ initial }: { initial: Sub }) {
       ) : (
         <Field label="Tanggal Pengingat" name="day_of_month" required hint="Pengingat dikirim pada tanggal ini setiap bulan (1–28).">
           {(a) => (
-            <select {...a} name="day_of_month" defaultValue={initial?.day_of_month ?? 1} className="block min-h-[3.25rem] w-full rounded-xl border-2 border-slate-300 bg-white px-4 text-base">
+            <select {...a} name="day_of_month" defaultValue={initial?.day_of_month ?? 1} className="block min-h-10 w-full rounded-xl border border-slate-300 bg-white px-4 text-base">
               {Array.from({ length: 28 }, (_, i) => i + 1).map((d) => (
                 <option key={d} value={d}>Tanggal {d}</option>
               ))}

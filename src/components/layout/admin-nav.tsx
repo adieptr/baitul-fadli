@@ -33,9 +33,9 @@ export function AdminMobileMenu() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="admin-menu"
-        className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-slate-200 px-3 font-semibold"
+        className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 font-semibold"
       >
-        {open ? <X className="size-5" /> : <Menu className="size-5" />} Menu
+        {open ? <X className="size-4" /> : <Menu className="size-4" />} Menu
       </button>
       {open && (
         <div id="admin-menu" className="fixed inset-x-0 top-[4.5rem] bottom-0 z-40 overflow-y-auto bg-white p-4 shadow-xl" onClick={(e) => {

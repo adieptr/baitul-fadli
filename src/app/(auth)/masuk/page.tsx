@@ -9,15 +9,15 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { next, error, reset } = await searchParams;
   return (
     <>
-      <h1 className="text-2xl font-bold">Masuk</h1>
+      <h1 className="text-xl font-bold">Masuk</h1>
       <p className="mt-1 mb-6 text-slate-600">Masuk ke akun donatur atau akun pengurus.</p>
       {error === "link" && (
-        <p role="alert" className="mb-4 rounded-xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900">
+        <p role="alert" className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900">
           Tautan sudah tidak berlaku. Silakan masuk atau minta tautan baru.
         </p>
       )}
       {reset && (
-        <p role="status" className="mb-4 rounded-xl border-2 border-emerald-300 bg-emerald-50 p-4 text-emerald-900">
+        <p role="status" className="mb-4 rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-emerald-900">
           Kata sandi baru berhasil disimpan. Silakan masuk.
         </p>
       )}

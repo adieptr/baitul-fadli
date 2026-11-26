@@ -65,7 +65,7 @@ export default async function DonorsPage({ searchParams }: { searchParams: Promi
           <input type="hidden" name="filter" value={filter} />
           <label className="flex-1 space-y-1">
             <span className="block font-semibold">Cari nama donatur</span>
-            <input name="q" defaultValue={q} className="block min-h-12 w-full rounded-xl border-2 border-slate-300 px-3" />
+            <input name="q" defaultValue={q} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
           </label>
           <Button type="submit" variant="secondary">Cari</Button>
         </form>
@@ -76,7 +76,7 @@ export default async function DonorsPage({ searchParams }: { searchParams: Promi
               href={`/admin/donatur?filter=${f.key}${q ? `&q=${encodeURIComponent(q)}` : ""}`}
               aria-current={f.key === filter ? "page" : undefined}
               className={cn(
-                "flex min-h-11 shrink-0 items-center rounded-full border-2 px-4 font-semibold",
+                "flex min-h-9 shrink-0 items-center rounded-full border px-4 font-semibold",
                 f.key === filter ? "border-brand-700 bg-brand-700 text-white" : "border-slate-300 bg-white text-slate-700",
               )}
             >
@@ -95,9 +95,9 @@ export default async function DonorsPage({ searchParams }: { searchParams: Promi
             const out = outstanding.get(s.user_id) ?? 0;
             return (
               <li key={s.id}>
-                <Link href={`/admin/donatur/${s.user_id}`} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand-600">
+                <Link href={`/admin/donatur/${s.user_id}`} className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-600">
                   <div className="min-w-0 flex-1">
-                    <p className="flex flex-wrap items-center gap-2 text-lg font-bold">
+                    <p className="flex flex-wrap items-center gap-2 text-base font-bold">
                       {s.profiles.full_name || "(tanpa nama)"} <SubscriptionBadge status={s.status} />
                       {s.profiles.telegram_links ? (
                         <Badge tone="info"><Send className="size-3.5" aria-hidden /> Telegram</Badge>
@@ -120,7 +120,7 @@ export default async function DonorsPage({ searchParams }: { searchParams: Promi
                       {out > 0 && <Badge tone="danger">{out} tagihan belum lunas</Badge>}
                     </div>
                   </div>
-                  <ChevronRight className="size-5 shrink-0 text-slate-400" aria-hidden />
+                  <ChevronRight className="size-4 shrink-0 text-slate-400" aria-hidden />
                 </Link>
               </li>
             );

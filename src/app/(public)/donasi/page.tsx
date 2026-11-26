@@ -23,12 +23,12 @@ export default async function DonasiPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {steps.map((s, i) => (
           <Card key={s.title} className="flex gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-brand-700 text-xl font-bold text-white">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-700 text-lg font-bold text-white">
               {i + 1}
             </div>
             <div>
-              <h2 className="flex items-center gap-2 text-lg font-bold">
-                <s.icon className="size-5 text-brand-700" aria-hidden /> {s.title}
+              <h2 className="flex items-center gap-2 text-base font-bold">
+                <s.icon className="size-4 text-brand-700" aria-hidden /> {s.title}
               </h2>
               <p className="text-slate-700">{s.text}</p>
             </div>
@@ -47,12 +47,12 @@ export default async function DonasiPage() {
 
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <h2 className="text-xl font-bold text-brand-900">Program yang Sedang Berjalan</h2>
+          <h2 className="text-lg font-bold text-brand-900">Program yang Sedang Berjalan</h2>
           {programs.length ? (
             programs.map((p) => (
               <Card key={p.id}>
-                <h3 className="text-xl font-bold">{p.title}</h3>
-                {p.description && <p className="mt-2 whitespace-pre-line text-lg text-slate-700">{p.description}</p>}
+                <h3 className="text-lg font-bold">{p.title}</h3>
+                {p.description && <p className="mt-2 whitespace-pre-line text-base text-slate-700">{p.description}</p>}
                 {p.target_amount && <p className="mt-2 font-semibold text-brand-800">Target: {formatRupiah(p.target_amount)}</p>}
               </Card>
             ))

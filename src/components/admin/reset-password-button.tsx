@@ -29,11 +29,11 @@ export function ResetPasswordButton({ userId, name, phone }: { userId: string; n
           ref.current?.showModal();
         }}
       >
-        <KeyRound className="size-5" aria-hidden /> Reset Kata Sandi
+        <KeyRound className="size-4" aria-hidden /> Reset Kata Sandi
       </Button>
-      <dialog ref={ref} className="m-auto w-[min(92vw,32rem)] rounded-2xl p-0 shadow-2xl">
+      <dialog ref={ref} className="m-auto w-[min(92vw,32rem)] rounded-xl p-0 shadow-2xl">
         <div className="space-y-4 p-6">
-          <h2 className="text-xl font-bold">Reset kata sandi {name}?</h2>
+          <h2 className="text-lg font-bold">Reset kata sandi {name}?</h2>
           {!result?.tempPassword ? (
             <>
               <p className="text-slate-700">
@@ -49,14 +49,14 @@ export function ResetPasswordButton({ userId, name, phone }: { userId: string; n
                   disabled={pending}
                   onClick={() => start(async () => setResult(await adminResetPasswordAction(userId)))}
                 >
-                  {pending && <Loader2 className="size-5 animate-spin" />} Buat Kata Sandi Sementara
+                  {pending && <Loader2 className="size-4 animate-spin" />} Buat Kata Sandi Sementara
                 </Button>
               </div>
             </>
           ) : (
             <>
               <p className="text-slate-700">Kata sandi sementara:</p>
-              <p className="rounded-xl border-2 border-brand-700 bg-brand-50 p-4 text-center font-mono text-2xl font-bold tracking-wide select-all" data-temp-password>
+              <p className="rounded-xl border border-brand-700 bg-brand-50 p-4 text-center font-mono text-xl font-bold tracking-wide select-all" data-temp-password>
                 {result.tempPassword}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
@@ -68,16 +68,16 @@ export function ResetPasswordButton({ userId, name, phone }: { userId: string; n
                     setCopied(true);
                   }}
                 >
-                  <Copy className="size-5" aria-hidden /> {copied ? "Tersalin" : "Salin"}
+                  <Copy className="size-4" aria-hidden /> {copied ? "Tersalin" : "Salin"}
                 </Button>
                 {wa && (
                   <a
                     href={`https://wa.me/${wa}?text=${waText}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#1f7a4d] px-5 font-semibold text-white"
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#1f7a4d] px-5 font-semibold text-white"
                   >
-                    <MessageCircle className="size-5" aria-hidden /> Kirim via WhatsApp
+                    <MessageCircle className="size-4" aria-hidden /> Kirim via WhatsApp
                   </a>
                 )}
               </div>

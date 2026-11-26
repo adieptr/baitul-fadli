@@ -69,19 +69,19 @@ export function InstallPrompt({ variant = "banner" }: { variant?: "banner" | "in
     <>
       <div className="flex items-start gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/icons/icon-192.png" alt="" className="size-12 rounded-xl" />
+        <img src="/icons/icon-192.png" alt="" className="size-10 rounded-xl" />
         <div className="flex-1">
           <p className="font-bold text-slate-900">Pasang aplikasi Baitul Fadli</p>
           <p className="text-sm text-slate-600">Buka lebih cepat langsung dari layar utama HP Anda.</p>
         </div>
         {variant === "banner" && (
           <button onClick={dismiss} aria-label="Tutup" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100">
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
         )}
       </div>
       <Button onClick={install} className="mt-3 w-full" size="md">
-        <Download className="size-5" /> {ios ? "Cara Memasang" : "Pasang Sekarang"}
+        <Download className="size-4" /> {ios ? "Cara Memasang" : "Pasang Sekarang"}
       </Button>
       {showIosHelp && (
         <ol className="mt-3 space-y-2 rounded-xl bg-slate-50 p-4 text-base text-slate-700">
@@ -89,19 +89,19 @@ export function InstallPrompt({ variant = "banner" }: { variant?: "banner" | "in
             1. Buka website ini di <b>Safari</b>.
           </li>
           <li className="flex items-center gap-2">
-            2. Ketuk tombol <Share className="inline size-5" aria-label="Bagikan" /> <b>Bagikan</b> di bawah layar.
+            2. Ketuk tombol <Share className="inline size-4" aria-label="Bagikan" /> <b>Bagikan</b> di bawah layar.
           </li>
           <li className="flex items-center gap-2">
-            3. Pilih <SquarePlus className="inline size-5" aria-hidden /> <b>Tambah ke Layar Utama</b>.
+            3. Pilih <SquarePlus className="inline size-4" aria-hidden /> <b>Tambah ke Layar Utama</b>.
           </li>
         </ol>
       )}
     </>
   );
 
-  if (variant === "inline") return <div className="rounded-2xl border border-slate-200 bg-white p-4">{content}</div>;
+  if (variant === "inline") return <div className="rounded-xl border border-slate-200 bg-white p-4">{content}</div>;
   return (
-    <div className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:right-4 sm:left-auto">
+    <div className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-4 shadow-2xl sm:right-4 sm:left-auto">
       {content}
     </div>
   );

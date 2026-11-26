@@ -29,7 +29,7 @@ export default async function ProfilePage() {
       />
 
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Data Diri</h2>
+        <h2 className="mb-4 text-lg font-bold">Data Diri</h2>
         <ActionForm action={updateProfileAction} className="space-y-5">
           <TextField label="Nama Lengkap" name="full_name" defaultValue={user.fullName} autoComplete="name" required />
           <TextField
@@ -47,14 +47,14 @@ export default async function ProfilePage() {
       </Card>
 
       <Card>
-        <h2 id="telegram" className="mb-4 scroll-mt-24 text-xl font-bold">
+        <h2 id="telegram" className="mb-4 scroll-mt-24 text-lg font-bold">
           Pengingat Telegram
         </h2>
         <TelegramConnect linked={Boolean(telegram)} username={telegram?.telegram_username} linkedAt={telegram?.linked_at} />
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Ubah Kata Sandi</h2>
+        <h2 className="mb-4 text-lg font-bold">Ubah Kata Sandi</h2>
         <ActionForm action={updatePasswordAction} className="space-y-5" resetOnSuccess>
           <PasswordField label="Kata Sandi Baru" name="password" autoComplete="new-password" hint="Minimal 8 karakter." required />
           <PasswordField label="Ulangi Kata Sandi Baru" name="password_confirm" autoComplete="new-password" required />

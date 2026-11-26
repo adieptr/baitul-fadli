@@ -19,7 +19,7 @@ export default async function CategoriesPage() {
     <div className="space-y-6">
       <PageHeader title="Kategori Transaksi" description="Kelompokkan transaksi agar laporan mudah dipahami." />
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Tambah Kategori</h2>
+        <h2 className="mb-4 text-lg font-bold">Tambah Kategori</h2>
         <ActionForm action={saveCategoryAction} className="grid gap-4 md:grid-cols-4" resetOnSuccess>
           <TextField label="Nama Kategori" name="name" required className="md:col-span-2" />
           <SelectField
@@ -38,7 +38,7 @@ export default async function CategoriesPage() {
 
       {groups.map(([type, title]) => (
         <Card key={type}>
-          <h2 className="mb-4 text-xl font-bold">{title}</h2>
+          <h2 className="mb-4 text-lg font-bold">{title}</h2>
           <ul className="divide-y divide-slate-100">
             {categories
               .filter((c) => c.type === type)

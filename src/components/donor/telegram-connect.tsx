@@ -37,7 +37,7 @@ export function TelegramConnect({
     return (
       <div className="space-y-4">
         <p className="flex items-start gap-3 rounded-xl bg-emerald-50 p-4 text-emerald-900">
-          <CheckCircle2 className="mt-0.5 size-6 shrink-0" aria-hidden />
+          <CheckCircle2 className="mt-0.5 size-5 shrink-0" aria-hidden />
           <span>
             <b>Telegram sudah terhubung</b>
             {username ? ` (@${username})` : ""}. Pengingat donasi akan dikirim otomatis.
@@ -78,11 +78,11 @@ export function TelegramConnect({
             })
           }
         >
-          {pending ? <Loader2 className="size-6 animate-spin" /> : <Send className="size-6" />} Hubungkan ke Telegram
+          {pending ? <Loader2 className="size-5 animate-spin" /> : <Send className="size-5" />} Hubungkan ke Telegram
         </Button>
       ) : (
-        <div className="space-y-3 rounded-2xl border-2 border-[#229ED9] bg-sky-50 p-4">
-          <ol className="list-decimal space-y-1 pl-6 text-lg">
+        <div className="space-y-3 rounded-xl border border-[#229ED9] bg-sky-50 p-4">
+          <ol className="list-decimal space-y-1 pl-6 text-base">
             <li>Tekan tombol <b>Buka Telegram</b> di bawah.</li>
             <li>
               Di Telegram, tekan <b>MULAI / START</b>.
@@ -95,7 +95,7 @@ export function TelegramConnect({
             rel="noopener noreferrer"
             className={buttonClass("primary", "lg", "w-full bg-[#229ED9] hover:bg-[#1c86b9]")}
           >
-            <Send className="size-6" aria-hidden /> Buka Telegram
+            <Send className="size-5" aria-hidden /> Buka Telegram
           </a>
           <p className="flex items-center gap-2 text-sm text-slate-600">
             <Loader2 className="size-4 animate-spin" aria-hidden /> Menunggu konfirmasi dari Telegram… (tautan berlaku 15 menit)

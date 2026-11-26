@@ -23,11 +23,11 @@ export default async function ReportsPage() {
             <li key={r.id}>
               <Link
                 href={`/keuangan/${r.id}`}
-                className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-brand-600 hover:shadow-md"
+                className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-brand-600 hover:shadow-md"
               >
-                <FileText className="size-10 shrink-0 text-brand-700" aria-hidden />
+                <FileText className="size-8 shrink-0 text-brand-700" aria-hidden />
                 <div className="flex-1">
-                  <p className="text-lg font-bold text-slate-900">{r.title}</p>
+                  <p className="text-base font-bold text-slate-900">{r.title}</p>
                   <p className="text-slate-600">
                     {formatDate(r.period_start, { short: true })} – {formatDate(r.period_end, { short: true })}
                   </p>
@@ -35,7 +35,7 @@ export default async function ReportsPage() {
                     Saldo akhir: <b className="text-brand-800 tabular-nums">{formatRupiah(r.closing_balance)}</b>
                   </p>
                 </div>
-                <ChevronRight className="size-6 text-slate-400" aria-hidden />
+                <ChevronRight className="size-5 text-slate-400" aria-hidden />
               </Link>
             </li>
           ))}

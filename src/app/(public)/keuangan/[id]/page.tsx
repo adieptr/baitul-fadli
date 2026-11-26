@@ -26,11 +26,11 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
-      <Link href="/keuangan" className="mb-4 inline-flex min-h-12 items-center gap-2 font-semibold text-brand-800">
-        <ArrowLeft className="size-5" aria-hidden /> Semua laporan
+      <Link href="/keuangan" className="mb-4 inline-flex min-h-10 items-center gap-2 font-semibold text-brand-800">
+        <ArrowLeft className="size-4" aria-hidden /> Semua laporan
       </Link>
-      <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">{report.title}</h1>
-      <p className="mt-1 text-lg text-slate-600">
+      <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">{report.title}</h1>
+      <p className="mt-1 text-base text-slate-600">
         Periode {formatDate(report.period_start)} – {formatDate(report.period_end)}
       </p>
       <p className="mt-1 text-sm text-slate-500">Dipublikasikan {formatDateTime(report.published_at)}</p>
@@ -41,7 +41,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
       {report.notes && (
         <Card className="mt-6">
-          <h2 className="text-lg font-bold">Catatan Pengurus</h2>
+          <h2 className="text-base font-bold">Catatan Pengurus</h2>
           <p className="mt-2 whitespace-pre-line text-slate-700">{report.notes}</p>
         </Card>
       )}
@@ -50,7 +50,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
         <BreakdownBars breakdown={report.breakdown as Breakdown | null} />
       </Card>
 
-      <h2 className="mt-10 mb-4 text-xl font-bold">Rincian Transaksi ({transactions.length})</h2>
+      <h2 className="mt-10 mb-4 text-lg font-bold">Rincian Transaksi ({transactions.length})</h2>
       {transactions.length === 0 ? (
         <p className="text-slate-600">Tidak ada transaksi pada periode ini.</p>
       ) : (
@@ -75,26 +75,26 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
             ))}
           </ul>
           {/* Tabel untuk layar lebar */}
-          <div className="hidden overflow-x-auto rounded-2xl border border-slate-200 bg-white md:block">
+          <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white md:block">
             <table className="w-full text-left text-base">
               <thead className="bg-slate-50 text-slate-700">
                 <tr>
-                  <th className="px-4 py-3">Tanggal</th>
-                  <th className="px-4 py-3">Keterangan</th>
-                  <th className="px-4 py-3">Kategori</th>
-                  <th className="px-4 py-3 text-right">Nominal</th>
+                  <th className="px-3 py-2">Tanggal</th>
+                  <th className="px-3 py-2">Keterangan</th>
+                  <th className="px-3 py-2">Kategori</th>
+                  <th className="px-3 py-2 text-right">Nominal</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {transactions.map((t) => (
                   <tr key={t.id}>
-                    <td className="px-4 py-3 whitespace-nowrap">{formatDate(t.transaction_date, { short: true })}</td>
-                    <td className="px-4 py-3">{t.description}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-3 py-2 whitespace-nowrap">{formatDate(t.transaction_date, { short: true })}</td>
+                    <td className="px-3 py-2">{t.description}</td>
+                    <td className="px-3 py-2">
                       <Badge tone={t.type === "income" ? "success" : "danger"}>{t.category_name}</Badge>
                     </td>
                     <td
-                      className={`px-4 py-3 text-right font-semibold whitespace-nowrap tabular-nums ${t.type === "income" ? "text-emerald-700" : "text-red-700"}`}
+                      className={`px-3 py-2 text-right font-semibold whitespace-nowrap tabular-nums ${t.type === "income" ? "text-emerald-700" : "text-red-700"}`}
                     >
                       {t.type === "income" ? "+" : "−"}
                       {formatRupiah(t.amount)}

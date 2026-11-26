@@ -29,11 +29,11 @@ export function BottomNav({ items }: { items: NavItem[] }) {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-16 flex-col items-center justify-center gap-0.5 text-[0.8rem] font-semibold",
+                  "flex min-h-14 flex-col items-center justify-center gap-0.5 text-[0.8rem] font-semibold",
                   active ? "text-brand-800" : "text-slate-600",
                 )}
               >
-                <item.icon className={cn("size-6", active && "stroke-[2.5]")} aria-hidden />
+                <item.icon className={cn("size-5", active && "stroke-[2.5]")} aria-hidden />
                 {item.label}
               </Link>
             </li>
@@ -58,11 +58,11 @@ export function TopTabs({ items }: { items: NavItem[] }) {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-14 items-center gap-2 border-b-4 px-4 font-semibold",
+                  "flex min-h-11 items-center gap-2 border-b-4 px-4 font-semibold",
                   active ? "border-brand-700 text-brand-800" : "border-transparent text-slate-600 hover:text-slate-900",
                 )}
               >
-                <item.icon className="size-5" aria-hidden /> {item.label}
+                <item.icon className="size-4" aria-hidden /> {item.label}
               </Link>
             </li>
           );
@@ -85,11 +85,11 @@ export function SideNav({ items }: { items: NavItem[] }) {
             href={item.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex min-h-12 items-center gap-3 rounded-xl px-4 font-semibold",
+              "flex min-h-10 items-center gap-3 rounded-xl px-4 font-semibold",
               active ? "bg-brand-700 text-white" : "text-slate-700 hover:bg-slate-100",
             )}
           >
-            <item.icon className="size-5" aria-hidden /> {item.label}
+            <item.icon className="size-4" aria-hidden /> {item.label}
           </Link>
         );
       })}

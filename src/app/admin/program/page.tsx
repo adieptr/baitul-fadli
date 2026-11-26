@@ -16,7 +16,7 @@ export default async function ProgramsPage() {
     <div className="space-y-6">
       <PageHeader title="Program Donasi" description="Program yang aktif tampil di halaman publik." />
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Tambah Program</h2>
+        <h2 className="mb-4 text-lg font-bold">Tambah Program</h2>
         <ActionForm action={saveProgramAction} className="space-y-4" resetOnSuccess>
           <TextField label="Judul Program" name="title" required maxLength={120} />
           <TextAreaField label="Deskripsi" name="description" rows={3} maxLength={3000} />

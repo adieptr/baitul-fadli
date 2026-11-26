@@ -43,16 +43,16 @@ export default async function TransactionDetailPage({ params }: { params: Promis
 
   return (
     <div className="max-w-3xl space-y-6">
-      <Link href="/admin/keuangan" className="inline-flex min-h-12 items-center gap-2 font-semibold text-brand-800">
-        <ArrowLeft className="size-5" aria-hidden /> Kembali
+      <Link href="/admin/keuangan" className="inline-flex min-h-10 items-center gap-2 font-semibold text-brand-800">
+        <ArrowLeft className="size-4" aria-hidden /> Kembali
       </Link>
       <PageHeader
         title="Detail Transaksi"
         description={`Dicatat oleh ${tx.creator?.full_name ?? "-"} · ${formatDateTime(tx.created_at)}${tx.updated_at !== tx.created_at ? ` · diubah ${tx.updater?.full_name ?? ""} ${formatDateTime(tx.updated_at)}` : ""}`}
       />
       {locked && (
-        <div className="flex items-start gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 p-4">
-          <Lock className="mt-0.5 size-6 shrink-0" aria-hidden />
+        <div className="flex items-start gap-3 rounded-xl border border-slate-300 bg-slate-50 p-4">
+          <Lock className="mt-0.5 size-5 shrink-0" aria-hidden />
           <p>
             Transaksi ini berada dalam periode laporan yang <b>sudah dipublikasikan</b> sehingga terkunci. Untuk mengoreksi,
             batalkan publikasi laporan terkait di menu <Link href="/admin/laporan" className="font-semibold underline">Laporan Keuangan</Link>.
@@ -60,7 +60,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
         </div>
       )}
       {tx.donation_period_id && (
-        <p className="rounded-xl border-2 border-sky-300 bg-sky-50 p-4 text-sky-900">
+        <p className="rounded-xl border border-sky-300 bg-sky-50 p-4 text-sky-900">
           Transaksi ini dibuat otomatis saat verifikasi pembayaran donatur tetap.
         </p>
       )}
@@ -82,7 +82,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
         />
         {proofUrl && (
           <a href={proofUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 font-semibold text-brand-800 underline">
-            <ExternalLink className="size-5" aria-hidden /> Buka bukti transaksi
+            <ExternalLink className="size-4" aria-hidden /> Buka bukti transaksi
           </a>
         )}
       </Card>
@@ -99,7 +99,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
         </ActionForm>
       )}
       <Card>
-        <h2 className="mb-4 text-xl font-bold">Riwayat Perubahan</h2>
+        <h2 className="mb-4 text-lg font-bold">Riwayat Perubahan</h2>
         <AuditTimeline entries={history ?? []} />
       </Card>
     </div>

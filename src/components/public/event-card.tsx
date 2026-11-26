@@ -13,7 +13,7 @@ export function EventCard({ event }: { event: EventRow }) {
   return (
     <Link
       href={`/agenda/${event.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+      className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
     >
       {img ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -21,25 +21,25 @@ export function EventCard({ event }: { event: EventRow }) {
       ) : (
         <div className="pattern-bg flex aspect-video items-center justify-center text-white">
           <div className="text-center">
-            <div className="text-4xl font-extrabold">{Number(d)}</div>
-            <div className="text-lg font-semibold uppercase">{month} {y}</div>
+            <div className="text-3xl font-extrabold">{Number(d)}</div>
+            <div className="text-base font-semibold uppercase">{month} {y}</div>
           </div>
         </div>
       )}
       <div className="flex flex-1 flex-col gap-2 p-5">
-        <h3 className="text-xl font-bold text-slate-900 group-hover:text-brand-800">{event.title}</h3>
+        <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-800">{event.title}</h3>
         <p className="flex items-center gap-2 text-slate-700">
-          <CalendarDays className="size-5 shrink-0 text-brand-700" aria-hidden /> {formatDate(event.event_date, { weekday: true })}
+          <CalendarDays className="size-4 shrink-0 text-brand-700" aria-hidden /> {formatDate(event.event_date, { weekday: true })}
         </p>
         {event.start_time && (
           <p className="flex items-center gap-2 text-slate-700">
-            <Clock className="size-5 shrink-0 text-brand-700" aria-hidden /> {formatTime(event.start_time)}
+            <Clock className="size-4 shrink-0 text-brand-700" aria-hidden /> {formatTime(event.start_time)}
             {event.end_time ? ` – ${formatTime(event.end_time)}` : ""} WIB
           </p>
         )}
         {event.location && (
           <p className="flex items-center gap-2 text-slate-700">
-            <MapPin className="size-5 shrink-0 text-brand-700" aria-hidden /> {event.location}
+            <MapPin className="size-4 shrink-0 text-brand-700" aria-hidden /> {event.location}
           </p>
         )}
       </div>
