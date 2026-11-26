@@ -5,7 +5,7 @@ import { Fragment, type ReactNode } from "react";
  * Format: "## Subjudul", "### Sub-subjudul", "- poin", "1. poin bernomor",
  * "> kutipan", **tebal**, *miring*, baris kosong = paragraf baru.
  */
-function inline(text: string): ReactNode[] {
+export function inline(text: string): ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/g).filter(Boolean);
   return parts.map((p, i) => {
     if (p.startsWith("**") && p.endsWith("**")) return <strong key={i} className="font-semibold text-slate-900">{p.slice(2, -2)}</strong>;
@@ -14,7 +14,7 @@ function inline(text: string): ReactNode[] {
   });
 }
 
-type Block =
+export type Block =
   | { type: "h2" | "h3" | "p" | "quote"; text: string }
   | { type: "ul" | "ol"; items: string[] };
 

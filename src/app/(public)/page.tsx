@@ -18,7 +18,7 @@ import { ReportSummary } from "@/components/public/finance";
 import { EventCard } from "@/components/public/event-card";
 import { PaymentInfo } from "@/components/public/payment-info";
 import { MosqueIllustration } from "@/components/public/mosque-illustration";
-import { RichText } from "@/components/public/rich-text";
+import { ProfileContent } from "@/components/public/profile-content";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { formatDate, formatRupiah, formatTime } from "@/lib/format";
 import { publicMediaUrl } from "@/lib/storage";
@@ -160,8 +160,8 @@ export default async function HomePage() {
               <Cover src={heroImage} alt="" />
             </div>
           </div>
-          <article className="rounded-2xl border border-slate-200 bg-white p-6 leading-relaxed text-slate-700 shadow-sm sm:p-10">
-            <RichText content={profile} />
+          <article>
+            <ProfileContent content={profile} />
           </article>
         </div>
       </section>
