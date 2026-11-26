@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BreakdownBars, ReportSummary } from "@/components/public/finance";
@@ -50,9 +50,14 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
         <BreakdownBars breakdown={report.breakdown as Breakdown | null} />
       </Card>
 
-      <h2 className="mt-10 mb-4 text-lg font-bold">Rincian Transaksi ({transactions.length})</h2>
+      <h2 className="mt-10 mb-2 text-lg font-bold">Rincian Pengeluaran ({transactions.length})</h2>
+      <p className="mb-4 flex items-start gap-2 text-sm text-slate-600">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-700" aria-hidden />
+        Demi menjaga privasi donatur, pemasukan ditampilkan sebagai total per kategori. Setiap pengeluaran ditampilkan
+        rinci sebagai bentuk pertanggungjawaban penggunaan dana.
+      </p>
       {transactions.length === 0 ? (
-        <p className="text-slate-600">Tidak ada transaksi pada periode ini.</p>
+        <p className="text-slate-600">Tidak ada pengeluaran pada periode ini.</p>
       ) : (
         <>
           {/* Tampilan kartu untuk HP */}

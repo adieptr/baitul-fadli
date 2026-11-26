@@ -1,7 +1,7 @@
 -- Test keamanan (RLS/RBAC) dan logika bisnis. Jalankan: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(76);
+select plan(77);
 
 -- ---------------------------------------------------------------------
 -- Fixture: 3 user (admin, donatur A, donatur B)
@@ -113,7 +113,9 @@ select is((select title from public.financial_reports where title like 'Laporan 
 select pg_temp.as_anon();
 select is((select count(*)::int from public.financial_reports), 1, 'publik hanya melihat laporan terbit');
 select is((select count(*)::int from public.get_public_report_transactions(
-  (select id from public.financial_reports limit 1))), 2, 'publik melihat transaksi periode laporan terbit');
+  (select id from public.financial_reports limit 1))), 1, 'publik melihat rincian pengeluaran periode laporan terbit');
+select is((select count(*)::int from public.get_public_report_transactions(
+  (select id from public.financial_reports limit 1)) where type = 'income'), 0, 'rincian pemasukan tidak terbuka untuk publik (privasi donatur)');
 select throws_ok($$ select * from public.transactions $$, '42501', null, 'publik tidak bisa membaca tabel transaksi');
 select throws_ok($$ select public.finance_summary('2026-01-01', '2026-12-31') $$, '42501', null,
   'publik tidak bisa memanggil RPC admin');

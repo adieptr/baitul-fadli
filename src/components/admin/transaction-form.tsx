@@ -78,7 +78,7 @@ export function TransactionForm({
           defaultValue={initial?.description}
           maxLength={500}
           required
-          hint="Keterangan akan tampil di laporan publik. Jangan cantumkan data pribadi donatur tanpa izin."
+          hint={type === "expense" ? "Keterangan pengeluaran tampil rinci di laporan publik." : "Pemasukan hanya tampil sebagai total per kategori di laporan publik (privasi donatur)."}
         />
         <FileUpload
           name="proof_path"
