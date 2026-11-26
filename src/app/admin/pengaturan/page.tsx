@@ -59,6 +59,7 @@ export default async function SettingsPage() {
             <TextField label="Telepon" name="phone" type="tel" defaultValue={s?.phone} maxLength={30} />
             <TextField label="WhatsApp" name="whatsapp" type="tel" defaultValue={s?.whatsapp} maxLength={30} hint="Contoh: 081234567890" />
             <TextField label="Email" name="email" type="email" defaultValue={s?.email} maxLength={120} />
+            <TextField label="Jam Layanan" name="service_hours" defaultValue={s?.service_hours} maxLength={200} placeholder="Setiap hari, 07.00–17.00 WIB" />
             <TextField label="Link Google Maps" name="maps_url" type="url" defaultValue={s?.maps_url} placeholder="https://maps.app.goo.gl/..." />
           </div>
           <TextAreaField

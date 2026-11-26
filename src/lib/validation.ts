@@ -188,6 +188,7 @@ export const settingsSchema = z.object({
     .refine((v) => v === "" || v.startsWith("https://"), "Link harus diawali https://")
     .default(""),
   payment_info: z.string().trim().max(2000).default(""),
+  service_hours: z.string().trim().max(200).default(""),
 });
 
 export const periodStatusSchema = z.object({

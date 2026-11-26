@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { SiteSettings } from "@/lib/queries/public";
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
@@ -22,6 +22,11 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               <a href={`tel:${settings.phone.replace(/[^0-9+]/g, "")}`} className="underline underline-offset-4">
                 {settings.phone}
               </a>
+            </p>
+          )}
+          {settings.service_hours && (
+            <p className="flex gap-2">
+              <Clock className="mt-1 size-4 shrink-0" aria-hidden /> {settings.service_hours}
             </p>
           )}
           {settings.email && (

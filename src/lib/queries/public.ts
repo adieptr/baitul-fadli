@@ -21,6 +21,7 @@ const FALLBACK_SETTINGS: SiteSettings = {
   email: "",
   maps_url: "",
   payment_info: "",
+  service_hours: "",
   updated_at: new Date(0).toISOString(),
 };
 

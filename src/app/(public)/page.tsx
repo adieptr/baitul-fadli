@@ -9,6 +9,7 @@ import {
   MapPin,
   MessageCircle,
   Phone,
+  Clock,
   ShieldCheck,
   Wallet,
 } from "lucide-react";
@@ -305,6 +306,11 @@ export default async function HomePage() {
                 <a className="font-medium hover:underline" href={`mailto:${settings.email}`}>
                   {settings.email}
                 </a>
+              </p>
+            )}
+            {settings.service_hours && (
+              <p className="flex gap-3">
+                <Clock className="mt-0.5 size-5 shrink-0 text-brand-700" aria-hidden /> {settings.service_hours}
               </p>
             )}
             {!settings.address && !settings.phone && !settings.email && (

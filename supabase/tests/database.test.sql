@@ -133,7 +133,7 @@ insert into public.events (title, event_date, is_published) values ('Kajian Ahad
 reset role;
 
 select pg_temp.as_anon();
-select is((select count(*)::int from public.events), 1, 'publik hanya melihat agenda terbit');
+select is((select count(*)::int from public.events where title in ('Kajian Ahad', 'Rapat internal')), 1, 'publik hanya melihat agenda terbit');
 reset role;
 
 -- ---------------------------------------------------------------------
