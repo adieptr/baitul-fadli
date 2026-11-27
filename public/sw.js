@@ -3,7 +3,7 @@
  * - Halaman publik: network-first, fallback ke cache lalu halaman offline
  * - Halaman akun/admin & API: TIDAK pernah di-cache (data pribadi)
  */
-const VERSION = "v2";
+const VERSION = "v3";
 const STATIC_CACHE = `bf-static-${VERSION}`;
 const PAGE_CACHE = `bf-pages-${VERSION}`;
 const PRECACHE = ["/offline.html", "/icons/icon-192.png", "/icons/icon-512.png", "/manifest.webmanifest"];
