@@ -59,12 +59,12 @@ function HeroVisual({ photo, name }: { photo: string | null; name: string }) {
     return (
       <div className="relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-black/5 trim-top">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={photo} alt={`Foto ${name}`} className="aspect-[4/5] w-full object-cover" fetchPriority="high" />
+        <img src={photo} alt={`Foto ${name}`} className="aspect-[16/11] w-full object-cover md:aspect-[4/5]" fetchPriority="high" />
       </div>
     );
   }
   return (
-    <div className="trim-top relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-b from-[#cfe0f4] via-brand-50 to-white shadow-xl ring-1 ring-brand-100 md:aspect-[4/5]">
+    <div className="trim-top relative mx-auto aspect-[16/11] w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-b from-[#cfe0f4] via-brand-50 to-white shadow-xl ring-1 ring-brand-100 md:aspect-[4/5]">
       <div className="lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" aria-hidden />
       <div className="absolute inset-x-10 bottom-[6%] h-6 rounded-[100%] bg-brand-900/15 blur-md" aria-hidden />
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,15 +98,15 @@ export default async function HomePage() {
       {/* ================= HERO ================= */}
       <section className="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
         <div className="lattice absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" aria-hidden />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-12 md:grid-cols-2 md:pt-14 md:pb-16">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-6 px-4 pt-5 pb-10 md:grid-cols-2 md:gap-10 md:pt-14 md:pb-16">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-brand-800 shadow-sm ring-1 ring-brand-100">
               <span className="size-1.5 rounded-full bg-accent-500" aria-hidden />
               Assalamu&apos;alaikum warahmatullahi wabarakatuh
             </p>
-            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">{settings.mosque_name}</h1>
-            {settings.tagline && <p className="mt-4 text-lg text-slate-600">{settings.tagline}</p>}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:mt-5">{settings.mosque_name}</h1>
+            {settings.tagline && <p className="mt-3 text-base text-slate-600 sm:text-lg md:mt-4">{settings.tagline}</p>}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row md:mt-8">
               <LinkButton href="/daftar" size="lg">
                 <HandHeart className="size-5" aria-hidden /> Jadi Donatur Tetap
               </LinkButton>
@@ -114,7 +114,7 @@ export default async function HomePage() {
                 Kenali Masjid Kami
               </LinkButton>
             </div>
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+            <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600 md:mt-8">
               <li className="flex items-center gap-2">
                 <ShieldCheck className="size-4 text-brand-700" aria-hidden /> Laporan keuangan terbuka
               </li>
@@ -123,7 +123,10 @@ export default async function HomePage() {
               </li>
             </ul>
           </div>
-          <HeroVisual photo={heroImage} name={settings.mosque_name} />
+          {/* Di HP gambar tampil paling atas (bingkai pendek) agar langsung terlihat */}
+          <div className="order-first md:order-none">
+            <HeroVisual photo={heroImage} name={settings.mosque_name} />
+          </div>
         </div>
       </section>
 
