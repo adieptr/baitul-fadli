@@ -9,6 +9,7 @@ import { updateProfileAction } from "@/lib/actions/donor";
 import { updatePasswordAction, signOutAction } from "@/lib/actions/auth";
 import { SUBSCRIPTION_STATUS } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { displayEmail } from "@/lib/synthetic-email";
 
 export const metadata = { title: "Profil" };
 
@@ -41,7 +42,9 @@ export default async function ProfilePage() {
             autoComplete="tel"
             required
           />
-          <TextField label="Email" name="email_display" value={user.email} disabled readOnly hint="Email tidak dapat diubah." />
+          {displayEmail(user.email) && (
+            <TextField label="Email" name="email_display" value={user.email} disabled readOnly hint="Email tidak dapat diubah." />
+          )}
           <SubmitButton>Simpan Profil</SubmitButton>
         </ActionForm>
       </Card>

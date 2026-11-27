@@ -5,7 +5,7 @@ import type { Breakdown, ReportRow } from "@/lib/queries/public";
 
 export function ReportSummary({ report }: { report: Pick<ReportRow, "opening_balance" | "total_income" | "total_expense" | "closing_balance"> }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       <StatCard label="Saldo Awal" value={formatRupiah(report.opening_balance)} icon={<Landmark className="size-4" />} />
       <StatCard label="Pemasukan" value={formatRupiah(report.total_income)} tone="success" icon={<ArrowDownCircle className="size-4" />} />
       <StatCard label="Pengeluaran" value={formatRupiah(report.total_expense)} tone="danger" icon={<ArrowUpCircle className="size-4" />} />

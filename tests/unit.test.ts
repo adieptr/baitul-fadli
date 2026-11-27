@@ -38,12 +38,11 @@ describe("transactionSchema", () => {
 });
 
 describe("registerSchema", () => {
-  it("menormalkan nomor HP & email", () => {
+  it("pendaftaran tanpa email: cukup nama, nomor HP, kata sandi", () => {
     const r = registerSchema.safeParse({
-      full_name: " Ahmad ", phone: "0812-3456-7890", email: " A@B.COM ", password: "rahasia123", password_confirm: "rahasia123",
+      full_name: " Ahmad ", phone: "+62 812-3456-7890", password: "rahasia123", password_confirm: "rahasia123",
     });
     expect(r.success && r.data.phone).toBe("081234567890");
-    expect(r.success && r.data.email).toBe("a@b.com");
   });
 });
 
@@ -88,5 +87,33 @@ describe("login dengan nomor HP", () => {
     expect(identifierSchema.parse("Ahmad@Contoh.test")).toEqual({ kind: "email", value: "ahmad@contoh.test" });
     expect(identifierSchema.parse("+62 812 3456 7890")).toEqual({ kind: "phone", value: "081234567890" });
     expect(identifierSchema.safeParse("12345").success).toBe(false);
+  });
+});
+
+import { lastCompletedWeek } from "../src/lib/schedule";
+import { weekReportTitle } from "../src/lib/format";
+
+describe("laporan pekanan Jumat–Kamis (konsisten dengan SQL)", () => {
+  it("menghitung pekan terakhir yang selesai", () => {
+    expect(lastCompletedWeek("2026-11-26")).toEqual({ start: "2026-11-13", end: "2026-11-19" }); // Kamis
+    expect(lastCompletedWeek("2026-11-27")).toEqual({ start: "2026-11-20", end: "2026-11-26" }); // Jumat
+    expect(lastCompletedWeek("2026-12-03")).toEqual({ start: "2026-11-20", end: "2026-11-26" });
+    expect(lastCompletedWeek("2026-12-04")).toEqual({ start: "2026-11-27", end: "2026-12-03" });
+  });
+  it("judul laporan pekan", () => {
+    expect(weekReportTitle("2026-11-20", "2026-11-26")).toBe("Laporan Pekan 20–26 November 2026");
+    expect(weekReportTitle("2026-11-27", "2026-12-03")).toBe("Laporan Pekan 27 November – 3 Desember 2026");
+  });
+});
+
+import { displayEmail, isSyntheticEmail, syntheticEmailForPhone } from "../src/lib/synthetic-email";
+
+describe("email internal dari nomor HP", () => {
+  it("dibuat dari nomor HP dan dikenali sebagai internal", () => {
+    const e = syntheticEmailForPhone("081234567890");
+    expect(e).toBe("donatur.081234567890@masjidbaitulfadli.or.id");
+    expect(isSyntheticEmail(e)).toBe(true);
+    expect(displayEmail(e)).toBe(null);
+    expect(displayEmail("pengurus@gmail.com")).toBe("pengurus@gmail.com");
   });
 });

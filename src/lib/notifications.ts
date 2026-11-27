@@ -58,6 +58,7 @@ export type ReminderRunResult = {
   failed: number;
   skipped: number;
   sendingWindow: boolean;
+  weeklyDraftId: string | null;
 };
 
 /**
@@ -66,11 +67,25 @@ export type ReminderRunResult = {
  */
 export async function runDailyReminders(opts: { force?: boolean } = {}): Promise<ReminderRunResult> {
   const supabase = createServiceClient();
-  const result: ReminderRunResult = { generated: 0, candidates: 0, sent: 0, failed: 0, skipped: 0, sendingWindow: true };
+  const result: ReminderRunResult = {
+    generated: 0,
+    candidates: 0,
+    sent: 0,
+    failed: 0,
+    skipped: 0,
+    sendingWindow: true,
+    weeklyDraftId: null,
+  };
 
   const { data: generated, error: genError } = await supabase.rpc("generate_donation_periods", {});
   if (genError) throw new Error(`generate_donation_periods: ${genError.message}`);
   result.generated = generated ?? 0;
+
+  // Draf laporan pekan lalu (Jumat–Kamis) dibuat otomatis; admin tinggal memeriksa & mempublikasikan.
+  const { data: draftId, error: draftError } = await supabase.rpc("create_weekly_report_draft", {});
+  if (draftError) console.error("create_weekly_report_draft", draftError.message);
+  result.weeklyDraftId = draftId ?? null;
+  if (draftId) await notifyAdminsWeeklyDraft(supabase, draftId);
 
   // Jangan kirim pesan di luar jam wajar (06.00–21.00 WIB).
   const hour = jakartaHour();
@@ -126,6 +141,24 @@ export async function runDailyReminders(opts: { force?: boolean } = {}): Promise
     await new Promise((r) => setTimeout(r, 60)); // < 30 pesan/detik (batas Telegram)
   }
   return result;
+}
+
+async function notifyAdminsWeeklyDraft(supabase: ReturnType<typeof createServiceClient>, reportId: string) {
+  if (!serverEnv.telegramConfigured()) return;
+  try {
+    const { data: report } = await supabase.from("financial_reports").select("title").eq("id", reportId).maybeSingle();
+    const { data: admins } = await supabase.from("telegram_links").select("chat_id, profiles!inner(role)").eq("profiles.role", "admin");
+    const url = `${publicEnv.siteUrl}/admin/laporan/${reportId}`;
+    for (const a of admins ?? []) {
+      await sendTelegramMessage(
+        a.chat_id,
+        `📊 <b>${escapeHtml(report?.title ?? "Draf laporan pekanan")}</b> sudah dibuat otomatis.\n\nSilakan periksa angkanya, lalu tekan <b>Publikasikan</b> agar jamaah dapat melihatnya.`,
+        { buttonText: "Periksa & Publikasikan", buttonUrl: url },
+      );
+    }
+  } catch (e) {
+    console.error("notifyAdminsWeeklyDraft", e);
+  }
 }
 
 /** Reminder manual dari admin untuk satu tagihan. */

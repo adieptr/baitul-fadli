@@ -38,3 +38,14 @@ export function nextDueDate(
   if (candidate < t) candidate.setUTCMonth(candidate.getUTCMonth() + 1);
   return fmt(candidate);
 }
+
+/** Pekan laporan terakhir yang sudah selesai: Jumat s/d Kamis (sama dengan SQL last_completed_week). */
+export function lastCompletedWeek(today: string = jakartaToday()): { start: string; end: string } {
+  const t = toUTC(today);
+  t.setUTCDate(t.getUTCDate() - 1); // hari ini belum selesai
+  const isoDow = ((t.getUTCDay() + 6) % 7) + 1;
+  t.setUTCDate(t.getUTCDate() - ((isoDow - 4 + 7) % 7)); // mundur ke Kamis
+  const end = fmt(t);
+  t.setUTCDate(t.getUTCDate() - 6);
+  return { start: fmt(t), end };
+}

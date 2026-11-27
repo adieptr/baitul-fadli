@@ -9,7 +9,7 @@ export default function RegisterPage() {
   return (
     <>
       <h1 className="text-xl font-bold">Daftar Akun Donatur</h1>
-      <p className="mt-1 mb-6 text-slate-600">Isi data berikut. Akun langsung aktif, lalu Anda dapat mengatur jadwal donasi rutin.</p>
+      <p className="mt-1 mb-6 text-slate-600">Cukup nama, nomor HP, dan kata sandi — tanpa email. Akun langsung aktif.</p>
       <ActionForm action={signUpAction} className="space-y-5" resetOnSuccess>
         <TextField label="Nama Lengkap" name="full_name" autoComplete="name" required />
         <TextField
@@ -19,15 +19,7 @@ export default function RegisterPage() {
           inputMode="tel"
           autoComplete="tel"
           placeholder="08xxxxxxxxxx"
-          required
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          hint="Tidak perlu konfirmasi email. Anda bisa masuk dengan nomor HP atau email."
+          hint="Nomor ini dipakai untuk masuk ke aplikasi."
           required
         />
         {/* Jebakan bot: tidak terlihat oleh manusia */}

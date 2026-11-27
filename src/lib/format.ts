@@ -87,3 +87,12 @@ export const SUBSCRIPTION_STATUS: Record<"active" | "paused" | "stopped", { labe
 
 export const FREQUENCY_LABEL = { weekly: "Mingguan", monthly: "Bulanan" } as const;
 export const TX_TYPE_LABEL = { income: "Pemasukan", expense: "Pengeluaran" } as const;
+
+/** "Laporan Pekan 20–26 November 2026" (sama dengan SQL week_report_title). */
+export function weekReportTitle(start: string, end: string): string {
+  const [, ms, ds] = start.split("-").map(Number);
+  const [ye, me, de] = end.split("-").map(Number);
+  return ms === me
+    ? `Laporan Pekan ${ds}–${de} ${MONTHS[me - 1]} ${ye}`
+    : `Laporan Pekan ${ds} ${MONTHS[ms - 1]} – ${de} ${MONTHS[me - 1]} ${ye}`;
+}

@@ -37,7 +37,7 @@ export default async function ResetPasswordPage({ searchParams }: { searchParams
   return (
     <>
       <h1 className="text-xl font-bold">Atur Kata Sandi Baru</h1>
-      <p className="mt-1 mb-6 text-slate-600">Untuk akun {user.email}</p>
+      <p className="mt-1 mb-6 text-slate-600">Untuk akun {user.fullName || user.phone}</p>
       <ActionForm action={updatePasswordAction} className="space-y-5" resetOnSuccess>
         <PasswordField label="Kata Sandi Baru" name="password" autoComplete="new-password" hint="Minimal 8 karakter." required />
         <PasswordField label="Ulangi Kata Sandi Baru" name="password_confirm" autoComplete="new-password" required />

@@ -10,11 +10,11 @@ export default function ForgotPasswordPage() {
     <>
       <h1 className="text-xl font-bold">Lupa Kata Sandi</h1>
       <p className="mt-1 mb-4 text-slate-600">
-        Masukkan nomor HP atau email akun Anda. Tautan untuk membuat kata sandi baru akan dikirim melalui{" "}
+        Masukkan nomor HP akun Anda. Tautan untuk membuat kata sandi baru akan dikirim melalui{" "}
         <b>Telegram</b> yang sudah terhubung dengan akun.
       </p>
       <ActionForm action={forgotPasswordAction} className="space-y-5" resetOnSuccess>
-        <TextField label="Nomor HP atau Email" name="identifier" autoComplete="username" placeholder="08xxxxxxxxxx" required />
+        <TextField label="Nomor HP" name="identifier" autoComplete="username" placeholder="08xxxxxxxxxx" required />
         <SubmitButton size="lg" className="w-full" pendingText="Mengirim…">
           <Send className="size-4" aria-hidden /> Kirim Tautan ke Telegram
         </SubmitButton>

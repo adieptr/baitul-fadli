@@ -365,6 +365,9 @@ isOneToOne: false
 "create_telegram_link_token":
 { Args: { "p_token_hash": string }; Returns: string
                            },
+"create_weekly_report_draft":
+{ Args: { "p_today"?: string }; Returns: string
+                           },
 "cycle_due_date":
 { Args: { "p_day": string,"p_dom": number,"p_dow": number,"p_freq": Database["public"]['Enums']["donation_frequency"] }; Returns: string
                            },
@@ -399,6 +402,11 @@ isOneToOne: false
 "jakarta_today":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
+"last_completed_week":
+{ Args: { "p_today": string }; Returns: {
+              "week_end": string,"week_start": string
+            }[]
+                           },
 "link_telegram_account":
 { Args: { "p_chat_id": number,"p_token_hash": string,"p_username": string }; Returns: {
               "full_name": string,"user_id": string
@@ -418,6 +426,9 @@ isOneToOne: false
                            },
 "unpublish_report":
 { Args: { "p_reason": string,"p_report_id": string }; Returns: undefined
+                           },
+"week_report_title":
+{ Args: { "p_end": string,"p_start": string }; Returns: string
                            },
 "write_audit":
 { Args: { "p_action": string,"p_details"?: Json,"p_entity": string,"p_entity_id": string }; Returns: undefined

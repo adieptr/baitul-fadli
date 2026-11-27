@@ -52,8 +52,3 @@ export async function getPublishedReport(id: string): Promise<ReportRow | null> 
   return data;
 }
 
-export async function getReportTransactions(id: string) {
-  const { data, error } = await createPublicClient().rpc("get_public_report_transactions", { p_report_id: id });
-  if (error) console.error("getReportTransactions", error.message);
-  return data ?? [];
-}

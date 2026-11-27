@@ -6,6 +6,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { setUserRoleAction } from "@/lib/actions/admin-donors";
+import { displayEmail } from "@/lib/synthetic-email";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { formatDateTime } from "@/lib/format";
 
@@ -26,7 +27,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (q) {
     const safe = q.replace(/[%_\\,()]/g, "");
-    query = query.or(`full_name.ilike.%${safe}%,email.ilike.%${safe}%`);
+    query = query.or(`full_name.ilike.%${safe}%,email.ilike.%${safe}%,phone.ilike.%${safe}%`);
   }
   const { data: users, count } = await query;
 
@@ -36,7 +37,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
       <Card>
         <form method="get" className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <label className="flex-1 space-y-1">
-            <span className="block font-semibold">Cari nama atau email</span>
+            <span className="block font-semibold">Cari nama, nomor HP, atau email</span>
             <input name="q" defaultValue={q} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
           </label>
           <Button type="submit" variant="secondary">Cari</Button>
@@ -51,7 +52,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                   {u.full_name || "(tanpa nama)"} {u.role === "admin" && <Badge tone="brand">Admin</Badge>}
                   {u.id === me.id && <Badge>Anda</Badge>}
                 </p>
-                <p className="break-all text-slate-600">{u.email} {u.phone && `· ${u.phone}`}</p>
+                <p className="break-all text-slate-600">{[u.phone, displayEmail(u.email)].filter(Boolean).join(" · ") || "—"}</p>
                 <p className="text-sm text-slate-500">Terdaftar {formatDateTime(u.created_at)}</p>
               </div>
               <div className="flex flex-wrap gap-2">

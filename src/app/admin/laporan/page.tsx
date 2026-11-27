@@ -7,8 +7,8 @@ import { Flash } from "@/components/ui/flash";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { saveReportAction } from "@/lib/actions/admin-finance";
-import { formatDate, formatRupiah } from "@/lib/format";
-import { jakartaToday } from "@/lib/schedule";
+import { formatDate, formatRupiah, weekReportTitle } from "@/lib/format";
+import { jakartaToday, lastCompletedWeek } from "@/lib/schedule";
 
 export const metadata = { title: "Laporan Keuangan" };
 
@@ -22,22 +22,21 @@ export default async function ReportsAdminPage({ searchParams }: { searchParams:
     .order("period_end", { ascending: false })
     .limit(100);
 
-  const today = jakartaToday();
-  const [y, m] = today.split("-").map(Number);
-  const prevMonthEnd = new Date(Date.UTC(y, m - 1, 0));
-  const prevStart = `${prevMonthEnd.getUTCFullYear()}-${String(prevMonthEnd.getUTCMonth() + 1).padStart(2, "0")}-01`;
-  const prevEnd = prevMonthEnd.toISOString().slice(0, 10);
-  const prevTitle = `Laporan Keuangan ${new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "UTC" }).format(prevMonthEnd)}`;
+  // Laporan pekanan: Jumat s/d Kamis pekan lalu (draf juga dibuat otomatis tiap Jumat pagi)
+  const week = lastCompletedWeek(jakartaToday());
+  const prevStart = week.start;
+  const prevEnd = week.end;
+  const prevTitle = weekReportTitle(week.start, week.end);
 
   return (
     <div className="space-y-6">
       <Flash params={sp} />
       <PageHeader
         title="Laporan Keuangan"
-        description="Buat laporan per periode, periksa, lalu publikasikan agar dapat dilihat masyarakat."
+        description="Laporan pekanan (Jumat–Kamis). Draf pekan lalu dibuat otomatis setiap Jumat pagi — periksa, lalu publikasikan."
       />
       <Card>
-        <h2 className="mb-4 text-lg font-bold">Buat Laporan Baru</h2>
+        <h2 className="mb-4 text-lg font-bold">Buat Laporan Manual</h2>
         <ActionForm action={saveReportAction} className="grid gap-5 md:grid-cols-2">
           <TextField label="Judul Laporan" name="title" defaultValue={prevTitle} required className="md:col-span-2" />
           <TextField label="Tanggal Awal" name="period_start" type="date" defaultValue={prevStart} required />

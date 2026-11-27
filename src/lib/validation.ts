@@ -25,7 +25,6 @@ export const registerSchema = z
   .object({
     full_name: z.string().trim().min(3, "Nama lengkap minimal 3 huruf.").max(120),
     phone: phoneSchema,
-    email: emailSchema,
     password: passwordSchema,
     password_confirm: z.string(),
     // honeypot anti-bot: harus kosong

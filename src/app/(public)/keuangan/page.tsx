@@ -13,7 +13,7 @@ export default async function ReportsPage() {
     <div className="mx-auto max-w-4xl px-4 py-10">
       <PageHeader
         title="Laporan Keuangan"
-        description="Laporan yang telah dipublikasikan pengurus. Pilih laporan untuk melihat rincian setiap transaksi."
+        description="Laporan pekanan (Jumat–Kamis) yang telah diperiksa dan dipublikasikan pengurus."
       />
       {reports.length === 0 ? (
         <EmptyState title="Belum ada laporan yang dipublikasikan" />

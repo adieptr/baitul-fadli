@@ -24,11 +24,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <ActionForm action={signInAction} className="space-y-5">
         <input type="hidden" name="next" value={next ?? ""} />
         <TextField
-          label="Nomor HP atau Email"
+          label="Nomor HP"
           name="identifier"
           autoComplete="username"
           placeholder="08xxxxxxxxxx"
-          hint="Boleh memakai nomor HP yang didaftarkan."
+          hint="Nomor HP yang dipakai saat mendaftar. Pengurus juga bisa masuk dengan email."
           required
         />
         <PasswordField label="Kata Sandi" name="password" autoComplete="current-password" required />

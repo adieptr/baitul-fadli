@@ -5,6 +5,7 @@ import { Card, EmptyState, PageHeader, StatCard } from "@/components/ui/card";
 import { PeriodStatusBadge, SubscriptionBadge } from "@/components/ui/badge";
 import { ActionForm, ConfirmButton } from "@/components/ui/form";
 import { PeriodActions } from "@/components/admin/period-actions";
+import { displayEmail } from "@/lib/synthetic-email";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -47,7 +48,7 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
               <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-800 underline"><MessageCircle className="size-4" aria-hidden /> WA</a>
             </p>
           )}
-          {profile.email && <p className="flex items-center gap-2 break-all"><Mail className="size-4 shrink-0" aria-hidden /> {profile.email}</p>}
+          {displayEmail(profile.email) && <p className="flex items-center gap-2 break-all"><Mail className="size-4 shrink-0" aria-hidden /> {profile.email}</p>}
           <p className="flex items-center gap-2"><Send className="size-4" aria-hidden /> {telegram ? `Terhubung${telegram.telegram_username ? ` (@${telegram.telegram_username})` : ""}` : "Belum terhubung Telegram"}</p>
           <ResetPasswordButton userId={profile.id} name={profile.full_name} phone={profile.phone} />
         </Card>

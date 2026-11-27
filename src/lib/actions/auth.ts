@@ -11,6 +11,7 @@ import { escapeHtml, sendTelegramMessage } from "@/lib/telegram";
 import { serverEnv } from "@/lib/server-env";
 import { failure, formObject, success, validationFailure, type ActionState } from "@/lib/action-state";
 import { identifierSchema, loginSchema, newPasswordSchema, registerSchema } from "@/lib/validation";
+import { syntheticEmailForPhone } from "@/lib/synthetic-email";
 
 const RESET_TTL_MINUTES = 30;
 
@@ -25,7 +26,9 @@ export async function signUpAction(_: ActionState, formData: FormData): Promise<
     if (parsed.error.issues.some((i) => i.path[0] === "website")) return failure("Pendaftaran gagal.");
     return validationFailure(parsed.error);
   }
-  const { email, password, full_name, phone } = parsed.data;
+  const { password, full_name, phone } = parsed.data;
+  // Tanpa email: akun memakai email internal dari nomor HP (tidak pernah dikirimi pesan).
+  const email = syntheticEmailForPhone(phone);
 
   const fp = await clientFingerprint();
   if (!(await rateLimit(`signup:${fp}`, 5, 3600))) {
@@ -48,7 +51,7 @@ export async function signUpAction(_: ActionState, formData: FormData): Promise<
   });
   if (error) {
     if (error.code === "email_exists" || error.status === 422) {
-      return failure("Email sudah terdaftar. Silakan masuk.", { email: ["Email sudah terdaftar."] });
+      return failure("Nomor HP sudah terdaftar. Silakan masuk.", { phone: ["Nomor HP sudah terdaftar."] });
     }
     if (error.code === "weak_password") return failure("Kata sandi terlalu lemah. Gunakan kombinasi huruf dan angka.");
     console.error("signUp", error.code, error.message);

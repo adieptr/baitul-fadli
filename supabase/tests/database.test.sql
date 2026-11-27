@@ -1,7 +1,7 @@
 -- Test keamanan (RLS/RBAC) dan logika bisnis. Jalankan: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(77);
+select plan(81);
 
 -- ---------------------------------------------------------------------
 -- Fixture: 3 user (admin, donatur A, donatur B)
@@ -112,10 +112,10 @@ select is((select title from public.financial_reports where title like 'Laporan 
 -- Publik
 select pg_temp.as_anon();
 select is((select count(*)::int from public.financial_reports), 1, 'publik hanya melihat laporan terbit');
-select is((select count(*)::int from public.get_public_report_transactions(
-  (select id from public.financial_reports limit 1))), 1, 'publik melihat rincian pengeluaran periode laporan terbit');
-select is((select count(*)::int from public.get_public_report_transactions(
-  (select id from public.financial_reports limit 1)) where type = 'income'), 0, 'rincian pemasukan tidak terbuka untuk publik (privasi donatur)');
+select throws_ok($$ select * from public.get_public_report_transactions((select id from public.financial_reports limit 1)) $$,
+  '42501', null, 'rincian transaksi tidak lagi terbuka untuk publik (laporan hanya ringkasan)');
+select is((select count(*)::int from public.financial_reports where opening_balance is not null and closing_balance is not null), 1,
+  'publik tetap melihat ringkasan saldo awal & akhir laporan terbit');
 select throws_ok($$ select * from public.transactions $$, '42501', null, 'publik tidak bisa membaca tabel transaksi');
 select throws_ok($$ select public.finance_summary('2026-01-01', '2026-12-31') $$, '42501', null,
   'publik tidak bisa memanggil RPC admin');
@@ -260,6 +260,19 @@ select is(public.consume_password_reset_token(repeat('c', 64)), '22222222-2222-2
 select is(public.consume_password_reset_token(repeat('c', 64)), null, 'token reset sekali pakai');
 select is((select count(*)::int from (select public.hit_rate_limit('t', 2, 60) as ok from generate_series(1, 3)) s where ok), 2,
   'rate limit membatasi percobaan');
+reset role;
+
+-- ---------------------------------------------------------------------
+-- Laporan pekanan (Jumat–Kamis)
+-- ---------------------------------------------------------------------
+select pg_temp.as_service();
+select isnt(public.create_weekly_report_draft('2026-12-04'), null, 'draf laporan pekan lalu dibuat otomatis');
+select is(public.create_weekly_report_draft('2026-12-05'), null, 'draf pekanan tidak dobel (idempoten)');
+select is((select period_start::text || '|' || period_end::text || '|' || title from public.financial_reports where title like 'Laporan Pekan%'),
+  '2026-11-27|2026-12-03|Laporan Pekan 27 November – 3 Desember 2026', 'periode Jumat s/d Kamis & judul pekan benar');
+reset role;
+select pg_temp.login('22222222-2222-2222-2222-222222222222');
+select throws_ok($$ select public.create_weekly_report_draft('2026-12-11') $$, '42501', null, 'donatur tidak bisa membuat draf laporan');
 reset role;
 
 select * from finish();
