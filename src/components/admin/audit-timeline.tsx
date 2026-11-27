@@ -11,6 +11,8 @@ const ACTION_LABEL: Record<string, string> = {
   confirm_payment: "Donatur konfirmasi bayar",
   set_role: "Role diubah",
   telegram_linked: "Telegram terhubung",
+  account_deleted: "Akun dihapus",
+  password_reset: "Kata sandi direset",
 };
 
 const FIELD_LABEL: Record<string, string> = {

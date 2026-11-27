@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createServiceClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 import { rateLimit } from "@/lib/rate-limit";
+import { purgeAccount } from "@/lib/account-deletion";
 import { getCurrentUser } from "@/lib/auth";
 import { publicEnv } from "@/lib/env";
 import { randomToken, sha256Hex } from "@/lib/crypto";
@@ -139,26 +139,8 @@ export async function deleteAccountAction(_: ActionState, formData: FormData): P
   if (authError) return failure("Kata sandi salah.", { password: ["Kata sandi salah."] });
   await verifier.auth.signOut().catch(() => {});
 
-  const admin = createServiceClient();
-  // Hapus foto bukti transfer milik pengguna
-  const { data: files } = await admin.storage.from("payment-proofs").list(user.id, { limit: 1000 });
-  if (files?.length) {
-    await admin.storage.from("payment-proofs").remove(files.map((f) => `${user.id}/${f.name}`));
-  }
-  // Jejak audit tanpa data pribadi
-  await admin.from("audit_logs").insert({
-    actor_id: null,
-    action: "account_deleted",
-    entity: "profiles",
-    entity_id: user.id,
-    details: { by: "self" },
-  });
-
-  const { error } = await admin.auth.admin.deleteUser(user.id);
-  if (error) {
-    console.error("deleteAccount", error.message);
-    return failure("Gagal menghapus akun. Silakan coba lagi atau hubungi pengurus masjid.");
-  }
+  const { ok } = await purgeAccount(user.id, { actorId: null, by: "self" });
+  if (!ok) return failure("Gagal menghapus akun. Silakan coba lagi atau hubungi pengurus masjid.");
   const supabase = await createClient();
   await supabase.auth.signOut().catch(() => {});
   redirect("/masuk?akun-dihapus=1");

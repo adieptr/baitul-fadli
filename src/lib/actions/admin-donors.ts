@@ -22,6 +22,8 @@ import { PERIOD_STATUS } from "@/lib/format";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { readablePassword } from "@/lib/crypto";
 import { sendTelegramMessage } from "@/lib/telegram";
+import { purgeAccount } from "@/lib/account-deletion";
+import { redirect } from "next/navigation";
 
 const FORBIDDEN = failure("Anda tidak memiliki akses admin.");
 const idSchema = z.uuid();
@@ -141,4 +143,36 @@ export async function adminResetPasswordAction(userId: string): Promise<ActionSt
     await sendTelegramMessage(link.chat_id, "🔐 Pengurus masjid telah membuat kata sandi sementara untuk akun Anda. Segera ganti di menu Profil setelah masuk.");
   }
   return { ...success("Kata sandi sementara dibuat."), tempPassword };
+}
+
+/**
+ * Admin menghapus akun donatur/pengguna (mis. atas permintaan donatur yang tidak
+ * bisa masuk, akun ganda, atau akun uji coba). Akun admin harus dicabut haknya dulu.
+ */
+export async function adminDeleteAccountAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const admin = await getAdminOrNull();
+  if (!admin) return FORBIDDEN;
+  const id = idSchema.safeParse(formData.get("user_id"));
+  if (!id.success) return failure("ID tidak valid.");
+  const reason = String(formData.get("reason") ?? "").trim().slice(0, 300);
+  if (reason.length < 3) return failure("Alasan wajib diisi.", { reason: ["Tuliskan alasan penghapusan."] });
+  if (id.data === admin.id) return failure("Anda tidak dapat menghapus akun Anda sendiri dari sini.");
+
+  const service = createServiceClient();
+  const { data: target } = await service.from("profiles").select("role").eq("id", id.data).maybeSingle();
+  if (!target) return failure("Akun tidak ditemukan atau sudah dihapus.");
+  if (target.role === "admin") return failure("Akun ini masih admin. Cabut hak adminnya terlebih dahulu.");
+
+  const { data: link } = await service.from("telegram_links").select("chat_id").eq("user_id", id.data).maybeSingle();
+  const { ok } = await purgeAccount(id.data, { actorId: admin.id, by: "admin", reason });
+  if (!ok) return failure("Gagal menghapus akun. Silakan coba lagi.");
+  if (link) {
+    after(() =>
+      sendTelegramMessage(link.chat_id, "ℹ️ Akun Anda di aplikasi Masjid Baitul Fadli telah dihapus oleh pengurus masjid. Bila ini keliru, silakan hubungi pengurus atau daftar kembali.").catch(() => {}),
+    );
+  }
+  revalidatePath("/admin/donatur", "layout");
+  revalidatePath("/admin/pengguna");
+  if (formData.get("from") === "donatur") redirect("/admin/donatur?deleted=1");
+  return success("Akun berhasil dihapus.");
 }

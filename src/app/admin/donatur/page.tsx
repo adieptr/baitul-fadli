@@ -1,3 +1,4 @@
+import { Flash } from "@/components/ui/flash";
 import Link from "next/link";
 import { ChevronRight, Send } from "lucide-react";
 import { Card, EmptyState, PageHeader } from "@/components/ui/card";
@@ -19,7 +20,7 @@ const FILTERS = [
   { key: "stopped", label: "Berhenti" },
 ] as const;
 
-export default async function DonorsPage({ searchParams }: { searchParams: Promise<{ filter?: string; q?: string }> }) {
+export default async function DonorsPage({ searchParams }: { searchParams: Promise<{ filter?: string; q?: string; deleted?: string }> }) {
   await requireAdmin();
   const sp = await searchParams;
   const filter = FILTERS.some((f) => f.key === sp.filter) ? sp.filter! : "all";
@@ -59,6 +60,7 @@ export default async function DonorsPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="space-y-6">
+      <Flash params={sp} />
       <PageHeader title="Donatur Tetap" description={`${subs.length} donatur ditampilkan`} />
       <Card>
         <form method="get" className="flex flex-col gap-3 sm:flex-row sm:items-end">

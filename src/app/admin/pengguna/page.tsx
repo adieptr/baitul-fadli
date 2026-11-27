@@ -8,6 +8,7 @@ import { requireAdmin } from "@/lib/auth";
 import { setUserRoleAction } from "@/lib/actions/admin-donors";
 import { displayEmail } from "@/lib/synthetic-email";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
+import { DeleteAccountButton } from "@/components/admin/delete-account-button";
 import { formatDateTime } from "@/lib/format";
 
 export const metadata = { title: "Pengguna & Role" };
@@ -65,6 +66,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                   <ConfirmButton label="Jadikan Admin" variant="secondary" size="sm" title="Jadikan admin?" message={`${u.full_name} akan memiliki akses penuh ke keuangan, donatur, dan pengaturan.`} confirmName="role" confirmValue="admin" confirmLabel="Ya, Jadikan Admin" />
                 )}
               </ActionForm>
+              {u.id !== me.id && u.role !== "admin" && <DeleteAccountButton userId={u.id} name={u.full_name} from="pengguna" />}
               </div>
             </Card>
           </li>

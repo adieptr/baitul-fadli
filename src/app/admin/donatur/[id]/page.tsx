@@ -7,6 +7,7 @@ import { ActionForm, ConfirmButton } from "@/components/ui/form";
 import { PeriodActions } from "@/components/admin/period-actions";
 import { displayEmail } from "@/lib/synthetic-email";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
+import { DeleteAccountButton } from "@/components/admin/delete-account-button";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { adminSetSubscriptionStatusAction } from "@/lib/actions/admin-donors";
@@ -21,7 +22,7 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const supabase = await createClient();
   const [{ data: profile }, { data: sub }, { data: periods }, { data: telegram }, { data: reminders }] = await Promise.all([
-    supabase.from("profiles").select("id, full_name, phone, email, created_at").eq("id", id).maybeSingle(),
+    supabase.from("profiles").select("id, full_name, phone, email, role, created_at").eq("id", id).maybeSingle(),
     supabase.from("donor_subscriptions").select("*").eq("user_id", id).maybeSingle(),
     supabase.from("donation_periods").select("*").eq("user_id", id).order("due_date", { ascending: false }).limit(200),
     supabase.from("telegram_links").select("telegram_username, linked_at").eq("user_id", id).maybeSingle(),
@@ -50,7 +51,10 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
           )}
           {displayEmail(profile.email) && <p className="flex items-center gap-2 break-all"><Mail className="size-4 shrink-0" aria-hidden /> {profile.email}</p>}
           <p className="flex items-center gap-2"><Send className="size-4" aria-hidden /> {telegram ? `Terhubung${telegram.telegram_username ? ` (@${telegram.telegram_username})` : ""}` : "Belum terhubung Telegram"}</p>
-          <ResetPasswordButton userId={profile.id} name={profile.full_name} phone={profile.phone} />
+          <div className="flex flex-wrap gap-2 pt-1">
+            <ResetPasswordButton userId={profile.id} name={profile.full_name} phone={profile.phone} />
+            {profile.role !== "admin" && <DeleteAccountButton userId={profile.id} name={profile.full_name} from="donatur" />}
+          </div>
         </Card>
         <StatCard label="Total Donasi Terverifikasi" value={formatRupiah(totalPaid)} tone="brand" hint={`${paid.length} periode lunas`} />
         <Card>
