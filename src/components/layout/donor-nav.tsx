@@ -3,7 +3,7 @@
 import { FileBarChart, History, House, HandHeart, UserRound } from "lucide-react";
 import { BottomNav, TopTabs, type NavItem } from "./app-nav";
 
-const ITEMS: NavItem[] = [
+export const DONOR_NAV_ITEMS: NavItem[] = [
   { href: "/akun", label: "Beranda", icon: House, exact: true },
   { href: "/akun/donasi", label: "Donasi", icon: HandHeart },
   { href: "/akun/riwayat", label: "Riwayat", icon: History },
@@ -12,8 +12,8 @@ const ITEMS: NavItem[] = [
 ];
 
 export function DonorTopTabs() {
-  return <TopTabs items={ITEMS} />;
+  return <TopTabs items={DONOR_NAV_ITEMS} />;
 }
 export function DonorBottomNav() {
-  return <BottomNav items={ITEMS} />;
+  return <BottomNav items={DONOR_NAV_ITEMS} />;
 }

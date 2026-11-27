@@ -15,7 +15,7 @@ export default async function PublicDashboard() {
     <div className="space-y-5">
       <h1 className="sr-only">{settings.mosque_name} — Dasbor</h1>
       {/* Saldo kas — informasi utama */}
-      <section className="trim-top lattice-light relative overflow-hidden rounded-2xl bg-brand-900 p-5 text-white shadow-sm sm:p-6">
+      <section className="lattice-light relative overflow-hidden rounded-2xl bg-brand-900 p-5 text-white shadow-sm sm:p-6">
         <p className="text-sm text-brand-100">Assalamu&apos;alaikum · {settings.mosque_name}</p>
         <div className="mt-4 flex items-center gap-2 text-sm text-brand-100">
           <Wallet className="size-4" aria-hidden /> Saldo kas masjid

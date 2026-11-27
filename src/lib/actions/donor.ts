@@ -4,6 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/admin";
+import { createPublicClient } from "@/lib/supabase/public";
+import { rateLimit } from "@/lib/rate-limit";
 import { getCurrentUser } from "@/lib/auth";
 import { publicEnv } from "@/lib/env";
 import { randomToken, sha256Hex } from "@/lib/crypto";
@@ -110,4 +113,53 @@ export async function unlinkTelegramAction(): Promise<ActionState> {
   if (error) return failure(dbErrorMessage(error));
   revalidatePath("/akun", "layout");
   return success("Tautan Telegram telah diputuskan.");
+}
+
+/**
+ * Hapus akun (hak pengguna atas data pribadinya — UU PDP).
+ * Dihapus: profil, nomor HP, pengaturan donasi, riwayat tagihan, tautan
+ * Telegram, foto bukti transfer. Tetap ada (anonim): transaksi pemasukan
+ * masjid, karena bagian dari pembukuan yang sudah dilaporkan ke jamaah.
+ */
+export async function deleteAccountAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const user = await getCurrentUser();
+  if (!user) return NOT_LOGGED_IN;
+  if (user.role === "admin") {
+    return failure("Akun pengurus tidak dapat dihapus sendiri. Minta admin lain mencabut hak admin Anda terlebih dahulu.");
+  }
+  const password = String(formData.get("password") ?? "");
+  if (!password) return failure("Masukkan kata sandi untuk konfirmasi.", { password: ["Wajib diisi."] });
+  if (!(await rateLimit(`delete-account:${user.id}`, 5, 3600))) {
+    return failure("Terlalu banyak percobaan. Silakan coba lagi 1 jam lagi.");
+  }
+
+  // Verifikasi kata sandi dengan klien terpisah (tidak mengubah sesi aktif)
+  const verifier = createPublicClient();
+  const { error: authError } = await verifier.auth.signInWithPassword({ email: user.email, password });
+  if (authError) return failure("Kata sandi salah.", { password: ["Kata sandi salah."] });
+  await verifier.auth.signOut().catch(() => {});
+
+  const admin = createServiceClient();
+  // Hapus foto bukti transfer milik pengguna
+  const { data: files } = await admin.storage.from("payment-proofs").list(user.id, { limit: 1000 });
+  if (files?.length) {
+    await admin.storage.from("payment-proofs").remove(files.map((f) => `${user.id}/${f.name}`));
+  }
+  // Jejak audit tanpa data pribadi
+  await admin.from("audit_logs").insert({
+    actor_id: null,
+    action: "account_deleted",
+    entity: "profiles",
+    entity_id: user.id,
+    details: { by: "self" },
+  });
+
+  const { error } = await admin.auth.admin.deleteUser(user.id);
+  if (error) {
+    console.error("deleteAccount", error.message);
+    return failure("Gagal menghapus akun. Silakan coba lagi atau hubungi pengurus masjid.");
+  }
+  const supabase = await createClient();
+  await supabase.auth.signOut().catch(() => {});
+  redirect("/masuk?akun-dihapus=1");
 }

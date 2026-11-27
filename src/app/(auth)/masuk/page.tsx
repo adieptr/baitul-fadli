@@ -5,8 +5,8 @@ import { signInAction } from "@/lib/actions/auth";
 
 export const metadata = { title: "Masuk" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string; reset?: string }> }) {
-  const { next, error, reset } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string; reset?: string; "akun-dihapus"?: string }> }) {
+  const { next, error, reset, "akun-dihapus": deleted } = await searchParams;
   return (
     <>
       <h1 className="text-xl font-bold">Masuk</h1>
@@ -14,6 +14,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       {error === "link" && (
         <p role="alert" className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-900">
           Tautan sudah tidak berlaku. Silakan masuk atau minta tautan baru.
+        </p>
+      )}
+      {deleted && (
+        <p role="status" className="mb-4 rounded-xl border border-slate-300 bg-slate-50 p-4 text-slate-800">
+          Akun Anda telah dihapus. Terima kasih atas kepercayaan dan dukungan Anda selama ini. Jazakumullahu khairan.
         </p>
       )}
       {reset && (

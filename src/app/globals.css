@@ -10,12 +10,12 @@
   --color-brand-700: #1f3d6d;
   --color-brand-800: #182f56;
   --color-brand-900: #0f2140;
-  /* Aksen: merah trim fasad & menara Masjid Baitul Fadli (dipakai hemat) */
-  --color-accent-100: #fdecee;
-  --color-accent-300: #f4a3ab;
-  --color-accent-500: #e0313f;
-  --color-accent-600: #c92433;
-  --color-accent-700: #a91d2a;
+  /* Aksen: biru baja (lebih terang dari navy), dipakai hemat */
+  --color-accent-100: #e6eefa;
+  --color-accent-300: #a9c1e6;
+  --color-accent-500: #4f7cc0;
+  --color-accent-600: #3f6aa9;
+  --color-accent-700: #2f568f;
 }
 
 :root {
@@ -37,7 +37,7 @@ body {
 
 /* Fokus keyboard yang jelas */
 :focus-visible {
-  outline: 3px solid #e0313f;
+  outline: 3px solid #4f7cc0;
   outline-offset: 2px;
 }
 
@@ -58,13 +58,9 @@ textarea {
 .pattern-bg {
   background-color: #0f2140;
   background-image:
-    radial-gradient(circle at 85% 0%, rgba(224, 49, 63, 0.18) 0, transparent 40%),
+    radial-gradient(circle at 85% 0%, rgba(79, 124, 192, 0.22) 0, transparent 40%),
     radial-gradient(circle at 10% 100%, rgba(45, 82, 136, 0.55) 0, transparent 55%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1.2'%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3Cpath d='M28 8c4 6 4 10 0 14c-4-4-4-8 0-14zM28 48c4-6 4-10 0-14c-4 4-4 8 0 14zM8 28c6-4 10-4 14 0c-4 4-8 4-14 0zM48 28c-6-4-10-4-14 0c4 4 8 4 14 0z'/%3E%3C/g%3E%3C/svg%3E");
-}
-/* Garis trim merah tipis seperti list atap fasad masjid */
-.trim-top {
-  box-shadow: inset 0 3px 0 0 #e0313f;
 }
 
 @media (prefers-reduced-motion: reduce) {

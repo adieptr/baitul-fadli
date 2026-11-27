@@ -43,7 +43,7 @@ export function MosqueInfoDialog({ info }: { info: MosqueInfo }) {
         if (e.target === ref.current) ref.current?.close(); // klik di luar kartu menutup popup
       }}
     >
-      <div className="trim-top relative h-52 overflow-hidden bg-gradient-to-b from-[#cfe0f4] via-brand-50 to-white">
+      <div className="relative h-52 overflow-hidden bg-gradient-to-b from-[#cfe0f4] via-brand-50 to-white">
         <div className="lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" aria-hidden />
         {info.photo ? (
           // eslint-disable-next-line @next/next/no-img-element

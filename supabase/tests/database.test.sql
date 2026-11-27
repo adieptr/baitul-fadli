@@ -1,7 +1,7 @@
 -- Test keamanan (RLS/RBAC) dan logika bisnis. Jalankan: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(81);
+select plan(86);
 
 -- ---------------------------------------------------------------------
 -- Fixture: 3 user (admin, donatur A, donatur B)
@@ -274,6 +274,26 @@ reset role;
 select pg_temp.login('22222222-2222-2222-2222-222222222222');
 select throws_ok($$ select public.create_weekly_report_draft('2026-12-11') $$, '42501', null, 'donatur tidak bisa membuat draf laporan');
 reset role;
+
+-- ---------------------------------------------------------------------
+-- Hapus akun: data pribadi hilang, pembukuan masjid tetap utuh
+-- ---------------------------------------------------------------------
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select public.set_period_status((select id from public.donation_periods where period_key = '2026-W46'), 'paid', 'tes hapus akun', true);
+insert into public.financial_reports (title, period_start, period_end)
+values ('Laporan uji hapus akun', public.jakarta_today() - 1, public.jakarta_today());
+select public.publish_report((select id from public.financial_reports where title = 'Laporan uji hapus akun'));
+reset role;
+
+select lives_ok($$ delete from auth.users where id = '33333333-3333-3333-3333-333333333333' $$,
+  'akun donatur bisa dihapus walau donasinya ada di periode laporan terbit');
+select is((select count(*)::int from public.profiles where id = '33333333-3333-3333-3333-333333333333'), 0, 'profil terhapus');
+select is((select count(*)::int from public.donor_subscriptions where user_id = '33333333-3333-3333-3333-333333333333'), 0,
+  'pengaturan donasi & tagihan ikut terhapus');
+select is((select count(*)::int from public.transactions where description like '%2026-W46%' and donation_period_id is null), 1,
+  'transaksi pemasukan masjid tetap tersimpan tanpa tautan ke donatur');
+select throws_ok($$ update public.transactions set amount = 1 where description like '%2026-W46%' $$, 'P0001', null,
+  'isi transaksi di periode terkunci tetap tidak bisa diubah');
 
 select * from finish();
 rollback;

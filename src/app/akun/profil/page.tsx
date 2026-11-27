@@ -1,11 +1,11 @@
 import { Card, PageHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ActionForm, SubmitButton, TextField } from "@/components/ui/form";
+import { ActionForm, ConfirmButton, SubmitButton, TextField } from "@/components/ui/form";
 import { PasswordField } from "@/components/ui/password-field";
 import { TelegramConnect } from "@/components/donor/telegram-connect";
 import { requireUser } from "@/lib/auth";
 import { getDonorData } from "@/lib/queries/donor";
-import { updateProfileAction } from "@/lib/actions/donor";
+import { deleteAccountAction, updateProfileAction } from "@/lib/actions/donor";
 import { updatePasswordAction, signOutAction } from "@/lib/actions/auth";
 import { SUBSCRIPTION_STATUS } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,32 @@ export default async function ProfilePage() {
           <PasswordField label="Ulangi Kata Sandi Baru" name="password_confirm" autoComplete="new-password" required />
           <SubmitButton variant="secondary">Ubah Kata Sandi</SubmitButton>
         </ActionForm>
+      </Card>
+
+      <Card className="border-red-200">
+        <h2 className="text-lg font-bold text-red-800">Hapus Akun</h2>
+        <p className="mt-1 text-sm text-slate-600">
+          Data pribadi Anda (nama, nomor HP, pengaturan donasi, riwayat tagihan, tautan Telegram, dan foto bukti
+          transfer) akan dihapus permanen. Catatan pemasukan masjid dari donasi Anda tetap tersimpan tanpa nama, karena
+          sudah menjadi bagian laporan keuangan.
+        </p>
+        {user.role === "admin" ? (
+          <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+            Akun pengurus tidak dapat dihapus sendiri. Minta admin lain mencabut hak admin Anda terlebih dahulu.
+          </p>
+        ) : (
+          <ActionForm action={deleteAccountAction} className="mt-4">
+            <ConfirmButton
+              label="Hapus Akun Saya"
+              variant="danger"
+              title="Hapus akun secara permanen?"
+              message="Tindakan ini tidak bisa dibatalkan. Masukkan kata sandi Anda untuk melanjutkan."
+              confirmLabel="Ya, Hapus Akun"
+            >
+              <PasswordField label="Kata Sandi" name="password" autoComplete="current-password" required />
+            </ConfirmButton>
+          </ActionForm>
+        )}
       </Card>
 
       <form action={signOutAction}>

@@ -42,7 +42,7 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
 
       <Link
         href={latest ? `/keuangan/${latest.id}` : "/keuangan"}
-        className="trim-top lattice-light flex items-center gap-3 rounded-2xl bg-brand-900 p-4 text-white shadow-sm"
+        className="lattice-light flex items-center gap-3 rounded-2xl bg-brand-900 p-4 text-white shadow-sm"
       >
         <Wallet className="size-5 shrink-0 text-brand-100" aria-hidden />
         <div className="min-w-0 flex-1">
