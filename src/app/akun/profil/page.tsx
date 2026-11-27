@@ -68,8 +68,7 @@ export default async function ProfilePage() {
       <Card className="border-red-200">
         <h2 className="text-lg font-bold text-red-800">Hapus Akun</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Data pribadi Anda (nama, nomor HP, pengaturan donasi, riwayat tagihan, tautan Telegram, dan foto bukti
-          transfer) akan dihapus permanen. Catatan pemasukan masjid dari donasi Anda tetap tersimpan tanpa nama, karena
+          Data pribadi Anda (nama, nomor HP, pengaturan donasi, riwayat tagihan, dan tautan Telegram) akan dihapus permanen. Catatan pemasukan masjid dari donasi Anda tetap tersimpan tanpa nama, karena
           sudah menjadi bagian laporan keuangan.
         </p>
         {user.role === "admin" ? (

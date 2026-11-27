@@ -200,5 +200,4 @@ export const periodStatusSchema = z.object({
 export const confirmPaymentSchema = z.object({
   period_id: z.uuid(),
   note: z.preprocess(emptyToNull, z.string().trim().max(300, "Catatan maksimal 300 karakter.").nullable()),
-  proof_path: storagePath,
 });

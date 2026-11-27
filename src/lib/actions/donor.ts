@@ -85,7 +85,6 @@ export async function confirmPaymentAction(_: ActionState, formData: FormData): 
   const { error } = await supabase.rpc("confirm_donation_payment", {
     p_period_id: parsed.data.period_id,
     p_note: parsed.data.note ?? undefined,
-    p_proof_path: parsed.data.proof_path ?? undefined,
   });
   if (error) return failure(dbErrorMessage(error));
   after(() => notifyAdminsPaymentConfirmed(parsed.data.period_id));

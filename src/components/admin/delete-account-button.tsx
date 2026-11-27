@@ -13,7 +13,7 @@ export function DeleteAccountButton({ userId, name, from }: { userId: string; na
         title={`Hapus akun ${name || "pengguna ini"}?`}
         message={
           <>
-            Profil, nomor HP, jadwal donasi, tagihan, tautan Telegram, dan foto bukti transfer akan <b>dihapus permanen</b>.
+            Profil, nomor HP, jadwal donasi, tagihan, dan tautan Telegram akan <b>dihapus permanen</b>.
             Catatan pemasukan kas masjid tetap tersimpan tanpa nama. Tindakan ini tidak dapat dibatalkan.
           </>
         }

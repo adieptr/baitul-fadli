@@ -111,7 +111,7 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
                 <PeriodStatusBadge status={p.status} />
               </div>
               <p className="my-3 text-2xl font-extrabold text-slate-900 tabular-nums">{formatRupiah(p.amount)}</p>
-              <ConfirmPaymentForm periodId={p.id} periodKey={p.period_key} amount={Number(p.amount)} userId={user.id} />
+              <ConfirmPaymentForm periodId={p.id} periodKey={p.period_key} amount={Number(p.amount)} />
             </Card>
           ))}
           <PaymentInfo text={settings.payment_info} />
