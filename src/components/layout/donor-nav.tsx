@@ -7,7 +7,7 @@ export const DONOR_NAV_ITEMS: NavItem[] = [
   { href: "/akun", label: "Beranda", icon: House, exact: true },
   { href: "/akun/donasi", label: "Donasi", icon: HandHeart },
   { href: "/akun/riwayat", label: "Riwayat", icon: History },
-  { href: "/keuangan", label: "Laporan", icon: FileBarChart },
+  { href: "/akun/laporan", label: "Laporan", icon: FileBarChart },
   { href: "/akun/profil", label: "Profil", icon: UserRound },
 ];
 

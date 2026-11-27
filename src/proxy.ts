@@ -26,10 +26,11 @@ export async function proxy(request: NextRequest) {
   const isLoggedIn = Boolean(data?.claims?.sub);
   const path = request.nextUrl.pathname;
 
-  // Aplikasi dibuka: yang sudah login langsung ke dasbor donatur.
-  if (isLoggedIn && path === "/") {
+  // Yang sudah login tetap di area donatur (menu bawah donatur tidak dimuat ulang):
+  // "/" → /akun, "/keuangan[/id]" → /akun/laporan[/id].
+  if (isLoggedIn && (path === "/" || path === "/keuangan" || path.startsWith("/keuangan/"))) {
     const url = request.nextUrl.clone();
-    url.pathname = "/akun";
+    url.pathname = path === "/" ? "/akun" : path.replace(/^\/keuangan/, "/akun/laporan");
     url.search = "";
     return NextResponse.redirect(url);
   }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownCircle, ArrowUpCircle, BellRing, ChevronRight, FileBarChart, HandHeart, ShieldCheck, Wallet } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, BellRing, ChevronRight, HandHeart, ShieldCheck, Wallet } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 import { formatDate, formatRupiah } from "@/lib/format";
 import { getPublishedReports, getSiteSettings } from "@/lib/queries/public";
@@ -43,12 +43,16 @@ export default async function PublicDashboard() {
           </div>
         )}
         {latest && (
-          <Link
-            href={`/keuangan/${latest.id}`}
-            className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-white underline-offset-4 hover:underline"
-          >
-            Lihat rincian laporan <ChevronRight className="size-4" aria-hidden />
-          </Link>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold">
+            <Link href={`/keuangan/${latest.id}`} className="inline-flex items-center gap-1 underline-offset-4 hover:underline">
+              Lihat rincian <ChevronRight className="size-4" aria-hidden />
+            </Link>
+            {reports.length > 1 && (
+              <Link href="/keuangan" className="text-brand-100 underline-offset-4 hover:underline">
+                Semua laporan ({reports.length})
+              </Link>
+            )}
+          </div>
         )}
       </section>
 
@@ -71,41 +75,6 @@ export default async function PublicDashboard() {
             Sudah punya akun? Masuk
           </LinkButton>
         </div>
-      </section>
-
-      {/* Laporan terbaru */}
-      <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900">Laporan keuangan</h2>
-          {reports.length > 0 && (
-            <Link href="/keuangan" className="text-sm font-semibold text-brand-700 hover:underline">
-              Semua
-            </Link>
-          )}
-        </div>
-        {reports.length ? (
-          <ul className="divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-            {reports.slice(0, 4).map((r) => (
-              <li key={r.id}>
-                <Link href={`/keuangan/${r.id}`} className="flex items-center gap-3 p-4 hover:bg-slate-50">
-                  <FileBarChart className="size-5 shrink-0 text-brand-700" aria-hidden />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-slate-900">{r.title}</p>
-                    <p className="text-xs text-slate-500">
-                      {formatDate(r.period_start, { short: true })} – {formatDate(r.period_end, { short: true })}
-                    </p>
-                  </div>
-                  <span className="text-sm font-bold text-brand-800 tabular-nums">{formatRupiah(r.closing_balance)}</span>
-                  <ChevronRight className="size-4 text-slate-400" aria-hidden />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-600">
-            Belum ada laporan yang dipublikasikan. Laporan akan tampil di sini setelah diperiksa pengurus.
-          </p>
-        )}
       </section>
 
       {/* Jaminan singkat */}
