@@ -162,3 +162,28 @@ export async function deleteReportAction(_: ActionState, formData: FormData): Pr
   revalidatePath("/admin/laporan");
   redirect("/admin/laporan?deleted=1");
 }
+
+/**
+ * Hapus transaksi otomatis dari verifikasi donatur: status tagihannya
+ * dikembalikan menjadi "Belum Dibayar" (transaksi ikut terhapus di database)
+ * dan alasannya tercatat di log aktivitas.
+ */
+export async function cancelAutoTransactionAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  if (!(await getAdminOrNull())) return FORBIDDEN;
+  const id = idSchema.safeParse(formData.get("id"));
+  if (!id.success) return failure("ID tidak valid.");
+  const reason = String(formData.get("reason") ?? "").trim();
+  if (reason.length < 5) return failure("Alasan wajib diisi (minimal 5 karakter).", { reason: ["Wajib diisi."] });
+  const supabase = await createClient();
+  const { data: tx } = await supabase.from("transactions").select("donation_period_id").eq("id", id.data).maybeSingle();
+  if (!tx?.donation_period_id) return failure("Transaksi ini bukan transaksi otomatis donatur.");
+  const { error } = await supabase.rpc("set_period_status", {
+    p_period_id: tx.donation_period_id,
+    p_status: "unpaid",
+    p_admin_note: reason.slice(0, 300),
+    p_record_income: false,
+  });
+  if (error) return failure(dbErrorMessage(error));
+  revalidateFinance();
+  redirect("/admin/keuangan?deleted=1");
+}

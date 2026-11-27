@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Lock } from "lucide-react";
 import { Card, PageHeader } from "@/components/ui/card";
-import { ActionForm, ConfirmButton } from "@/components/ui/form";
+import { ActionForm, ConfirmButton, TextAreaField } from "@/components/ui/form";
 import { TransactionForm } from "@/components/admin/transaction-form";
 import { AuditTimeline } from "@/components/admin/audit-timeline";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { getCategories, getLockedRanges, isLocked } from "@/lib/queries/admin";
-import { deleteTransactionAction } from "@/lib/actions/admin-finance";
+import { cancelAutoTransactionAction, deleteTransactionAction } from "@/lib/actions/admin-finance";
 import { signedUrl } from "@/lib/storage";
 import { jakartaToday } from "@/lib/schedule";
 import { formatDateTime } from "@/lib/format";
@@ -86,6 +86,20 @@ export default async function TransactionDetailPage({ params }: { params: Promis
           </a>
         )}
       </Card>
+      {!locked && tx.donation_period_id && (
+        <ActionForm action={cancelAutoTransactionAction}>
+          <input type="hidden" name="id" value={tx.id} />
+          <ConfirmButton
+            label="Batalkan Verifikasi & Hapus Transaksi"
+            variant="danger"
+            title="Batalkan verifikasi pembayaran ini?"
+            message="Transaksi pemasukan ini akan dihapus dan status tagihan donatur kembali menjadi “Belum Dibayar”. Alasan pembatalan tercatat di log aktivitas."
+            confirmLabel="Ya, Batalkan & Hapus"
+          >
+            <TextAreaField label="Alasan" name="reason" rows={2} required defaultValue="" placeholder="Contoh: transaksi uji coba" />
+          </ConfirmButton>
+        </ActionForm>
+      )}
       {!locked && !tx.donation_period_id && (
         <ActionForm action={deleteTransactionAction}>
           <input type="hidden" name="id" value={tx.id} />
