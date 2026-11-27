@@ -3,11 +3,11 @@
  * - Halaman publik: network-first, fallback ke cache lalu halaman offline
  * - Halaman akun/admin & API: TIDAK pernah di-cache (data pribadi)
  */
-const VERSION = "v3";
+const VERSION = "v4";
 const STATIC_CACHE = `bf-static-${VERSION}`;
 const PAGE_CACHE = `bf-pages-${VERSION}`;
 const PRECACHE = ["/offline.html", "/icons/icon-192.png", "/icons/icon-512.png", "/manifest.webmanifest"];
-const PUBLIC_PAGES = [/^\/$/, /^\/keuangan(\/.*)?$/, /^\/agenda(\/.*)?$/, /^\/donasi$/, /^\/profil$/];
+const PUBLIC_PAGES = [/^\/$/, /^\/keuangan(\/.*)?$/];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(STATIC_CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));

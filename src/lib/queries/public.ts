@@ -1,11 +1,9 @@
 import "server-only";
 import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
-import { jakartaToday } from "@/lib/schedule";
 import type { Database } from "@/lib/database.types";
 
 export type SiteSettings = Database["public"]["Tables"]["site_settings"]["Row"];
-export type EventRow = Database["public"]["Tables"]["events"]["Row"];
 export type ReportRow = Database["public"]["Tables"]["financial_reports"]["Row"];
 export type Breakdown = Array<{ category: string; type: "income" | "expense"; total: number; count: number }>;
 
@@ -59,43 +57,3 @@ export async function getReportTransactions(id: string) {
   if (error) console.error("getReportTransactions", error.message);
   return data ?? [];
 }
-
-export const getUpcomingEvents = cache(async (limit = 6): Promise<EventRow[]> => {
-  const { data, error } = await createPublicClient()
-    .from("events")
-    .select("*")
-    .eq("is_published", true)
-    .gte("event_date", jakartaToday())
-    .order("event_date", { ascending: true })
-    .order("start_time", { ascending: true, nullsFirst: true })
-    .limit(limit);
-  if (error) console.error("getUpcomingEvents", error.message);
-  return data ?? [];
-});
-
-export const getPastEvents = cache(async (limit = 12): Promise<EventRow[]> => {
-  const { data } = await createPublicClient()
-    .from("events")
-    .select("*")
-    .eq("is_published", true)
-    .lt("event_date", jakartaToday())
-    .order("event_date", { ascending: false })
-    .limit(limit);
-  return data ?? [];
-});
-
-export async function getPublishedEvent(id: string): Promise<EventRow | null> {
-  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
-  const { data } = await createPublicClient().from("events").select("*").eq("id", id).eq("is_published", true).maybeSingle();
-  return data;
-}
-
-export const getActivePrograms = cache(async () => {
-  const { data } = await createPublicClient()
-    .from("donation_programs")
-    .select("id, title, description, target_amount")
-    .eq("is_active", true)
-    .order("sort_order")
-    .order("created_at");
-  return data ?? [];
-});

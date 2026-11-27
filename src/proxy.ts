@@ -26,6 +26,14 @@ export async function proxy(request: NextRequest) {
   const isLoggedIn = Boolean(data?.claims?.sub);
   const path = request.nextUrl.pathname;
 
+  // Aplikasi dibuka: yang sudah login langsung ke dasbor donatur.
+  if (isLoggedIn && path === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/akun";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
   if (!isLoggedIn && PROTECTED.some((p) => path === p || path.startsWith(`${p}/`))) {
     const url = request.nextUrl.clone();
     url.pathname = "/masuk";

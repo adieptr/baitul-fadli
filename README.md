@@ -10,14 +10,13 @@ Dokumentasi teknis lengkap (arsitektur, skema database, RLS, alur Telegram, penj
 
 ## Fitur
 
-| Publik | Donatur (login) | Admin |
+| Publik (tanpa login) | Donatur (login) | Admin |
 |---|---|---|
-| Beranda: profil, visi-misi, kontak | Daftar tanpa konfirmasi email, masuk dengan **nomor HP atau email** | Dashboard ringkasan kas & donatur |
-| Laporan keuangan yang sudah dipublikasikan + rincian transaksi | Atur nominal & jadwal (mingguan/bulanan) | Transaksi pemasukan/pengeluaran + bukti |
-| Agenda mendatang & sebelumnya | Hubungkan Telegram (pengingat otomatis) | Laporan per periode, publikasi = tutup buku |
-| Program donasi & info rekening | Konfirmasi "Saya Sudah Bayar" + foto bukti | Verifikasi pembayaran (otomatis tercatat sebagai pemasukan) |
-| Pasang sebagai aplikasi (PWA) | Riwayat & status pembayaran per periode | Donatur tetap, filter belum bayar, kirim pengingat |
-| | Jeda / berhenti / aktifkan kembali | Agenda, program, kategori, pengaturan, role, log aktivitas |
+| Aplikasi langsung membuka **dasbor**: saldo kas, ringkasan & daftar laporan | Daftar tanpa konfirmasi email, masuk dengan **nomor HP atau email** | Dashboard ringkasan kas & donatur |
+| Laporan keuangan terbit + rincian pengeluaran (pemasukan per kategori demi privasi) | Dasbor donatur: tagihan, konfirmasi "Saya Sudah Bayar" + foto bukti, saldo kas | Transaksi pemasukan/pengeluaran + bukti |
+| **Popup info masjid** (gambar, alamat, jam layanan) sekali per sesi, tombol ⓘ | Atur nominal & jadwal (mingguan/bulanan), riwayat | Laporan per periode, publikasi = tutup buku |
+| Pasang sebagai aplikasi (PWA) | Hubungkan Telegram: pengingat otomatis & reset sandi | Verifikasi pembayaran, donatur tetap, kirim pengingat |
+| | Jeda / berhenti / aktifkan kembali | Kategori, pengaturan, role, log aktivitas |
 
 ---
 

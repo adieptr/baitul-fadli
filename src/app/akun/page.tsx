@@ -1,23 +1,28 @@
 import Link from "next/link";
-import { BellRing, CalendarClock, HandHeart, Hourglass } from "lucide-react";
+import { BellRing, CalendarClock, ChevronRight, HandHeart, Hourglass, Wallet } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PeriodStatusBadge, SubscriptionBadge } from "@/components/ui/badge";
 import { PaymentInfo } from "@/components/public/payment-info";
 import { ConfirmPaymentForm } from "@/components/donor/confirm-payment";
-import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { requireUser } from "@/lib/auth";
 import { getDonorData } from "@/lib/queries/donor";
-import { getSiteSettings } from "@/lib/queries/public";
+import { getPublishedReports, getSiteSettings } from "@/lib/queries/public";
 import { FREQUENCY_LABEL, formatDate, formatPeriodKey, formatRupiah, scheduleLabel } from "@/lib/format";
 import { nextDueDate } from "@/lib/schedule";
+import { InstallPrompt } from "@/components/pwa/install-prompt";
 
 export const metadata = { title: "Akun Saya" };
 
 export default async function DonorHomePage({ searchParams }: { searchParams: Promise<{ konfirmasi?: string }> }) {
   const { konfirmasi } = await searchParams;
   const user = await requireUser();
-  const [{ subscription, periods, telegram }, settings] = await Promise.all([getDonorData(user.id), getSiteSettings()]);
+  const [{ subscription, periods, telegram }, settings, reports] = await Promise.all([
+    getDonorData(user.id),
+    getSiteSettings(),
+    getPublishedReports(),
+  ]);
+  const latest = reports[0];
   const actionable = periods.filter((p) => p.status === "pending" || p.status === "unpaid");
   const waiting = periods.filter((p) => p.status === "awaiting_verification");
   const firstName = user.fullName.split(" ")[0] || "Bapak/Ibu";
@@ -34,6 +39,21 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
         <p className="text-base text-slate-600">Assalamu&apos;alaikum,</p>
         <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl">{user.fullName || firstName}</h1>
       </div>
+
+      <Link
+        href={latest ? `/keuangan/${latest.id}` : "/keuangan"}
+        className="trim-top lattice-light flex items-center gap-3 rounded-2xl bg-brand-900 p-4 text-white shadow-sm"
+      >
+        <Wallet className="size-5 shrink-0 text-brand-100" aria-hidden />
+        <div className="min-w-0 flex-1">
+          <p className="text-xs text-brand-100">Saldo kas masjid</p>
+          <p className="text-xl font-extrabold tabular-nums">{latest ? formatRupiah(latest.closing_balance) : "—"}</p>
+          <p className="truncate text-xs text-brand-200">
+            {latest ? `Per ${formatDate(latest.period_end)} · lihat laporan` : "Laporan pertama sedang disiapkan"}
+          </p>
+        </div>
+        <ChevronRight className="size-5 text-brand-200" aria-hidden />
+      </Link>
 
       {!subscription ? (
         <Card className="border border-brand-700 bg-brand-50">

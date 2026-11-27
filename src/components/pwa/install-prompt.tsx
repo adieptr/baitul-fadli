@@ -101,7 +101,7 @@ export function InstallPrompt({ variant = "banner" }: { variant?: "banner" | "in
 
   if (variant === "inline") return <div className="rounded-xl border border-slate-200 bg-white p-4">{content}</div>;
   return (
-    <div className="fixed inset-x-3 bottom-3 z-40 mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-4 shadow-2xl sm:right-4 sm:left-auto">
+    <div className="fixed inset-x-3 bottom-20 z-40 md:bottom-3 mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-4 shadow-2xl sm:right-4 sm:left-auto">
       {content}
     </div>
   );

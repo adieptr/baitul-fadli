@@ -34,25 +34,20 @@ export default async function SettingsPage() {
           <TextField label="Slogan / Tagline" name="tagline" defaultValue={s?.tagline} maxLength={200} />
           <FileUpload
             name="hero_image_path"
-            label="Foto Sampul Beranda (opsional)"
+            label="Foto Masjid untuk Popup Info (opsional)"
             bucket="public-media"
             folder="site"
             defaultPath={s?.hero_image_path}
             previewUrl={publicMediaUrl(s?.hero_image_path)}
-            hint="Gunakan foto asli masjid (landscape). Jika kosong, beranda menampilkan ilustrasi masjid."
+            hint="Tampil di popup info saat aplikasi dibuka. Jika kosong, memakai gambar bangunan masjid bawaan."
           />
           <TextAreaField
-            label="Profil Masjid (artikel di beranda)"
+            label="Profil Masjid"
             name="profile_content"
             rows={18}
             defaultValue={s?.profile_content}
             maxLength={20000}
-            hint={
-              <>
-                Satu artikel berisi sambutan, sejarah, visi, dan misi. Format: <code>## Subjudul</code>, <code>- poin</code>,{" "}
-                <code>&gt; kutipan</code>, <code>**tebal**</code>. Pisahkan paragraf dengan baris kosong.
-              </>
-            }
+            hint="Paragraf pertama (selain salam) tampil sebagai ringkasan di popup info masjid."
           />
           <TextAreaField label="Alamat" name="address" rows={2} defaultValue={s?.address} maxLength={500} />
           <div className="grid gap-5 sm:grid-cols-2">

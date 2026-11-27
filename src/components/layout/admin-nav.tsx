@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  CalendarDays, ClipboardCheck, FileBarChart, HandHeart, History, LayoutDashboard, Menu, Settings,
+  ClipboardCheck, FileBarChart, History, LayoutDashboard, Menu, Settings,
   Tags, Users, Wallet, X, ShieldCheck,
 } from "lucide-react";
 import { SideNav, type NavItem } from "./app-nav";
@@ -14,8 +14,6 @@ export const ADMIN_NAV: NavItem[] = [
   { href: "/admin/keuangan", label: "Transaksi Keuangan", icon: Wallet },
   { href: "/admin/laporan", label: "Laporan Keuangan", icon: FileBarChart },
   { href: "/admin/kategori", label: "Kategori", icon: Tags },
-  { href: "/admin/agenda", label: "Agenda Kegiatan", icon: CalendarDays },
-  { href: "/admin/program", label: "Program Donasi", icon: HandHeart },
   { href: "/admin/pengguna", label: "Pengguna & Role", icon: ShieldCheck },
   { href: "/admin/audit", label: "Log Aktivitas", icon: History },
   { href: "/admin/pengaturan", label: "Pengaturan", icon: Settings },

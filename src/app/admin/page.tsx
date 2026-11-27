@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowDownCircle, ArrowUpCircle, CalendarDays, ClipboardCheck, Plus, Users, Wallet } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, ClipboardCheck, Plus, Users, Wallet } from "lucide-react";
 import { Card, PageHeader, StatCard, EmptyState } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { PeriodStatusBadge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
-import { formatDate, formatDateTime, formatPeriodKey, formatRupiah, formatTime } from "@/lib/format";
+import { formatDate, formatDateTime, formatPeriodKey, formatRupiah } from "@/lib/format";
 import { jakartaToday } from "@/lib/schedule";
 
 export const metadata = { title: "Dashboard" };
@@ -19,7 +19,7 @@ type Stats = {
 export default async function AdminDashboard() {
   await requireAdmin();
   const supabase = await createClient();
-  const [{ data: statsRaw }, { data: awaiting }, { data: events }] = await Promise.all([
+  const [{ data: statsRaw }, { data: awaiting }] = await Promise.all([
     supabase.rpc("admin_dashboard_stats"),
     supabase
       .from("donation_periods")
@@ -27,12 +27,6 @@ export default async function AdminDashboard() {
       .eq("status", "awaiting_verification")
       .order("donor_confirmed_at", { ascending: true })
       .limit(5),
-    supabase
-      .from("events")
-      .select("id, title, event_date, start_time, is_published")
-      .gte("event_date", jakartaToday())
-      .order("event_date")
-      .limit(4),
   ]);
   const s = (statsRaw ?? {}) as Partial<Stats>;
   const month = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(new Date());
@@ -46,9 +40,6 @@ export default async function AdminDashboard() {
           <>
             <LinkButton href="/admin/keuangan/baru">
               <Plus className="size-4" aria-hidden /> Catat Transaksi
-            </LinkButton>
-            <LinkButton href="/admin/agenda/baru" variant="secondary">
-              <Plus className="size-4" aria-hidden /> Agenda
             </LinkButton>
           </>
         }
@@ -92,7 +83,7 @@ export default async function AdminDashboard() {
         </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-6">
         <Card>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-bold">Menunggu Verifikasi</h2>
@@ -115,30 +106,6 @@ export default async function AdminDashboard() {
             </ul>
           ) : (
             <EmptyState title="Tidak ada pembayaran yang menunggu" />
-          )}
-        </Card>
-        <Card>
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold">Agenda Terdekat</h2>
-            <Link href="/admin/agenda" className="font-semibold text-brand-800 underline underline-offset-4">Semua</Link>
-          </div>
-          {events?.length ? (
-            <ul className="divide-y divide-slate-100">
-              {events.map((e) => (
-                <li key={e.id} className="flex items-center gap-3 py-3">
-                  <CalendarDays className="size-5 shrink-0 text-brand-700" aria-hidden />
-                  <div className="flex-1">
-                    <Link href={`/admin/agenda/${e.id}`} className="font-semibold hover:underline">{e.title}</Link>
-                    <p className="text-sm text-slate-600">
-                      {formatDate(e.event_date, { weekday: true })} {e.start_time && `· ${formatTime(e.start_time)} WIB`}
-                      {!e.is_published && " · (draf)"}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <EmptyState title="Belum ada agenda mendatang" />
           )}
         </Card>
       </div>

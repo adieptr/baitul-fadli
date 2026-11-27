@@ -23,7 +23,6 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: "Akun Donatur", url: "/akun", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
       { name: "Laporan Keuangan", url: "/keuangan", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "Agenda", url: "/agenda", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
     ],
   };
 }
