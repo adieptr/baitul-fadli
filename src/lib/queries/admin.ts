@@ -5,7 +5,7 @@ export async function getCategories() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("categories")
-    .select("id, name, type, is_active, is_system, sort_order")
+    .select("id, name, type, is_active, is_system, sort_order, donor_selectable")
     .order("type")
     .order("sort_order")
     .order("name");

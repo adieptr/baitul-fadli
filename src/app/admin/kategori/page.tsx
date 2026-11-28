@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ActionForm, ConfirmButton, SelectField, SubmitButton, TextField } from "@/components/ui/form";
 import { requireAdmin } from "@/lib/auth";
 import { getCategories } from "@/lib/queries/admin";
-import { deleteCategoryAction, saveCategoryAction, toggleCategoryAction } from "@/lib/actions/admin-finance";
+import { deleteCategoryAction, saveCategoryAction, toggleCategoryAction, toggleDonorSelectableAction } from "@/lib/actions/admin-finance";
 
 export const metadata = { title: "Kategori" };
 
@@ -54,6 +54,14 @@ export default async function CategoriesPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     {c.is_system && <Badge tone="info">Sistem</Badge>}
                     {!c.is_active && <Badge tone="neutral">Nonaktif</Badge>}
+                    {c.type === "income" && !c.is_system && c.donor_selectable && <Badge tone="success">Bisa dipilih donatur</Badge>}
+                    {c.type === "income" && !c.is_system && (
+                      <ActionForm action={toggleDonorSelectableAction} hideAlert>
+                        <input type="hidden" name="id" value={c.id} />
+                        <input type="hidden" name="value" value={String(!c.donor_selectable)} />
+                        <SubmitButton variant="ghost" size="sm">{c.donor_selectable ? "Tutup untuk donatur" : "Buka untuk donatur"}</SubmitButton>
+                      </ActionForm>
+                    )}
                     <ActionForm action={toggleCategoryAction} hideAlert>
                       <input type="hidden" name="id" value={c.id} />
                       <input type="hidden" name="is_active" value={String(!c.is_active)} />

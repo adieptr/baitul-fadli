@@ -1,7 +1,7 @@
 -- Test keamanan (RLS/RBAC) dan logika bisnis. Jalankan: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(109);
+select plan(124);
 
 -- ---------------------------------------------------------------------
 -- Fixture: 3 user (admin, donatur A, donatur B)
@@ -264,6 +264,54 @@ $$, '23503', null, 'akun sumber dana yang tidak dikenal ditolak');
 reset role;
 
 -- ---------------------------------------------------------------------
+-- Donasi sukarela (shodaqoh / infaq / wakaf)
+-- ---------------------------------------------------------------------
+select pg_temp.login('22222222-2222-2222-2222-222222222222');
+select lives_ok($$
+  select public.submit_voluntary_donation((select id from public.categories where name = 'Shodaqoh'), 75000, 'bsi', 'Semoga berkah')
+$$, 'donatur bisa mengirim shodaqoh di luar tagihan');
+select throws_ok($$
+  select public.submit_voluntary_donation((select id from public.categories where name = 'Infaq Jumat'), 75000, 'bsi')
+$$, 'P0001', null, 'kategori yang tidak dibuka untuk donatur ditolak');
+select throws_ok($$
+  select public.submit_voluntary_donation((select id from public.categories where name = 'Shodaqoh'), 500, 'bsi')
+$$, 'P0001', null, 'donasi sukarela di bawah Rp 1.000 ditolak');
+select is((select count(*)::int from public.voluntary_donations where status = 'awaiting_verification'), 1, 'donasi menunggu verifikasi tercatat');
+select throws_ok($$ select public.set_voluntary_status((select id from public.voluntary_donations limit 1), 'verified') $$,
+  '42501', null, 'donatur tidak bisa memverifikasi donasinya sendiri');
+reset role;
+
+select pg_temp.login('33333333-3333-3333-3333-333333333333');
+select is((select count(*)::int from public.voluntary_donations), 0, 'donatur lain tidak melihat donasi orang lain');
+reset role;
+
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select lives_ok($$
+  select public.set_voluntary_status((select id from public.voluntary_donations limit 1), 'verified', 'ok', 80000, 'cash')
+$$, 'admin memverifikasi donasi sukarela (dengan koreksi nominal & akun)');
+select is((select t.amount::text || '|' || t.account_id from public.transactions t where t.voluntary_donation_id is not null),
+  '80000.00|cash', 'transaksi pemasukan otomatis memakai nominal & akun hasil verifikasi');
+select is((select t.description from public.transactions t where t.voluntary_donation_id is not null),
+  'Donasi sukarela: Shodaqoh', 'keterangan transaksi tanpa nama donatur');
+select lives_ok($$ select public.set_voluntary_status((select id from public.voluntary_donations limit 1), 'awaiting_verification') $$,
+  'admin mengembalikan ke menunggu verifikasi');
+select is((select count(*)::int from public.transactions where voluntary_donation_id is not null), 0, 'transaksi otomatis ikut dihapus');
+reset role;
+
+select pg_temp.login('22222222-2222-2222-2222-222222222222');
+select lives_ok($$
+  do $do$ begin
+    for i in 1..4 loop
+      perform public.submit_voluntary_donation((select id from public.categories where name = 'Wakaf'), 10000 + i, 'cash');
+    end loop;
+  end $do$
+$$, 'donatur bisa mengirim hingga 5 donasi menunggu verifikasi');
+select throws_ok($$
+  select public.submit_voluntary_donation((select id from public.categories where name = 'Wakaf'), 20000, 'cash')
+$$, 'P0001', null, 'donasi ke-6 yang menunggu verifikasi ditolak (anti-spam)');
+reset role;
+
+-- ---------------------------------------------------------------------
 -- Telegram & reminder
 -- ---------------------------------------------------------------------
 select pg_temp.login('22222222-2222-2222-2222-222222222222');
@@ -337,6 +385,12 @@ reset role;
 -- ---------------------------------------------------------------------
 select pg_temp.login('11111111-1111-1111-1111-111111111111');
 select public.set_period_status((select id from public.donation_periods where period_key = '2026-W46'), 'paid', 'tes hapus akun', true);
+reset role;
+select pg_temp.login('33333333-3333-3333-3333-333333333333');
+select public.submit_voluntary_donation((select id from public.categories where name = 'Wakaf'), 55000, 'bsi');
+reset role;
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select public.set_voluntary_status((select id from public.voluntary_donations where user_id = '33333333-3333-3333-3333-333333333333'), 'verified');
 insert into public.financial_reports (title, period_start, period_end)
 values ('Laporan uji hapus akun', public.jakarta_today() - 1, public.jakarta_today());
 select public.publish_report((select id from public.financial_reports where title = 'Laporan uji hapus akun'));
@@ -349,6 +403,10 @@ select is((select count(*)::int from public.donor_subscriptions where user_id = 
   'pengaturan donasi & tagihan ikut terhapus');
 select is((select count(*)::int from public.transactions where description like '%2026-W46%' and donation_period_id is null), 1,
   'transaksi pemasukan masjid tetap tersimpan tanpa tautan ke donatur');
+select is((select count(*)::int from public.transactions where description = 'Donasi sukarela: Wakaf' and voluntary_donation_id is null), 1,
+  'transaksi donasi sukarela tetap tersimpan setelah akun dihapus');
+select is((select count(*)::int from public.voluntary_donations where user_id = '33333333-3333-3333-3333-333333333333'), 0,
+  'data donasi sukarela milik akun terhapus ikut hilang');
 select throws_ok($$ update public.transactions set amount = 1 where description like '%2026-W46%' $$, 'P0001', null,
   'isi transaksi di periode terkunci tetap tidak bisa diubah');
 

@@ -280,3 +280,60 @@ export async function notifyDonorPaymentVerified(periodId: string) {
     console.error("notifyDonorPaymentVerified", e);
   }
 }
+
+/** Beri tahu admin bahwa ada donasi sukarela baru yang menunggu verifikasi. */
+export async function notifyAdminsVoluntary(donationId: string) {
+  if (!serverEnv.telegramConfigured()) return;
+  try {
+    const supabase = createServiceClient();
+    const { data: d } = await supabase
+      .from("voluntary_donations")
+      .select("amount, account_id, categories(name), profiles!voluntary_donations_user_id_fkey(full_name)")
+      .eq("id", donationId)
+      .maybeSingle();
+    if (!d) return;
+    const { data: admins } = await supabase.from("telegram_links").select("chat_id, profiles!inner(role)").eq("profiles.role", "admin");
+    const text = [
+      "🔔 <b>Donasi sukarela baru</b>",
+      `Donatur: ${escapeHtml(d.profiles?.full_name ?? "-")}`,
+      `Jenis: ${escapeHtml(d.categories?.name ?? "-")}`,
+      `Nominal: <b>${escapeHtml(formatRupiah(d.amount))}</b> (${d.account_id === "cash" ? "tunai" : "transfer BSI"})`,
+      "",
+      "Silakan cek dana masuk lalu verifikasi di dashboard admin.",
+    ].join("\n");
+    for (const a of admins ?? []) {
+      await sendTelegramMessage(a.chat_id, text, { buttonText: "Buka Verifikasi", buttonUrl: `${publicEnv.siteUrl}/admin/donasi-lain` });
+    }
+  } catch (e) {
+    console.error("notifyAdminsVoluntary", e);
+  }
+}
+
+/** Ucapan terima kasih ke donatur setelah donasi sukarela diverifikasi. */
+export async function notifyDonorVoluntaryVerified(donationId: string) {
+  if (!serverEnv.telegramConfigured()) return;
+  try {
+    const supabase = createServiceClient();
+    const { data: d } = await supabase
+      .from("voluntary_donations")
+      .select("user_id, amount, categories(name), profiles!voluntary_donations_user_id_fkey(full_name)")
+      .eq("id", donationId)
+      .maybeSingle();
+    if (!d) return;
+    const { data: link } = await supabase.from("telegram_links").select("chat_id").eq("user_id", d.user_id).maybeSingle();
+    if (!link) return;
+    const site = await getSiteInfo(supabase);
+    await sendTelegramMessage(
+      link.chat_id,
+      [
+        `✅ ${escapeHtml(d.categories?.name ?? "Donasi")} Anda telah <b>diverifikasi</b>.`,
+        "",
+        `• Nominal: <b>${escapeHtml(formatRupiah(d.amount))}</b>`,
+        "",
+        `Jazakumullahu khairan, ${escapeHtml(d.profiles?.full_name ?? "Bapak/Ibu")}. Semoga Allah menerima dan melipatgandakan pahalanya. — ${escapeHtml(site.mosqueName)}`,
+      ].join("\n"),
+    );
+  } catch (e) {
+    console.error("notifyDonorVoluntaryVerified", e);
+  }
+}

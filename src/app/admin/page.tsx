@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownCircle, ArrowUpCircle, Banknote, ClipboardCheck, Landmark, Plus, Users, Wallet } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, Banknote, ClipboardCheck, HandHeart, Landmark, Plus, Users, Wallet } from "lucide-react";
 import { Card, PageHeader, StatCard, EmptyState } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { PeriodStatusBadge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ type Stats = {
 export default async function AdminDashboard() {
   await requireAdmin();
   const supabase = await createClient();
-  const [{ data: statsRaw }, { data: awaiting }, { data: balances }] = await Promise.all([
+  const [{ data: statsRaw }, { data: awaiting }, { data: balances }, { count: voluntaryWaiting }] = await Promise.all([
     supabase.rpc("admin_dashboard_stats"),
     supabase
       .from("donation_periods")
@@ -28,6 +28,7 @@ export default async function AdminDashboard() {
       .order("donor_confirmed_at", { ascending: true })
       .limit(5),
     supabase.rpc("get_account_balances"),
+    supabase.from("voluntary_donations").select("id", { count: "exact", head: true }).eq("status", "awaiting_verification"),
   ]);
   const totalBalance = (balances ?? []).reduce((sum, b) => sum + Number(b.balance), 0);
   const s = (statsRaw ?? {}) as Partial<Stats>;
@@ -56,6 +57,16 @@ export default async function AdminDashboard() {
           <div>
             <p className="text-base font-bold text-sky-900">{s.awaiting_verification} pembayaran menunggu verifikasi</p>
             <p className="text-sky-800">Periksa rekening masjid lalu verifikasi →</p>
+          </div>
+        </Link>
+      )}
+
+      {(voluntaryWaiting ?? 0) > 0 && (
+        <Link href="/admin/donasi-lain" className="flex items-center gap-4 rounded-xl border border-sky-400 bg-sky-50 p-5 hover:bg-sky-100">
+          <HandHeart className="size-8 shrink-0 text-sky-700" aria-hidden />
+          <div>
+            <p className="text-base font-bold text-sky-900">{voluntaryWaiting} donasi sukarela menunggu verifikasi</p>
+            <p className="text-sky-800">Shodaqoh / infaq / wakaf dari donatur →</p>
           </div>
         </Link>
       )}

@@ -200,3 +200,15 @@ export async function setOpeningBalanceAction(_: ActionState, formData: FormData
   revalidatePath("/admin/buku-besar");
   return success("Saldo awal diperbarui.");
 }
+
+export async function toggleDonorSelectableAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  if (!(await getAdminOrNull())) return FORBIDDEN;
+  const id = idSchema.safeParse(formData.get("id"));
+  if (!id.success) return failure("ID tidak valid.");
+  const supabase = await createClient();
+  const { error } = await supabase.from("categories").update({ donor_selectable: formData.get("value") === "true" }).eq("id", id.data);
+  if (error) return failure(dbErrorMessage(error));
+  revalidatePath("/admin/kategori");
+  revalidatePath("/akun/donasi-lain");
+  return success("Pengaturan kategori diperbarui.");
+}

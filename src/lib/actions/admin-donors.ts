@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getAdminOrNull } from "@/lib/auth";
 import { publicEnv } from "@/lib/env";
 import { serverEnv } from "@/lib/server-env";
-import { notifyDonorPaymentVerified, runDailyReminders, sendManualReminder } from "@/lib/notifications";
+import { notifyDonorPaymentVerified, notifyDonorVoluntaryVerified, runDailyReminders, sendManualReminder } from "@/lib/notifications";
 import { getTelegramWebhookInfo, setTelegramWebhook } from "@/lib/telegram";
 import {
   dbErrorMessage,
@@ -17,7 +17,7 @@ import {
   validationFailure,
   type ActionState,
 } from "@/lib/action-state";
-import { periodStatusSchema } from "@/lib/validation";
+import { periodStatusSchema, voluntaryStatusSchema } from "@/lib/validation";
 import { PERIOD_STATUS } from "@/lib/format";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { readablePassword } from "@/lib/crypto";
@@ -177,4 +177,25 @@ export async function adminDeleteAccountAction(_: ActionState, formData: FormDat
   revalidatePath("/admin/pengguna");
   if (formData.get("from") === "donatur") redirect("/admin/donatur?deleted=1");
   return success("Akun berhasil dihapus.");
+}
+
+export async function setVoluntaryStatusAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  if (!(await getAdminOrNull())) return FORBIDDEN;
+  const parsed = voluntaryStatusSchema.safeParse(formObject(formData));
+  if (!parsed.success) return validationFailure(parsed.error);
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_voluntary_status", {
+    p_id: parsed.data.id,
+    p_status: parsed.data.status,
+    p_note: parsed.data.admin_note ?? undefined,
+    p_amount: parsed.data.amount ?? undefined,
+    p_account: parsed.data.account ?? undefined,
+    p_category: parsed.data.category_id ?? undefined,
+  });
+  if (error) return failure(dbErrorMessage(error));
+  if (parsed.data.status === "verified") after(() => notifyDonorVoluntaryVerified(parsed.data.id));
+  revalidatePath("/admin", "layout");
+  revalidatePath("/akun", "layout");
+  const label = { awaiting_verification: "dikembalikan ke Menunggu Verifikasi", verified: "diverifikasi dan dicatat sebagai pemasukan", rejected: "ditolak" }[parsed.data.status];
+  return success(`Donasi ${label}.`);
 }

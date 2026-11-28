@@ -13,6 +13,8 @@ const ACTION_LABEL: Record<string, string> = {
   telegram_linked: "Telegram terhubung",
   account_deleted: "Akun dihapus",
   set_opening_balance: "Saldo awal diubah",
+  voluntary_submitted: "Donasi sukarela dikirim",
+  set_voluntary_status: "Status donasi sukarela diubah",
   password_reset: "Kata sandi direset",
 };
 

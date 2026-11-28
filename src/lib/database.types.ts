@@ -45,14 +45,14 @@ isOneToOne: false
                   ]
                 },"categories": {
                   Row: {
-                    "created_at": string,"id": string,"is_active": boolean,"is_system": boolean,"name": string,"sort_order": number,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string
+                    "created_at": string,"donor_selectable": boolean,"id": string,"is_active": boolean,"is_system": boolean,"name": string,"sort_order": number,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"is_active"?: boolean,"is_system"?: boolean,"name": string,"sort_order"?: number,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string
+                    "created_at"?: string,"donor_selectable"?: boolean,"id"?: string,"is_active"?: boolean,"is_system"?: boolean,"name": string,"sort_order"?: number,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"is_active"?: boolean,"is_system"?: boolean,"name"?: string,"sort_order"?: number,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string
+                    "created_at"?: string,"donor_selectable"?: boolean,"id"?: string,"is_active"?: boolean,"is_system"?: boolean,"name"?: string,"sort_order"?: number,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -325,14 +325,14 @@ isOneToOne: true
                   ]
                 },"transactions": {
                   Row: {
-                    "account_id": string,"amount": number,"category_id": string,"created_at": string,"created_by": string | null,"description": string,"donation_period_id": string | null,"id": string,"proof_path": string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string,"updated_by": string | null
+                    "account_id": string,"amount": number,"category_id": string,"created_at": string,"created_by": string | null,"description": string,"donation_period_id": string | null,"id": string,"proof_path": string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string,"updated_by": string | null,"voluntary_donation_id": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "account_id"?: string,"amount": number,"category_id": string,"created_at"?: string,"created_by"?: string | null,"description": string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
+                    "account_id"?: string,"amount": number,"category_id": string,"created_at"?: string,"created_by"?: string | null,"description": string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null,"voluntary_donation_id"?: string | null
                   }
                   Update: {
-                    "account_id"?: string,"amount"?: number,"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date"?: string,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
+                    "account_id"?: string,"amount"?: number,"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date"?: string,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null,"voluntary_donation_id"?: string | null
                   }
                   Relationships: [
                     {
@@ -362,6 +362,50 @@ isOneToOne: true
     },{
       foreignKeyName: "transactions_updated_by_fkey"
       columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "transactions_voluntary_donation_id_fkey"
+      columns: ["voluntary_donation_id"]
+isOneToOne: true
+      referencedRelation: "voluntary_donations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"voluntary_donations": {
+                  Row: {
+                    "account_id": string,"admin_note": string | null,"amount": number,"category_id": string,"created_at": string,"donor_note": string | null,"id": string,"status": string,"user_id": string,"verified_at": string | null,"verified_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "account_id": string,"admin_note"?: string | null,"amount": number,"category_id": string,"created_at"?: string,"donor_note"?: string | null,"id"?: string,"status"?: string,"user_id": string,"verified_at"?: string | null,"verified_by"?: string | null
+                  }
+                  Update: {
+                    "account_id"?: string,"admin_note"?: string | null,"amount"?: number,"category_id"?: string,"created_at"?: string,"donor_note"?: string | null,"id"?: string,"status"?: string,"user_id"?: string,"verified_at"?: string | null,"verified_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "voluntary_donations_account_id_fkey"
+      columns: ["account_id"]
+isOneToOne: false
+      referencedRelation: "fund_accounts"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "voluntary_donations_category_id_fkey"
+      columns: ["category_id"]
+isOneToOne: false
+      referencedRelation: "categories"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "voluntary_donations_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "voluntary_donations_verified_by_fkey"
+      columns: ["verified_by"]
 isOneToOne: false
       referencedRelation: "profiles"
       referencedColumns: ["id"]
@@ -465,6 +509,12 @@ isOneToOne: false
                            },
 "set_user_role":
 { Args: { "p_role": Database["public"]['Enums']["user_role"],"p_user_id": string }; Returns: undefined
+                           },
+"set_voluntary_status":
+{ Args: { "p_account"?: string,"p_amount"?: number,"p_category"?: string,"p_id": string,"p_note"?: string,"p_status": string }; Returns: undefined
+                           },
+"submit_voluntary_donation":
+{ Args: { "p_account": string,"p_amount": number,"p_category_id": string,"p_note"?: string }; Returns: string
                            },
 "unpublish_report":
 { Args: { "p_reason": string,"p_report_id": string }; Returns: undefined

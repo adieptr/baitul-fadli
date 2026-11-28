@@ -128,6 +128,22 @@ export const transactionSchema = z.object({
   account_id: z.enum(ACCOUNT_IDS, { message: "Pilih sumber dana (Kas Tunai atau Bank BSI)." }),
 });
 
+export const voluntaryDonationSchema = z.object({
+  category_id: z.uuid("Pilih jenis donasi."),
+  amount: amountSchema.pipe(z.number().min(1000, "Nominal minimal Rp1.000.").max(1_000_000_000, "Nominal terlalu besar.")),
+  account: z.enum(ACCOUNT_IDS, { message: "Pilih cara pembayaran." }),
+  note: z.preprocess(emptyToNull, z.string().trim().max(300, "Catatan maksimal 300 karakter.").nullable()),
+});
+
+export const voluntaryStatusSchema = z.object({
+  id: z.uuid(),
+  status: z.enum(["awaiting_verification", "verified", "rejected"]),
+  admin_note: z.preprocess(emptyToNull, z.string().trim().max(300).nullable()),
+  amount: z.preprocess(emptyToNull, amountSchema.pipe(z.number().min(1000, "Nominal minimal Rp1.000.").max(1_000_000_000)).nullable()),
+  account: z.preprocess(emptyToNull, z.enum(ACCOUNT_IDS).nullable()),
+  category_id: z.preprocess(emptyToNull, z.uuid().nullable()),
+});
+
 export const openingBalanceSchema = z.object({
   account: z.enum(ACCOUNT_IDS),
   amount: z.preprocess(

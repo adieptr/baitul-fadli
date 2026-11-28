@@ -10,7 +10,7 @@ import { purgeAccount } from "@/lib/account-deletion";
 import { getCurrentUser } from "@/lib/auth";
 import { publicEnv } from "@/lib/env";
 import { randomToken, sha256Hex } from "@/lib/crypto";
-import { notifyAdminsPaymentConfirmed } from "@/lib/notifications";
+import { notifyAdminsPaymentConfirmed, notifyAdminsVoluntary } from "@/lib/notifications";
 import {
   dbErrorMessage,
   failure,
@@ -19,7 +19,7 @@ import {
   validationFailure,
   type ActionState,
 } from "@/lib/action-state";
-import { confirmPaymentSchema, profileSchema, subscriptionSchema } from "@/lib/validation";
+import { confirmPaymentSchema, profileSchema, subscriptionSchema, voluntaryDonationSchema } from "@/lib/validation";
 
 const NOT_LOGGED_IN = failure("Sesi Anda telah berakhir. Silakan masuk kembali.");
 
@@ -93,6 +93,24 @@ export async function confirmPaymentAction(_: ActionState, formData: FormData): 
   revalidatePath("/akun", "layout");
   // Kartu tagihan akan hilang setelah status berubah, jadi tampilkan pesan di halaman tujuan.
   redirect("/akun?konfirmasi=1");
+}
+
+export async function submitVoluntaryDonationAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const user = await getCurrentUser();
+  if (!user) return NOT_LOGGED_IN;
+  const parsed = voluntaryDonationSchema.safeParse(formObject(formData));
+  if (!parsed.success) return validationFailure(parsed.error);
+  const supabase = await createClient();
+  const { data: id, error } = await supabase.rpc("submit_voluntary_donation", {
+    p_category_id: parsed.data.category_id,
+    p_amount: parsed.data.amount,
+    p_account: parsed.data.account,
+    p_note: parsed.data.note ?? undefined,
+  });
+  if (error) return failure(dbErrorMessage(error));
+  if (id) after(() => notifyAdminsVoluntary(id));
+  revalidatePath("/akun/donasi-lain");
+  redirect("/akun/donasi-lain?terkirim=1");
 }
 
 export async function createTelegramLinkAction(): Promise<ActionState & { url?: string }> {

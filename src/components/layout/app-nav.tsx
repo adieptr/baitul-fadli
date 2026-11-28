@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-export type NavItem = { href: string; label: string; icon: LucideIcon; exact?: boolean };
+export type NavItem = { href: string; label: string; icon: LucideIcon; exact?: boolean; match?: string[] };
 
 function useActive() {
   const pathname = usePathname();
-  return (item: NavItem) => (item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(`${item.href}/`));
+  const on = (base: string) => pathname === base || pathname.startsWith(`${base}/`);
+  return (item: NavItem) => (item.exact ? pathname === item.href : on(item.href) || Boolean(item.match?.some(on)));
 }
 
 /** Tab bawah ala aplikasi untuk HP: pil ikon beranimasi + garis trim merah pada tab aktif. */

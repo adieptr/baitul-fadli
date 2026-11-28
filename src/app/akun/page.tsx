@@ -156,6 +156,16 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
         </Card>
       )}
 
+      <Card className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="flex items-center gap-2 text-base font-bold">
+            <HandHeart className="size-4 text-brand-700" aria-hidden /> Ingin berbagi lebih?
+          </h2>
+          <p className="text-slate-600">Kirim shodaqoh atau donasi lain kapan saja, tanpa menunggu tagihan.</p>
+        </div>
+        <LinkButton href="/akun/donasi-lain" variant="secondary">Kirim Shodaqoh / Donasi Lain</LinkButton>
+      </Card>
+
       {periods.length > 0 && (
         <div className="text-right">
           <Link href="/akun/riwayat" className="font-semibold text-brand-800 underline underline-offset-4">
