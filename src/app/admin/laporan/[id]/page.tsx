@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Printer } from "lucide-react";
 import { Card, PageHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ActionForm, ConfirmButton, SubmitButton, TextField, TextAreaField } from "@/components/ui/form";
@@ -57,9 +57,14 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
 
       {published ? (
         <Card className="space-y-4">
-          <a href={`/keuangan/${r.id}`} target="_blank" className="inline-flex items-center gap-2 font-semibold text-brand-800 underline">
-            <ExternalLink className="size-4" aria-hidden /> Lihat tampilan publik
-          </a>
+          <div className="flex flex-wrap items-center gap-3">
+            <a href={`/cetak/${r.id}`} target="_blank" rel="noopener" className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-700 px-5 font-bold text-white hover:bg-brand-800">
+              <Printer className="size-5" aria-hidden /> Cetak untuk Mading
+            </a>
+            <a href={`/keuangan/${r.id}`} target="_blank" className="inline-flex items-center gap-2 font-semibold text-brand-800 underline">
+              <ExternalLink className="size-4" aria-hidden /> Lihat tampilan publik
+            </a>
+          </div>
           <ActionForm action={unpublishReportAction}>
             <input type="hidden" name="id" value={r.id} />
             <ConfirmButton

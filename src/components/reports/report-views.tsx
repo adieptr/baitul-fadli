@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, FileText, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ChevronRight, FileText, Printer, ShieldCheck } from "lucide-react";
 import { Card, EmptyState, PageHeader } from "@/components/ui/card";
 import { ReportSummary } from "@/components/public/finance";
 import { formatDate, formatDateTime, formatRupiah } from "@/lib/format";
@@ -57,6 +57,14 @@ export function ReportDetail({ report, basePath }: { report: ReportRow; basePath
         </p>
       </div>
       <ReportSummary report={report} />
+      <a
+        href={`/cetak/${report.id}`}
+        target="_blank"
+        rel="noopener"
+        className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 font-semibold text-slate-800 hover:bg-slate-50"
+      >
+        <Printer className="size-4" aria-hidden /> Cetak laporan
+      </a>
       {report.notes && (
         <Card>
           <h2 className="font-bold">Catatan Pengurus</h2>
