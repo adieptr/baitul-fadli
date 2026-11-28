@@ -27,7 +27,7 @@ export default async function LedgerPage({ searchParams }: { searchParams: Promi
         description="Seluruh mutasi kas masjid beserta saldo berjalan, per sumber dana."
         action={
           <Link href={exportHref} prefetch={false} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 font-semibold text-slate-800 hover:bg-slate-50">
-            <Download className="size-4" aria-hidden /> Unduh CSV
+            <Download className="size-4" aria-hidden /> Unduh Excel
           </Link>
         }
       />

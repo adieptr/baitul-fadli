@@ -15,7 +15,6 @@ export function mosqueInfoFrom(s: SiteSettings): MosqueInfo {
     tagline: s.tagline,
     summary,
     address: s.address,
-    hours: s.service_hours ?? "",
     photo: publicMediaUrl(s.hero_image_path),
   };
 }

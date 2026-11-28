@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Clock, Info, MapPin, X } from "lucide-react";
+import { Info, MapPin, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const SEEN_KEY = "bf-intro-seen";
@@ -12,7 +12,6 @@ export type MosqueInfo = {
   tagline: string;
   summary: string;
   address: string;
-  hours: string;
   photo: string | null;
 };
 
@@ -73,19 +72,10 @@ export function MosqueInfoDialog({ info }: { info: MosqueInfo }) {
           {info.tagline && <p className="text-sm text-slate-600">{info.tagline}</p>}
         </div>
         {info.summary && <p className="text-sm leading-relaxed text-slate-700">{info.summary}</p>}
-        {(info.address || info.hours) && (
-          <ul className="space-y-1.5 text-sm text-slate-700">
-            {info.address && (
-              <li className="flex gap-2">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-brand-700" aria-hidden /> {info.address}
-              </li>
-            )}
-            {info.hours && (
-              <li className="flex gap-2">
-                <Clock className="mt-0.5 size-4 shrink-0 text-brand-700" aria-hidden /> {info.hours}
-              </li>
-            )}
-          </ul>
+        {info.address && (
+          <p className="flex gap-2 text-sm text-slate-700">
+            <MapPin className="mt-0.5 size-4 shrink-0 text-brand-700" aria-hidden /> {info.address}
+          </p>
         )}
         <form method="dialog" className="pt-1">
           <Button type="submit" className="w-full">
