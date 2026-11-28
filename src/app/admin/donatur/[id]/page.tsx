@@ -4,6 +4,7 @@ import { ArrowLeft, Mail, MessageCircle, Phone, Send } from "lucide-react";
 import { Card, EmptyState, PageHeader, StatCard } from "@/components/ui/card";
 import { PeriodStatusBadge, SubscriptionBadge } from "@/components/ui/badge";
 import { ActionForm, ConfirmButton } from "@/components/ui/form";
+import { PaymentDeclared } from "@/components/admin/payment-declared";
 import { PeriodActions } from "@/components/admin/period-actions";
 import { displayEmail } from "@/lib/synthetic-email";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
@@ -101,6 +102,7 @@ export default async function DonorDetailPage({ params }: { params: Promise<{ id
                     <PeriodStatusBadge status={p.status} />
                   </div>
                 </div>
+                {p.status !== "pending" && <PaymentDeclared billed={p.amount} paid={p.paid_amount} account={p.paid_account} />}
                 <PeriodActions period={p} donorName={profile.full_name} hasTelegram={Boolean(telegram)} />
               </li>
             ))}

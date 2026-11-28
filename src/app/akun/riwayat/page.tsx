@@ -11,7 +11,7 @@ export default async function HistoryPage() {
   const user = await requireUser("/akun/riwayat");
   const { periods } = await getDonorData(user.id);
   const paid = periods.filter((p) => p.status === "paid");
-  const totalPaid = paid.reduce((s, p) => s + Number(p.amount), 0);
+  const totalPaid = paid.reduce((s, p) => s + Number(p.paid_amount ?? p.amount), 0);
 
   return (
     <div className="space-y-6">
@@ -37,7 +37,10 @@ export default async function HistoryPage() {
                     <p className="text-slate-600">Jatuh tempo {formatDate(p.due_date)}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-base font-bold tabular-nums">{formatRupiah(p.amount)}</p>
+                    <p className="text-base font-bold tabular-nums">{formatRupiah(p.status !== "pending" && p.status !== "unpaid" ? (p.paid_amount ?? p.amount) : p.amount)}</p>
+                    {p.paid_amount != null && Number(p.paid_amount) !== Number(p.amount) && p.status !== "pending" && p.status !== "unpaid" && (
+                      <p className="text-sm text-slate-600">Tagihan {formatRupiah(p.amount)}</p>
+                    )}
                     <PeriodStatusBadge status={p.status} />
                   </div>
                 </div>

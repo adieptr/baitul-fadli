@@ -9,12 +9,13 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { getCategories, getLockedRanges, isLocked } from "@/lib/queries/admin";
 import { formatDate, formatRupiah } from "@/lib/format";
+import { ACCOUNTS, ACCOUNT_SHORT } from "@/lib/accounts";
 import { jakartaToday } from "@/lib/schedule";
 
 export const metadata = { title: "Transaksi Keuangan" };
 const PAGE_SIZE = 25;
 
-type SP = { month?: string; type?: string; category?: string; q?: string; page?: string; saved?: string; deleted?: string };
+type SP = { month?: string; type?: string; account?: string; category?: string; q?: string; page?: string; saved?: string; deleted?: string };
 
 function monthRange(month: string) {
   const [y, m] = month.split("-").map(Number);
@@ -27,6 +28,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
   const sp = await searchParams;
   const month = /^\d{4}-\d{2}$/.test(sp.month ?? "") ? sp.month! : jakartaToday().slice(0, 7);
   const type = sp.type === "income" || sp.type === "expense" ? sp.type : undefined;
+  const account = ACCOUNTS.find((a) => a.id === sp.account)?.id;
   const category = /^[0-9a-f-]{36}$/.test(sp.category ?? "") ? sp.category : undefined;
   const q = (sp.q ?? "").trim().slice(0, 60);
   const page = Math.max(1, Number(sp.page) || 1);
@@ -35,7 +37,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
   const supabase = await createClient();
   let query = supabase
     .from("transactions")
-    .select("id, type, amount, transaction_date, description, proof_path, donation_period_id, categories(name)", { count: "exact" })
+    .select("id, type, amount, transaction_date, description, proof_path, donation_period_id, account_id, categories(name)", { count: "exact" })
     .gte("transaction_date", start)
     .lte("transaction_date", end)
     .order("transaction_date", { ascending: false })
@@ -43,6 +45,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (type) query = query.eq("type", type);
   if (category) query = query.eq("category_id", category);
+  if (account) query = query.eq("account_id", account);
   if (q) query = query.ilike("description", `%${q.replace(/[%_\\]/g, "\\$&")}%`);
 
   const [{ data: rows, count }, { data: summary }, categories, locked] = await Promise.all([
@@ -67,7 +70,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
       />
 
       <Card className="mb-6">
-        <form className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5" method="get">
+        <form className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6" method="get">
           <label className="space-y-1">
             <span className="block font-semibold">Bulan</span>
             <input type="month" name="month" defaultValue={month} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3" />
@@ -78,6 +81,15 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
               <option value="">Semua</option>
               <option value="income">Pemasukan</option>
               <option value="expense">Pengeluaran</option>
+            </select>
+          </label>
+          <label className="space-y-1">
+            <span className="block font-semibold">Sumber dana</span>
+            <select name="account" defaultValue={account ?? ""} className="block min-h-10 w-full rounded-xl border border-slate-300 px-3">
+              <option value="">Semua</option>
+              {ACCOUNTS.map((a) => (
+                <option key={a.id} value={a.id}>{a.label}</option>
+              ))}
             </select>
           </label>
           <label className="space-y-1">
@@ -125,6 +137,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
                     <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
                       <span>{formatDate(t.transaction_date, { short: true })}</span>
                       <Badge tone={t.type === "income" ? "success" : "danger"}>{t.categories?.name}</Badge>
+                      <Badge tone={t.account_id === "bsi" ? "info" : "neutral"}>{ACCOUNT_SHORT[t.account_id] ?? t.account_id}</Badge>
                       {t.donation_period_id && <Badge tone="info">Otomatis · Donatur</Badge>}
                       {lockedRow && (
                         <Badge tone="neutral">
@@ -149,7 +162,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
         pageSize={PAGE_SIZE}
         total={count ?? 0}
         basePath="/admin/keuangan"
-        baseParams={{ month, type, category, q: q || undefined }}
+        baseParams={{ month, type, account, category, q: q || undefined }}
       />
     </div>
   );

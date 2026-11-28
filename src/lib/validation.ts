@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ACCOUNT_IDS } from "@/lib/accounts";
 
 const emptyToNull = (v: unknown) => (v === undefined || (typeof v === "string" && v.trim() === "") ? null : v);
 
@@ -124,6 +125,15 @@ export const transactionSchema = z.object({
   transaction_date: dateSchema,
   description: z.string().trim().min(3, "Keterangan minimal 3 karakter.").max(500),
   proof_path: storagePath,
+  account_id: z.enum(ACCOUNT_IDS, { message: "Pilih sumber dana (Kas Tunai atau Bank BSI)." }),
+});
+
+export const openingBalanceSchema = z.object({
+  account: z.enum(ACCOUNT_IDS),
+  amount: z.preprocess(
+    (v) => (typeof v === "string" ? v.replace(/[^0-9]/g, "") || "0" : v),
+    z.coerce.number({ message: "Nominal tidak valid." }).int().min(0).max(100_000_000_000, "Nominal terlalu besar."),
+  ),
 });
 
 export const categorySchema = z.object({
@@ -195,9 +205,14 @@ export const periodStatusSchema = z.object({
   status: z.enum(["pending", "awaiting_verification", "paid", "unpaid"]),
   admin_note: z.preprocess(emptyToNull, z.string().trim().max(300).nullable()),
   record_income: z.preprocess((v) => v === "on" || v === "true", z.boolean()),
+  // nominal & akun akhir (opsional; default mengikuti konfirmasi donatur)
+  amount: z.preprocess(emptyToNull, amountSchema.pipe(z.number().min(1000, "Nominal minimal Rp1.000.").max(1_000_000_000)).nullable()),
+  account: z.preprocess(emptyToNull, z.enum(ACCOUNT_IDS).nullable()),
 });
 
 export const confirmPaymentSchema = z.object({
   period_id: z.uuid(),
+  amount: amountSchema.pipe(z.number().min(1000, "Nominal minimal Rp1.000.").max(1_000_000_000, "Nominal terlalu besar.")),
+  account: z.enum(ACCOUNT_IDS, { message: "Pilih cara pembayaran." }),
   note: z.preprocess(emptyToNull, z.string().trim().max(300, "Catatan maksimal 300 karakter.").nullable()),
 });

@@ -221,7 +221,7 @@ export async function notifyAdminsPaymentConfirmed(periodId: string) {
     const supabase = createServiceClient();
     const { data: period } = await supabase
       .from("donation_periods")
-      .select("amount, period_key, profiles!donation_periods_user_id_fkey(full_name)")
+      .select("amount, paid_amount, paid_account, period_key, profiles!donation_periods_user_id_fkey(full_name)")
       .eq("id", periodId)
       .maybeSingle();
     if (!period) return;
@@ -233,10 +233,13 @@ export async function notifyAdminsPaymentConfirmed(periodId: string) {
       "🔔 <b>Konfirmasi pembayaran baru</b>",
       `Donatur: ${escapeHtml(period.profiles?.full_name ?? "-")}`,
       `Periode: ${escapeHtml(formatPeriodKey(period.period_key))}`,
-      `Nominal: ${escapeHtml(formatRupiah(period.amount))}`,
+      `Nominal tagihan: ${escapeHtml(formatRupiah(period.amount))}`,
+      period.paid_amount != null
+        ? `Dikonfirmasi donatur: <b>${escapeHtml(formatRupiah(period.paid_amount))}</b> (${period.paid_account === "cash" ? "tunai" : "transfer BSI"})`
+        : null,
       "",
       "Silakan cek rekening masjid lalu verifikasi di dashboard admin.",
-    ].join("\n");
+    ].filter((l) => l !== null).join("\n");
     for (const a of admins ?? []) {
       await sendTelegramMessage(a.chat_id, text, {
         buttonText: "Buka Verifikasi",
@@ -255,7 +258,7 @@ export async function notifyDonorPaymentVerified(periodId: string) {
     const supabase = createServiceClient();
     const { data: period } = await supabase
       .from("donation_periods")
-      .select("user_id, amount, period_key, profiles!donation_periods_user_id_fkey(full_name)")
+      .select("user_id, amount, paid_amount, period_key, profiles!donation_periods_user_id_fkey(full_name)")
       .eq("id", periodId)
       .maybeSingle();
     if (!period) return;
@@ -268,7 +271,7 @@ export async function notifyDonorPaymentVerified(periodId: string) {
         `✅ Pembayaran donasi Anda telah <b>diverifikasi</b>.`,
         "",
         `• Periode: <b>${escapeHtml(formatPeriodKey(period.period_key))}</b>`,
-        `• Nominal: <b>${escapeHtml(formatRupiah(period.amount))}</b>`,
+        `• Nominal: <b>${escapeHtml(formatRupiah(period.paid_amount ?? period.amount))}</b>`,
         "",
         `Jazakumullahu khairan, ${escapeHtml(period.profiles?.full_name ?? "Bapak/Ibu")}. Semoga menjadi amal jariyah yang terus mengalir pahalanya. — ${escapeHtml(site.mosqueName)}`,
       ].join("\n"),

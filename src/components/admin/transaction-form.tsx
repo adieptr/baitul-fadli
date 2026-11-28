@@ -5,6 +5,7 @@ import { ActionForm, MoneyField, SelectField, SubmitButton, TextField, TextAreaF
 import { FileUpload } from "@/components/ui/file-upload";
 import { saveTransactionAction } from "@/lib/actions/admin-finance";
 import { cn } from "@/lib/cn";
+import { ACCOUNTS } from "@/lib/accounts";
 
 type Category = { id: string; name: string; type: "income" | "expense"; is_active: boolean };
 type Tx = {
@@ -15,6 +16,7 @@ type Tx = {
   transaction_date: string;
   description: string;
   proof_path: string | null;
+  account_id: string;
 };
 
 export function TransactionForm({
@@ -56,6 +58,21 @@ export function TransactionForm({
               >
                 <input type="radio" name="type" value={t} checked={type === t} onChange={() => setType(t)} className="sr-only" />
                 {t === "income" ? "Pemasukan" : "Pengeluaran"}
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <span className="mb-2 block text-base font-semibold text-slate-800">
+            {type === "income" ? "Diterima lewat *" : "Dibayar dari *"}
+          </span>
+          <div className="grid grid-cols-2 gap-3">
+            {ACCOUNTS.map((a) => (
+              <label key={a.id} className="cursor-pointer">
+                <input type="radio" name="account_id" value={a.id} defaultChecked={(initial?.account_id ?? "cash") === a.id} className="peer sr-only" />
+                <span className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white text-base font-bold text-slate-600 peer-checked:border-brand-700 peer-checked:bg-brand-50 peer-checked:text-brand-800 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-600">
+                  {a.label}
+                </span>
               </label>
             ))}
           </div>

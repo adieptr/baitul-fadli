@@ -11,6 +11,7 @@ import { deleteReportAction, publishReportAction, saveReportAction, unpublishRep
 import { formatDate, formatDateTime } from "@/lib/format";
 import { jakartaToday } from "@/lib/schedule";
 import type { Breakdown } from "@/lib/queries/public";
+import { AccountBreakdown, type AccountSummary, type MatrixRow } from "@/components/admin/account-breakdown";
 
 export const metadata = { title: "Detail Laporan" };
 
@@ -22,12 +23,12 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
   const { data: r } = await supabase.from("financial_reports").select("*").eq("id", id).maybeSingle();
   if (!r) notFound();
   const published = r.status === "published";
-  const { data: live } = published
-    ? { data: null }
-    : await supabase.rpc("finance_summary", { p_start: r.period_start, p_end: r.period_end });
-  const summary = published
-    ? r
-    : ((live ?? {}) as { opening_balance: number; total_income: number; total_expense: number; closing_balance: number; breakdown: Breakdown });
+  const { data: live } = await supabase.rpc("finance_summary", { p_start: r.period_start, p_end: r.period_end });
+  const liveSummary = (live ?? {}) as {
+    opening_balance: number; total_income: number; total_expense: number; closing_balance: number; breakdown: Breakdown;
+    by_account?: AccountSummary[]; matrix?: MatrixRow[];
+  };
+  const summary = published ? r : liveSummary;
   const canPublish = r.period_end <= jakartaToday();
 
   return (
@@ -51,6 +52,8 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
       <Card>
         <BreakdownBars breakdown={(published ? r.breakdown : (summary as { breakdown: Breakdown }).breakdown) as Breakdown | null} />
       </Card>
+
+      <AccountBreakdown byAccount={liveSummary.by_account ?? []} matrix={liveSummary.matrix ?? []} />
 
       {published ? (
         <Card className="space-y-4">
@@ -95,7 +98,7 @@ export default async function ReportAdminDetail({ params }: { params: Promise<{ 
                   label="Publikasikan Laporan"
                   size="lg"
                   title="Publikasikan laporan ini?"
-                  message="Laporan dan rincian transaksinya akan tampil di halaman publik. Transaksi pada periode ini akan terkunci (tutup buku)."
+                  message="Ringkasan laporan (saldo awal, pemasukan, pengeluaran, saldo akhir) akan tampil di halaman publik. Transaksi pada periode ini akan terkunci (tutup buku)."
                   confirmLabel="Ya, Publikasikan"
                 />
               ) : (

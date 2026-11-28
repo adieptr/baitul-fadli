@@ -1,11 +1,12 @@
 import { Card, PageHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ActionForm, SubmitButton, TextField, TextAreaField } from "@/components/ui/form";
+import { ActionForm, MoneyField, SubmitButton, TextField, TextAreaField } from "@/components/ui/form";
 import { FileUpload } from "@/components/ui/file-upload";
 import { publicMediaUrl } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { saveSettingsAction } from "@/lib/actions/admin-content";
+import { setOpeningBalanceAction } from "@/lib/actions/admin-finance";
 import { runRemindersNowAction, setupTelegramWebhookAction } from "@/lib/actions/admin-donors";
 import { getTelegramWebhookInfo } from "@/lib/telegram";
 import { serverEnv } from "@/lib/server-env";
@@ -17,9 +18,11 @@ export const metadata = { title: "Pengaturan" };
 export default async function SettingsPage() {
   await requireAdmin();
   const supabase = await createClient();
-  const [{ data: s }, { data: lastRun }] = await Promise.all([
+  const [{ data: s }, { data: lastRun }, { data: accounts }, { count: publishedCount }] = await Promise.all([
     supabase.from("site_settings").select("*").eq("id", 1).single(),
     supabase.from("reminder_logs").select("created_at, status").in("kind", ["due", "followup"]).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("fund_accounts").select("id, name, opening_balance").order("sort_order"),
+    supabase.from("financial_reports").select("id", { count: "exact", head: true }).eq("status", "published"),
   ]);
   const tgConfigured = serverEnv.telegramConfigured();
   const webhook = tgConfigured ? await getTelegramWebhookInfo().catch(() => null) : null;
@@ -67,6 +70,32 @@ export default async function SettingsPage() {
           />
           <SubmitButton size="lg">Simpan Pengaturan</SubmitButton>
         </ActionForm>
+      </Card>
+
+      <Card className="space-y-4">
+        <div>
+          <h2 className="text-lg font-bold">Saldo Awal Pencatatan</h2>
+          <p className="text-slate-600">
+            Saldo kas tunai dan rekening Bank BSI <b>sebelum</b> transaksi pertama dicatat di aplikasi. Isi sekali saat mulai memakai
+            aplikasi, sesuai catatan/mutasi rekening terakhir.
+          </p>
+        </div>
+        {(publishedCount ?? 0) > 0 && (
+          <p className="rounded-xl bg-slate-100 p-3 text-slate-700">
+            Terkunci: sudah ada laporan yang dipublikasikan, sehingga saldo awal tidak dapat diubah lagi.
+          </p>
+        )}
+        <div className="grid gap-4 md:grid-cols-2">
+          {(accounts ?? []).map((a) => (
+            <ActionForm key={a.id} action={setOpeningBalanceAction} className="space-y-3">
+              <input type="hidden" name="account" value={a.id} />
+              <fieldset disabled={(publishedCount ?? 0) > 0} className="space-y-3">
+                <MoneyField label={`Saldo awal ${a.name}`} name="amount" defaultValue={Number(a.opening_balance)} />
+                <SubmitButton variant="secondary" pendingText="Menyimpan…">Simpan</SubmitButton>
+              </fieldset>
+            </ActionForm>
+          ))}
+        </div>
       </Card>
 
       <Card className="space-y-4">

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { subscriptionSchema, transactionSchema, registerSchema, eventSchema } from "../src/lib/validation";
+import { subscriptionSchema, transactionSchema, confirmPaymentSchema, registerSchema, eventSchema } from "../src/lib/validation";
 import { nextDueDate } from "../src/lib/schedule";
 import { formatPeriodKey } from "../src/lib/format";
 
@@ -26,6 +26,7 @@ describe("transactionSchema", () => {
     amount: "1.500.000",
     transaction_date: "2026-10-15",
     description: "Infaq Jumat",
+    account_id: "cash",
   };
   it("parse nominal berformat ribuan", () => {
     const r = transactionSchema.safeParse(base);
@@ -34,6 +35,23 @@ describe("transactionSchema", () => {
   });
   it("menolak path file berbahaya", () => {
     expect(transactionSchema.safeParse({ ...base, proof_path: "../../etc/passwd" }).success).toBe(false);
+  });
+  it("wajib memilih sumber dana yang dikenal (cash / bsi)", () => {
+    expect(transactionSchema.safeParse({ ...base, account_id: "bsi" }).success).toBe(true);
+    expect(transactionSchema.safeParse({ ...base, account_id: "paypal" }).success).toBe(false);
+    expect(transactionSchema.safeParse({ ...base, account_id: undefined }).success).toBe(false);
+  });
+});
+
+describe("confirmPaymentSchema", () => {
+  const base = { period_id: "6f1e7a52-1c1a-4b7e-9a37-3f0b7d1f2a11", account: "bsi" };
+  it("menerima nominal berformat ribuan (lebih/kurang dari tagihan)", () => {
+    const r = confirmPaymentSchema.safeParse({ ...base, amount: "150.000" });
+    expect(r.success && r.data.amount).toBe(150000);
+  });
+  it("menolak nominal di bawah Rp1.000 dan cara bayar asing", () => {
+    expect(confirmPaymentSchema.safeParse({ ...base, amount: "500" }).success).toBe(false);
+    expect(confirmPaymentSchema.safeParse({ ...base, amount: "50000", account: "paypal" }).success).toBe(false);
   });
 });
 

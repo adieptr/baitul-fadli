@@ -286,6 +286,7 @@ export function ConfirmButton({
   className,
   confirmName,
   confirmValue,
+  submitDisabled,
 }: {
   label: ReactNode;
   title: string;
@@ -297,6 +298,7 @@ export function ConfirmButton({
   className?: string;
   confirmName?: string;
   confirmValue?: string;
+  submitDisabled?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const { pending, state } = useFormCtx();
@@ -314,7 +316,7 @@ export function ConfirmButton({
       <dialog
         ref={ref}
         aria-labelledby={titleId}
-        className="m-auto w-[min(92vw,32rem)] rounded-xl p-0 shadow-2xl"
+        className="m-auto max-h-[90dvh] w-[min(92vw,32rem)] overflow-y-auto rounded-xl p-0 shadow-2xl"
       >
         <div className="space-y-4 p-5">
           <h2 id={titleId} className="text-lg font-semibold text-slate-900">
@@ -327,7 +329,7 @@ export function ConfirmButton({
             <Button type="button" variant="secondary" onClick={() => ref.current?.close()}>
               Batal
             </Button>
-            <SubmitButton variant={variant === "danger" ? "danger" : "primary"} name={confirmName} value={confirmValue} disabled={pending}>
+            <SubmitButton variant={variant === "danger" ? "danger" : "primary"} name={confirmName} value={confirmValue} disabled={pending || submitDisabled}>
               {confirmLabel}
             </SubmitButton>
           </div>

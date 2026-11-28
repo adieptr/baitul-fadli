@@ -13,7 +13,7 @@ import {
   validationFailure,
   type ActionState,
 } from "@/lib/action-state";
-import { categorySchema, reportSchema, transactionSchema } from "@/lib/validation";
+import { categorySchema, openingBalanceSchema, reportSchema, transactionSchema } from "@/lib/validation";
 
 const FORBIDDEN = failure("Anda tidak memiliki akses admin.");
 const idSchema = z.uuid();
@@ -186,4 +186,17 @@ export async function cancelAutoTransactionAction(_: ActionState, formData: Form
   if (error) return failure(dbErrorMessage(error));
   revalidateFinance();
   redirect("/admin/keuangan?deleted=1");
+}
+
+// ---------------- Saldo awal akun ----------------
+export async function setOpeningBalanceAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  if (!(await getAdminOrNull())) return FORBIDDEN;
+  const parsed = openingBalanceSchema.safeParse(formObject(formData));
+  if (!parsed.success) return validationFailure(parsed.error);
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_account_opening", { p_account: parsed.data.account, p_amount: parsed.data.amount });
+  if (error) return failure(dbErrorMessage(error));
+  revalidateFinance();
+  revalidatePath("/admin/buku-besar");
+  return success("Saldo awal diperbarui.");
 }

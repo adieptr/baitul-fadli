@@ -12,6 +12,7 @@ const ACTION_LABEL: Record<string, string> = {
   set_role: "Role diubah",
   telegram_linked: "Telegram terhubung",
   account_deleted: "Akun dihapus",
+  set_opening_balance: "Saldo awal diubah",
   password_reset: "Kata sandi direset",
 };
 

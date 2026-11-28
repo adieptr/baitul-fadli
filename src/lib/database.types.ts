@@ -59,17 +59,23 @@ isOneToOne: false
                   ]
                 },"donation_periods": {
                   Row: {
-                    "admin_note": string | null,"amount": number,"created_at": string,"donor_confirmed_at": string | null,"donor_note": string | null,"due_date": string,"id": string,"period_key": string,"proof_path": string | null,"status": Database["public"]['Enums']["period_status"],"subscription_id": string,"updated_at": string,"user_id": string,"verified_at": string | null,"verified_by": string | null
+                    "admin_note": string | null,"amount": number,"created_at": string,"donor_confirmed_at": string | null,"donor_note": string | null,"due_date": string,"id": string,"paid_account": string | null,"paid_amount": number | null,"period_key": string,"proof_path": string | null,"status": Database["public"]['Enums']["period_status"],"subscription_id": string,"updated_at": string,"user_id": string,"verified_at": string | null,"verified_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "admin_note"?: string | null,"amount": number,"created_at"?: string,"donor_confirmed_at"?: string | null,"donor_note"?: string | null,"due_date": string,"id"?: string,"period_key": string,"proof_path"?: string | null,"status"?: Database["public"]['Enums']["period_status"],"subscription_id": string,"updated_at"?: string,"user_id": string,"verified_at"?: string | null,"verified_by"?: string | null
+                    "admin_note"?: string | null,"amount": number,"created_at"?: string,"donor_confirmed_at"?: string | null,"donor_note"?: string | null,"due_date": string,"id"?: string,"paid_account"?: string | null,"paid_amount"?: number | null,"period_key": string,"proof_path"?: string | null,"status"?: Database["public"]['Enums']["period_status"],"subscription_id": string,"updated_at"?: string,"user_id": string,"verified_at"?: string | null,"verified_by"?: string | null
                   }
                   Update: {
-                    "admin_note"?: string | null,"amount"?: number,"created_at"?: string,"donor_confirmed_at"?: string | null,"donor_note"?: string | null,"due_date"?: string,"id"?: string,"period_key"?: string,"proof_path"?: string | null,"status"?: Database["public"]['Enums']["period_status"],"subscription_id"?: string,"updated_at"?: string,"user_id"?: string,"verified_at"?: string | null,"verified_by"?: string | null
+                    "admin_note"?: string | null,"amount"?: number,"created_at"?: string,"donor_confirmed_at"?: string | null,"donor_note"?: string | null,"due_date"?: string,"id"?: string,"paid_account"?: string | null,"paid_amount"?: number | null,"period_key"?: string,"proof_path"?: string | null,"status"?: Database["public"]['Enums']["period_status"],"subscription_id"?: string,"updated_at"?: string,"user_id"?: string,"verified_at"?: string | null,"verified_by"?: string | null
                   }
                   Relationships: [
                     {
+      foreignKeyName: "donation_periods_paid_account_fkey"
+      columns: ["paid_account"]
+isOneToOne: false
+      referencedRelation: "fund_accounts"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "donation_periods_subscription_id_fkey"
       columns: ["subscription_id"]
 isOneToOne: false
@@ -168,6 +174,20 @@ isOneToOne: false
       referencedRelation: "profiles"
       referencedColumns: ["id"]
     }
+                  ]
+                },"fund_accounts": {
+                  Row: {
+                    "id": string,"name": string,"opening_balance": number,"sort_order": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id": string,"name": string,"opening_balance"?: number,"sort_order"?: number
+                  }
+                  Update: {
+                    "id"?: string,"name"?: string,"opening_balance"?: number,"sort_order"?: number
+                  }
+                  Relationships: [
+                    
                   ]
                 },"password_reset_tokens": {
                   Row: {
@@ -305,17 +325,23 @@ isOneToOne: true
                   ]
                 },"transactions": {
                   Row: {
-                    "amount": number,"category_id": string,"created_at": string,"created_by": string | null,"description": string,"donation_period_id": string | null,"id": string,"proof_path": string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string,"updated_by": string | null
+                    "account_id": string,"amount": number,"category_id": string,"created_at": string,"created_by": string | null,"description": string,"donation_period_id": string | null,"id": string,"proof_path": string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at": string,"updated_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "amount": number,"category_id": string,"created_at"?: string,"created_by"?: string | null,"description": string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
+                    "account_id"?: string,"amount": number,"category_id": string,"created_at"?: string,"created_by"?: string | null,"description": string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "amount"?: number,"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date"?: string,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
+                    "account_id"?: string,"amount"?: number,"category_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"donation_period_id"?: string | null,"id"?: string,"proof_path"?: string | null,"transaction_date"?: string,"type"?: Database["public"]['Enums']["transaction_type"],"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
+      foreignKeyName: "transactions_account_id_fkey"
+      columns: ["account_id"]
+isOneToOne: false
+      referencedRelation: "fund_accounts"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "transactions_category_id_fkey"
       columns: ["category_id"]
 isOneToOne: false
@@ -357,7 +383,7 @@ isOneToOne: false
 { Args: { "p_end": string,"p_start": string }; Returns: Json
                            },
 "confirm_donation_payment":
-{ Args: { "p_note"?: string,"p_period_id": string,"p_proof_path"?: string }; Returns: undefined
+{ Args: { "p_account"?: string,"p_amount"?: number,"p_note"?: string,"p_period_id": string }; Returns: undefined
                            },
 "consume_password_reset_token":
 { Args: { "p_token_hash": string }; Returns: string
@@ -383,6 +409,16 @@ isOneToOne: false
 "generate_donation_periods":
 { Args: { "p_today"?: string }; Returns: number
                            },
+"get_account_balances":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "balance": number,"id": string,"name": string
+            }[]
+                           },
+"get_ledger":
+{ Args: { "p_account"?: string,"p_end": string,"p_start": string }; Returns: {
+              "account_id": string,"balance": number,"category_name": string,"created_at": string,"description": string,"expense": number,"id": string,"income": number,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"]
+            }[]
+                           },
 "get_public_report_transactions":
 { Args: { "p_report_id": string }; Returns: {
               "amount": number,"category_name": string,"description": string,"id": string,"transaction_date": string,"type": Database["public"]['Enums']["transaction_type"]
@@ -407,6 +443,9 @@ isOneToOne: false
               "week_end": string,"week_start": string
             }[]
                            },
+"ledger_opening_balance":
+{ Args: { "p_account"?: string,"p_start": string }; Returns: number
+                           },
 "link_telegram_account":
 { Args: { "p_chat_id": number,"p_token_hash": string,"p_username": string }; Returns: {
               "full_name": string,"user_id": string
@@ -418,8 +457,11 @@ isOneToOne: false
 "publish_report":
 { Args: { "p_report_id": string }; Returns: undefined
                            },
+"set_account_opening":
+{ Args: { "p_account": string,"p_amount": number }; Returns: undefined
+                           },
 "set_period_status":
-{ Args: { "p_admin_note"?: string,"p_period_id": string,"p_record_income"?: boolean,"p_status": Database["public"]['Enums']["period_status"] }; Returns: undefined
+{ Args: { "p_account"?: string,"p_admin_note"?: string,"p_amount"?: number,"p_period_id": string,"p_record_income"?: boolean,"p_status": Database["public"]['Enums']["period_status"] }; Returns: undefined
                            },
 "set_user_role":
 { Args: { "p_role": Database["public"]['Enums']["user_role"],"p_user_id": string }; Returns: undefined

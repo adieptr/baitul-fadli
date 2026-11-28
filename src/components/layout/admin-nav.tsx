@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  ClipboardCheck, FileBarChart, History, LayoutDashboard, Menu, Settings,
+  BookOpen, ClipboardCheck, FileBarChart, History, LayoutDashboard, Menu, Settings,
   Tags, Users, Wallet, X, ShieldCheck,
 } from "lucide-react";
 import { SideNav, type NavItem } from "./app-nav";
@@ -12,6 +12,7 @@ export const ADMIN_NAV: NavItem[] = [
   { href: "/admin/pembayaran", label: "Verifikasi Pembayaran", icon: ClipboardCheck },
   { href: "/admin/donatur", label: "Donatur Tetap", icon: Users },
   { href: "/admin/keuangan", label: "Transaksi Keuangan", icon: Wallet },
+  { href: "/admin/buku-besar", label: "Buku Besar", icon: BookOpen },
   { href: "/admin/laporan", label: "Laporan Keuangan", icon: FileBarChart },
   { href: "/admin/kategori", label: "Kategori", icon: Tags },
   { href: "/admin/pengguna", label: "Pengguna & Role", icon: ShieldCheck },

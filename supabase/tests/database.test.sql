@@ -1,7 +1,7 @@
 -- Test keamanan (RLS/RBAC) dan logika bisnis. Jalankan: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(86);
+select plan(109);
 
 -- ---------------------------------------------------------------------
 -- Fixture: 3 user (admin, donatur A, donatur B)
@@ -207,6 +207,63 @@ select throws_ok($$ select public.set_user_role('11111111-1111-1111-1111-1111111
 reset role;
 
 -- ---------------------------------------------------------------------
+-- Sumber dana (Kas/BSI), nominal donasi fleksibel, buku besar
+-- ---------------------------------------------------------------------
+select pg_temp.login('22222222-2222-2222-2222-222222222222');
+select throws_ok($$
+  select public.confirm_donation_payment((select id from public.donation_periods where period_key = '2026-11'), null, 500, 'bsi')
+$$, 'P0001', null, 'nominal di bawah Rp 1.000 ditolak');
+select throws_ok($$
+  select public.confirm_donation_payment((select id from public.donation_periods where period_key = '2026-11'), null, 150000, 'paypal')
+$$, 'P0001', null, 'cara pembayaran tidak dikenal ditolak');
+select lives_ok($$
+  select public.confirm_donation_payment((select id from public.donation_periods where period_key = '2026-11'), 'Lebih sedikit', 150000, 'cash')
+$$, 'donatur bisa konfirmasi dengan nominal lebih dari tagihan (tunai)');
+select is((select paid_amount from public.donation_periods where period_key = '2026-11'), 150000::numeric, 'nominal konfirmasi tersimpan');
+select is((select paid_account from public.donation_periods where period_key = '2026-11'), 'cash', 'cara bayar tersimpan');
+reset role;
+
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select lives_ok($$ select public.set_period_status((select id from public.donation_periods where period_key = '2026-11'), 'paid') $$,
+  'admin memverifikasi tanpa mengubah nominal');
+select is((select t.amount from public.transactions t join public.donation_periods p on p.id = t.donation_period_id where p.period_key = '2026-11'),
+  150000::numeric, 'transaksi otomatis memakai nominal sebenarnya, bukan tagihan');
+select is((select t.account_id from public.transactions t join public.donation_periods p on p.id = t.donation_period_id where p.period_key = '2026-11'),
+  'cash', 'transaksi otomatis masuk akun sesuai donatur');
+select ok((select t.description like '%lebih dari tagihan%' from public.transactions t join public.donation_periods p on p.id = t.donation_period_id where p.period_key = '2026-11'),
+  'keterangan menandai kelebihan');
+select lives_ok($$ select public.set_period_status((select id from public.donation_periods where period_key = '2026-11'), 'pending', 'koreksi') $$,
+  'admin membatalkan lunas');
+select is((select paid_amount from public.donation_periods where period_key = '2026-11'), null, 'nominal konfirmasi dikosongkan saat dibatalkan');
+select lives_ok($$ select public.set_period_status((select id from public.donation_periods where period_key = '2026-11'), 'paid', null, true, 90000, 'bsi') $$,
+  'admin bisa mengoreksi nominal & akun saat verifikasi');
+select is((select t.amount::text || '|' || t.account_id from public.transactions t join public.donation_periods p on p.id = t.donation_period_id where p.period_key = '2026-11'),
+  '90000.00|bsi', 'nominal & akun hasil koreksi admin dipakai');
+select ok((select t.description like '%kurang dari tagihan%' from public.transactions t join public.donation_periods p on p.id = t.donation_period_id where p.period_key = '2026-11'),
+  'keterangan menandai kekurangan');
+select public.set_period_status((select id from public.donation_periods where period_key = '2026-11'), 'pending', 'kembalikan untuk uji berikutnya');
+reset role;
+
+select pg_temp.login('22222222-2222-2222-2222-222222222222');
+select throws_ok($$ select * from public.get_ledger('2026-01-01', '2026-12-31') $$, '42501', null, 'donatur tidak bisa membuka buku besar');
+select throws_ok($$ select public.set_account_opening('cash', 5) $$, '42501', null, 'donatur tidak bisa mengubah saldo awal');
+select is((select count(*)::int from public.fund_accounts), 0, 'donatur tidak melihat data akun sumber dana');
+reset role;
+
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select lives_ok($$ select public.set_account_opening('cash', 1000000) $$, 'admin mengisi saldo awal kas tunai');
+select is((select balance from public.get_account_balances() where id = 'cash'),
+  (select 1000000 + coalesce(sum(case when type = 'income' then amount else -amount end), 0) from public.transactions where account_id = 'cash'),
+  'saldo akun = saldo awal + mutasi');
+select throws_ok($$ select public.set_account_opening('cash', -1) $$, 'P0001', null, 'saldo awal negatif ditolak');
+select is(jsonb_array_length(public.finance_summary('2026-01-01', '2026-12-31') -> 'by_account'), 2, 'ringkasan memuat rincian 2 akun');
+select throws_ok($$
+  insert into public.transactions (type, category_id, amount, transaction_date, description, account_id)
+  values ('income', (select id from public.categories where type = 'income' limit 1), 1000, '2027-01-05', 'akun palsu', 'paypal')
+$$, '23503', null, 'akun sumber dana yang tidak dikenal ditolak');
+reset role;
+
+-- ---------------------------------------------------------------------
 -- Telegram & reminder
 -- ---------------------------------------------------------------------
 select pg_temp.login('22222222-2222-2222-2222-222222222222');
@@ -294,6 +351,10 @@ select is((select count(*)::int from public.transactions where description like 
   'transaksi pemasukan masjid tetap tersimpan tanpa tautan ke donatur');
 select throws_ok($$ update public.transactions set amount = 1 where description like '%2026-W46%' $$, 'P0001', null,
   'isi transaksi di periode terkunci tetap tidak bisa diubah');
+
+select pg_temp.login('11111111-1111-1111-1111-111111111111');
+select throws_ok($$ select public.set_account_opening('bsi', 1) $$, 'P0001', null, 'saldo awal terkunci setelah ada laporan terbit');
+reset role;
 
 select * from finish();
 rollback;

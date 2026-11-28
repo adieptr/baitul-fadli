@@ -1,5 +1,6 @@
 import { BadgeCheck, Send, Undo2, XCircle } from "lucide-react";
-import { ActionForm, CheckboxField, ConfirmButton, TextAreaField } from "@/components/ui/form";
+import { ActionForm, CheckboxField, ConfirmButton, MoneyField, TextAreaField } from "@/components/ui/form";
+import { ACCOUNTS } from "@/lib/accounts";
 import { sendReminderAction, setPeriodStatusAction } from "@/lib/actions/admin-donors";
 import { formatPeriodKey, formatRupiah, type PeriodStatus } from "@/lib/format";
 
@@ -8,7 +9,14 @@ export function PeriodActions({
   donorName,
   hasTelegram,
 }: {
-  period: { id: string; status: PeriodStatus; amount: number | string; period_key: string };
+  period: {
+    id: string;
+    status: PeriodStatus;
+    amount: number | string;
+    period_key: string;
+    paid_amount?: number | string | null;
+    paid_account?: string | null;
+  };
   donorName: string;
   hasTelegram: boolean;
 }) {
@@ -35,11 +43,31 @@ export function PeriodActions({
             confirmLabel="Ya, Sudah Dibayar"
           >
             <div className="space-y-4">
+              <MoneyField
+                label="Nominal yang diterima"
+                name="amount"
+                defaultValue={period.paid_amount ?? period.amount}
+                required
+                hint={`Tagihan: ${formatRupiah(period.amount)}. Ubah bila donatur memberi lebih/kurang; yang dicatat adalah nominal ini.`}
+              />
+              <fieldset>
+                <legend className="mb-2 text-base font-semibold text-slate-800">Masuk ke</legend>
+                <div className="grid grid-cols-2 gap-3">
+                  {ACCOUNTS.map((a) => (
+                    <label key={a.id} className="cursor-pointer">
+                      <input type="radio" name="account" value={a.id} defaultChecked={(period.paid_account ?? "bsi") === a.id} className="peer sr-only" />
+                      <span className="flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white font-bold text-slate-600 peer-checked:border-brand-700 peer-checked:bg-brand-50 peer-checked:text-brand-800 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-600">
+                        {a.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
               <CheckboxField
                 name="record_income"
                 defaultChecked
                 label="Catat otomatis sebagai pemasukan"
-                hint='Membuat transaksi kategori "Donatur Tetap" tanggal hari ini (tanpa nama donatur).'
+                hint='Membuat transaksi kategori "Donatur Tetap" tanggal hari ini pada akun di atas (tanpa nama donatur).'
               />
               <TextAreaField label="Catatan (opsional)" name="admin_note" rows={2} maxLength={300} />
             </div>

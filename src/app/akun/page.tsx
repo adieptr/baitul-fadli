@@ -127,7 +127,7 @@ export default async function DonorHomePage({ searchParams }: { searchParams: Pr
             {waiting.map((p) => (
               <li key={p.id} className="flex flex-wrap items-center justify-between gap-2">
                 <span>
-                  {formatPeriodKey(p.period_key)} — <b>{formatRupiah(p.amount)}</b>
+                  {formatPeriodKey(p.period_key)} — <b>{formatRupiah(p.paid_amount ?? p.amount)}</b>
                 </span>
                 <PeriodStatusBadge status={p.status} />
               </li>

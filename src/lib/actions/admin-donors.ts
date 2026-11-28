@@ -38,6 +38,8 @@ export async function setPeriodStatusAction(_: ActionState, formData: FormData):
     p_status: parsed.data.status,
     p_admin_note: parsed.data.admin_note ?? undefined,
     p_record_income: parsed.data.record_income,
+    p_amount: parsed.data.amount ?? undefined,
+    p_account: parsed.data.account ?? undefined,
   });
   if (error) return failure(dbErrorMessage(error));
   if (parsed.data.status === "paid") after(() => notifyDonorPaymentVerified(parsed.data.period_id));

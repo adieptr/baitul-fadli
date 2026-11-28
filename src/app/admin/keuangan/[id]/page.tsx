@@ -78,6 +78,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
             transaction_date: tx.transaction_date,
             description: tx.description,
             proof_path: tx.proof_path,
+            account_id: tx.account_id,
           }}
         />
         {proofUrl && (

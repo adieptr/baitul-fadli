@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownCircle, ArrowUpCircle, ClipboardCheck, Plus, Users, Wallet } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, Banknote, ClipboardCheck, Landmark, Plus, Users, Wallet } from "lucide-react";
 import { Card, PageHeader, StatCard, EmptyState } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { PeriodStatusBadge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ type Stats = {
 export default async function AdminDashboard() {
   await requireAdmin();
   const supabase = await createClient();
-  const [{ data: statsRaw }, { data: awaiting }] = await Promise.all([
+  const [{ data: statsRaw }, { data: awaiting }, { data: balances }] = await Promise.all([
     supabase.rpc("admin_dashboard_stats"),
     supabase
       .from("donation_periods")
@@ -27,7 +27,9 @@ export default async function AdminDashboard() {
       .eq("status", "awaiting_verification")
       .order("donor_confirmed_at", { ascending: true })
       .limit(5),
+    supabase.rpc("get_account_balances"),
   ]);
+  const totalBalance = (balances ?? []).reduce((sum, b) => sum + Number(b.balance), 0);
   const s = (statsRaw ?? {}) as Partial<Stats>;
   const month = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(new Date());
 
@@ -61,10 +63,22 @@ export default async function AdminDashboard() {
       <section aria-labelledby="keu">
         <h2 id="keu" className="mb-3 text-lg font-bold">Keuangan</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Total Saldo Kas" value={formatRupiah(s.balance)} tone="brand" icon={<Wallet className="size-4" />} hint="Seluruh transaksi tercatat" />
+          <StatCard label="Total Saldo" value={formatRupiah(totalBalance)} tone="brand" icon={<Wallet className="size-4" />} hint="Kas tunai + Bank BSI" />
           <StatCard label="Total Pemasukan" value={formatRupiah(s.income_all)} tone="success" icon={<ArrowDownCircle className="size-4" />} hint={`${month}: ${formatRupiah(s.income_month)}`} />
           <StatCard label="Total Pengeluaran" value={formatRupiah(s.expense_all)} tone="danger" icon={<ArrowUpCircle className="size-4" />} hint={`${month}: ${formatRupiah(s.expense_month)}`} />
           <StatCard label={`Selisih ${month}`} value={formatRupiah((s.income_month ?? 0) - (s.expense_month ?? 0))} icon={<Wallet className="size-4" />} />
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {(balances ?? []).map((b) => (
+            <Link key={b.id} href={`/admin/buku-besar?account=${b.id}`} className="block rounded-xl focus-visible:ring-2 focus-visible:ring-brand-600">
+              <StatCard
+                label={`Saldo ${b.name}`}
+                value={formatRupiah(b.balance)}
+                icon={b.id === "bsi" ? <Landmark className="size-4" /> : <Banknote className="size-4" />}
+                hint="Lihat buku besar →"
+              />
+            </Link>
+          ))}
         </div>
       </section>
 

@@ -3,6 +3,7 @@ import { ExternalLink, MessageCircle, Phone } from "lucide-react";
 import { Card, EmptyState, PageHeader } from "@/components/ui/card";
 import { PeriodStatusBadge } from "@/components/ui/badge";
 import { ActionForm, SubmitButton } from "@/components/ui/form";
+import { PaymentDeclared } from "@/components/admin/payment-declared";
 import { PeriodActions } from "@/components/admin/period-actions";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -25,7 +26,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
     supabase
       .from("donation_periods")
       .select(
-        "id, period_key, due_date, amount, status, donor_note, donor_confirmed_at, proof_path, admin_note, verified_at, user_id, profiles!donation_periods_user_id_fkey(full_name, phone, telegram_links(user_id))",
+        "id, period_key, due_date, amount, status, donor_note, donor_confirmed_at, proof_path, paid_amount, paid_account, admin_note, verified_at, user_id, profiles!donation_periods_user_id_fkey(full_name, phone, telegram_links(user_id))",
       )
       .eq("status", status)
       .order(status === "paid" ? "verified_at" : "due_date", { ascending: status !== "paid" })
@@ -92,9 +93,10 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
                       <PeriodStatusBadge status={p.status} />
                     </div>
                   </div>
-                  {(p.donor_confirmed_at || p.donor_note || proofUrls[i] || p.admin_note) && (
+                  {(p.donor_confirmed_at || p.paid_amount != null || p.donor_note || proofUrls[i] || p.admin_note) && (
                     <div className="space-y-1 rounded-xl bg-slate-50 p-3 text-base">
                       {p.donor_confirmed_at && <p>Dikonfirmasi donatur: {formatDateTime(p.donor_confirmed_at)}</p>}
+                      <PaymentDeclared billed={p.amount} paid={p.paid_amount} account={p.paid_account} />
                       {p.donor_note && <p>Catatan donatur: “{p.donor_note}”</p>}
                       {proofUrls[i] && (
                         <a href={proofUrls[i]!} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-brand-800 underline">
